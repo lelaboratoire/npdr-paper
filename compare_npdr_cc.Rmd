@@ -1,0 +1,201 @@
+---
+title: "Comparing NPDR, STIR and Relief-F"
+output: html_document
+---
+
+### Load packages:
+
+```{r echo=FALSE}
+library(privateEC)
+library(broom)
+library(tidyverse)
+# library(devtools)
+# install_github("insilico/glmSTIR") # glmSTIR install
+library(glmSTIR)
+
+rm(list = ls())
+set.seed(1618)
+```
+
+
+### Simulate case-control interaction effect data:
+
+```{r}
+#####
+n.samples <- 300     # 100 samples in train/holdout/test
+n.variables <- 100   # 100 features
+label <- "class" # tells simulator to do case/control and adds this colname
+type <- "interactionErdos" # or mainEffect
+# type <-"mainEffect"
+bias <- 0.4          # moderate effect size
+pct.signals <- 0.1   # pct functional features
+verbose <- FALSE
+cc.3sets <- createSimulation(num.samples = n.samples,
+                              num.variables = n.variables,
+                              pct.signals = pct.signals,
+                              label = label,
+                              bias = bias,
+                              pct.train = 1/3,
+                              pct.holdout = 1/3,
+                              pct.validation = 1/3,
+                              sim.type = type,
+                              save.file = NULL,
+                              verbose = verbose)
+# combine train and holdout into 200 samples x 100 attributes
+# ignore validation set for now; cc = case.control (binary outcome)
+cc.data <- rbind(cc.3sets$train, cc.3sets$holdout)
+n.samples.cc <- nrow(cc.data)
+pheno.cc <- as.factor(cc.data[,"class"])
+functional.cc <- cc.3sets$signal.names # functional attributes
+```
+
+### Run glmSTIR:
+
+```{r}
+#####
+glm.stir.cc.results <- 
+  glmSTIR("class", cc.data, regression.type="glm", 
+          attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
+          nbd.metric = "manhattan", msurf.sd.frac = .5, 
+          fdr.method = "bonferroni", verbose = T) %>%
+  rownames_to_column('att') %>%
+  mutate(glmstir.log10 = -log10(pval.attr))
+
+# get functional attribute detection stats
+glm.stir.cc.positives <- glm.stir.cc.results %>%
+  filter(pval.adj < .05) %>%
+  pull(att)
+glm.stir.cc.detect.stats <- detectionStats(functional.cc, glm.stir.cc.positives)
+cat(glm.stir.cc.detect.stats$report)
+
+```
+
+### Run STIR:
+
+```{r}
+# expect: glmSTIR gives same resutls as original t-STIR
+# stir interface requires splitting phenotype and predictor matrix, 
+# and requires finding the neighborhood separately.
+predictors.cc.mat <- cc.data %>% select(-class)
+neighbor.idx.observed <- stir::find.neighbors(predictors.cc.mat, 
+                                        pheno.cc, k = 0, method = "multisurf")
+stir.results <- stir::stir(predictors.cc.mat, neighbor.idx.observed, k = 0, 
+                     metric = "manhattan", method = "multisurf")
+multisurf_softed_imp <- stir.results$STIR_T %>% 
+  rownames_to_column('att') %>%
+  mutate(stir.log10 = -log10(t.pval.adj))
+
+# functional attribute detection stats
+tstat_stir.detect.stats <- detectionStats(
+  functional.cc, multisurf_softed_imp %>%
+    filter(t.pval.adj < .05) %>%
+    pull(att))
+cat(tstat_stir.detect.stats$report)
+```
+
+### Compare NPDR and STIR
+```{r}
+pcutoff <- -log10(0.05)
+test.df <- merge(multisurf_softed_imp, glm.stir.cc.results) %>% 
+  mutate(functional = att %in% functional.cc)
+r2 <- round(cor(test.df$stir.log10, test.df$glmstir.log10), digits = 3)
+
+p <- ggplot(test.df, aes(x=stir.log10,y=glmstir.log10)) + 
+  geom_smooth(method = 'lm', se = F, color = 'grey') + 
+  geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
+  theme_bw() + theme(legend.position = c(0.78, 0.23)) +
+  labs(colour = NULL, 
+       x = bquote('STIR ('~-log[10]~'p'[adj]~')'), 
+       y = bquote('NPDR ('~-log[10]~'p'[adj]~')'),
+       title = "Similarity between NPDR and RRelief") + 
+  annotate("text", x = 75, y = 88.5, label = deparse(bquote(R^2 == .(r2))), parse = T) + 
+  viridis::scale_color_viridis(discrete = TRUE, 
+                               labels = c('Non-functional', 'Funtional')) + 
+  geom_vline(xintercept=pcutoff, linetype="dashed", alpha = 0.5) +
+  geom_hline(yintercept=pcutoff, linetype="dashed", alpha = 0.5)
+p
+ggsave(p, filename = 'figs/npdr_stir_p_cc.pdf', height = 4, width = 4)
+
+
+
+```
+
+### Compute Relief-F score with the `CORElearn` package 
+(fixed $k$ with theoretical surf value)
+
+```{r}
+core.learn.cc <- CORElearn::attrEval("class", data = cc.data,
+                                      estimator = "ReliefFequalK",
+                                      costMatrix = NULL,
+                                      outputNumericSplits=FALSE,
+                                      kNearestEqual = knnSURF(n.samples.cc,.5))
+core.learn.cc.order <- order(core.learn.cc, decreasing = T)
+corelearn.df <- data.frame(att=names(core.learn.cc), rrelief=core.learn.cc)
+last.imp.att <- which(glm.stir.cc.results$pval.adj>.05)[1]-1
+glmstir.beta.cutoff <- glm.stir.cc.results[last.imp.att, 'beta.attr']
+
+test.df <- merge(corelearn.df, glm.stir.cc.results) %>% 
+  mutate(functional = att %in% functional.cc)
+r2 <- round(cor(test.df$rrelief, test.df$beta.attr), digits = 3)
+
+p <- ggplot(test.df, aes(x = rrelief, y = beta.attr)) + 
+  geom_smooth(method = "lm", se = F, color = "grey") + 
+  geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
+  theme_bw() + theme(legend.position = c(0.78, 0.17)) +
+  labs(colour = NULL, x = "Relief scores", y = "NPDR coefficients",
+       title = "NPDR and Relief-F importance score") +
+  viridis::scale_color_viridis(discrete = TRUE, direction = -1,
+                               labels = c('Non-functional', 'Funtional')) +
+  annotate("text", x = 0.04, y = 0.35, label = deparse(bquote(R^2 == .(r2))), parse = T) +
+  geom_hline(yintercept=glmstir.beta.cutoff, linetype="dashed", alpha = 0.5)
+p
+```
+
+
+Draw the Precision-Recall curve:
+
+```{r}
+pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>% 
+                        filter(functional == T) %>% 
+                        pull(beta.attr),
+                      scores.class1 = test.df %>% 
+                        filter(functional == F) %>% 
+                        pull(beta.attr), 
+                      curve = T)
+
+pr_relief <- PRROC::pr.curve(scores.class0 = test.df %>% 
+                        filter(functional == T) %>% 
+                        pull(rrelief),
+                      scores.class1 = test.df %>% 
+                        filter(functional == F) %>% 
+                        pull(rrelief), 
+                      curve = T)
+
+x <- as.data.frame(pr_npdr$curve) 
+colnames(x) <- paste0(c('Recall', 'Precision', 'w'))
+y <- as.data.frame(pr_relief$curve) 
+colnames(y) <- paste0(c('Recall', 'Precision', 'w'))
+
+prr.dat <- rbind(x, y) %>% 
+  mutate(type = rep(c('NPDR', 'Relief-F'), each = nrow(x)))
+
+pr_npdr
+pr_relief
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
+q <- prr.dat %>%
+  ggplot(aes(Recall, Precision, color = type)) +
+  geom_path(size = 1) + theme_bw() +
+  scale_color_manual(values = cbbPalette[c(6,8)]) +
+  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2)) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) + 
+  annotate('text', x = 0.95, y = 0.92, label = 'NPDR \n AUC = 0.951', color = cbbPalette[6]) +
+  annotate('text', x = 0.7, y = 0.43, label = 'Relief-F \n AUC = 0.846', color = cbbPalette[8]) +
+  guides(color = FALSE) + 
+  labs(title = "PR curve for detecting important attributes")
+q  
+
+pq <- cowplot::plot_grid(p, q, labels = 'AUTO')
+ggsave(pq, filename = 'figs/npdr_relief_cc.pdf', height = 4, width = 8.5)
+```
+
