@@ -1,0 +1,179 @@
+ \newcommand{\noop}[1]{}
+\begin{thebibliography}{10}
+
+\bibitem{urbanowicz17b}
+Ryan~J. Urbanowicz, Melissa Meeker, William~La Cava, Randal~S. Olson, and
+  Jason~H. Moore.
+\newblock Relief-based feature selection: Introduction and review.
+\newblock {\em Journal of Biomedical Informatics}, 2018.
+
+\bibitem{kononenko97}
+Igor Kononenko, Edvard {\v{S}}imec, and Marko Robnik-{\v{S}}ikonja.
+\newblock Overcoming the {Myopia} of {Inductive} {Learning} {Algorithms} with
+  {RELIEFF}.
+\newblock {\em Applied Intelligence}, 7(1):39--55, January 1997.
+
+\bibitem{mckinney09}
+Brett~A. McKinney, James~E. Crowe, Jingyu Guo, and Dehua Tian.
+\newblock Capturing the spectrum of interaction effects in genetic association
+  studies by simulated evaporative cooling network analysis.
+\newblock {\em PLoS genetics}, 5(3):e1000432, March 2009.
+
+\bibitem{rendell92}
+Kenji Kira and Larry~A. Rendell.
+\newblock The feature selection problem: Traditional methods and a new
+  algorithm.
+\newblock In {\em Proceedings Tenth National Conference on Artificial
+  Intelligence}, pages 129--134. AAAI Press/The MIT Press, 1992.
+
+\bibitem{breen12}
+MS~Breen, C~Kemena, PK~Vlasov, C~Notredame, and Kondrashov FA.
+\newblock Epistasis as the primary factor in molecular evolution.
+\newblock {\em Nature}, 490(7421):535--8, 2012.
+
+\bibitem{weinreich13}
+DM~Weinreich, Y~Lan, e~CS Wyli, and RB~Heckendorn.
+\newblock Should evolutionary geneticists worry about higher-order epistasis?
+\newblock {\em Curr Opin Genet Dev.}, 23(6):700--7, 2013.
+
+\bibitem{lareau15}
+Caleb~A Lareau, Bill~C White, Ann~L Oberg, and Brett~A McKinney.
+\newblock Differential co-expression network centrality and machine learning
+  feature selection for identifying susceptibility hubs in networks with
+  scale-free structure.
+\newblock {\em BioData mining}, 8(1):5, 2015.
+
+\bibitem{diffcoexp10}
+Alberto De~la Fuente.
+\newblock From ?differential expression?to ?differential
+  networking?--identification of dysfunctional regulatory networks in diseases.
+\newblock {\em Trends in genetics}, 26(7):326--333, 2010.
+
+\bibitem{riesselman18}
+Adam~J Riesselman, John~B Ingraham, and Debora~S Marks.
+\newblock Deep generative models of genetic variation capture the effects of
+  mutations.
+\newblock {\em Nature methods}, 15(10):816--822, 2018.
+
+\bibitem{titv}
+Marziyeh Arabnejad, BD~Dawkins, WS~Bush, BC~White, AR~Harkness, and Brett~A
+  McKinney.
+\newblock Transition-transversion encoding and genetic relationship metric in
+  relieff feature selection improves pathway enrichment in gwas.
+\newblock {\em BioData mining}, 11:23, 2015.
+
+\bibitem{stir}
+Trang~T Le, Ryan~J Urbanowicz, Jason~H Moore, and Brett~A McKinney.
+\newblock Statistical inference relief (stir) feature selection.
+\newblock {\em Bioinformatics}, page bty788, 2018.
+
+\bibitem{mckinney13}
+Brett~A McKinney, Bill~C White, Diane~E Grill, Peter~W Li, Richard~B Kennedy,
+  Gregory~A Poland, and Ann~L Oberg.
+\newblock Reliefseq: a gene-wise adaptive-k nearest-neighbor feature selection
+  tool for finding gene-gene interactions and main effects in mrna-seq gene
+  expression data.
+\newblock {\em PloS one}, 8(12):e81527, 2013.
+
+\bibitem{le18_brainagesim}
+Trang~T Le, Rayus~T Kuplicki, Brett~A McKinney, Hung-wen Yeh, Wesley~K
+  Thompson, and Martin~P Paulus.
+\newblock A nonlinear simulation framework supports adjusting for age when
+  analyzing brainage.
+\newblock {\em Frontiers in aging neuroscience}, 10, 2018.
+
+\bibitem{popstrat16}
+Han Chen, Chaolong Wang, Matthew~P Conomos, Adrienne~M Stilp, Zilin Li, Tamar
+  Sofer, Adam~A Szpiro, Wei Chen, John~M Brehm, Juan~C Celed{\'o}n, et~al.
+\newblock Control for population structure and relatedness for binary traits in
+  genetic association studies via logistic mixed models.
+\newblock {\em The American Journal of Human Genetics}, 98(4):653--666, 2016.
+
+\bibitem{rao2017}
+Anil Rao, Joao~M Monteiro, Janaina Mourao-Miranda, Alzheimer's~Disease
+  Initiative, et~al.
+\newblock Predictive modelling using neuroimaging data in the presence of
+  confounds.
+\newblock {\em NeuroImage}, 150:23--49, 2017.
+
+\bibitem{linn2016}
+Kristin~A Linn, Bilwaj Gaonkar, Jimit Doshi, Christos Davatzikos, and Russell~T
+  Shinohara.
+\newblock Addressing confounding in predictive models with an application to
+  neuroimaging.
+\newblock {\em The international journal of biostatistics}, 12(1):31--44, 2016.
+
+\bibitem{li2011ccsvm}
+Limin Li, Barbara Rakitsch, and Karsten Borgwardt.
+\newblock ccsvm: correcting support vector machines for confounding factors in
+  biological data classification.
+\newblock {\em Bioinformatics}, 27(13):i342--i348, 2011.
+
+\bibitem{greene09}
+Casey~S. Greene, Nadia~M. Penrod, Jeff Kiralis, and Jason~H. Moore.
+\newblock Spatially {Uniform} {ReliefF} ({SURF}) for computationally-efficient
+  filtering of gene-gene interactions.
+\newblock {\em BioData Mining}, 2:5, September 2009.
+
+\bibitem{urbanowicz17}
+Ryan~J. Urbanowicz, Randal~S. Olson, Peter Schmitt, Melissa Meeker, and
+  Jason~H. Moore.
+\newblock Benchmarking relief-based feature selection methods for
+  bioinformatics data mining.
+\newblock {\em Journal of Biomedical Informatics}, 85:168--188, 2018.
+
+\bibitem{msurf13}
+Delaney Granizo-Mackenzie and Jason~H Moore.
+\newblock Multiple threshold spatially uniform relieff for the genetic analysis
+  of complex human diseases.
+\newblock In {\em European Conference on Evolutionary Computation, Machine
+  Learning and Data Mining in Bioinformatics}, pages 1--10. Springer, 2013.
+
+\bibitem{glmnet05}
+Hui Zou and Trevor Hastie.
+\newblock Regularization and variable selection via the elastic net.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 67(2):301--320, 2005.
+
+\bibitem{le17}
+Trang~T Le, W~Kyle Simmons, Masaya Misaki, Jerzy Bodurka, Bill~C White,
+  Jonathan Savitz, and Brett~A McKinney.
+\newblock Differential privacy-based evaporative cooling feature selection and
+  classification with relief-f and random forests.
+\newblock {\em Bioinformatics}, 33(18):2906--2913, 2017.
+
+\bibitem{benjamini01}
+Yoav Benjamini, Dan Drai, Greg Elmer, Neri Kafkafi, and Ilan Golani.
+\newblock Controlling the false discovery rate in behavior genetics research.
+\newblock {\em Behavioural brain research}, 125(1-2):279--284, 2001.
+
+\bibitem{mostafavi14}
+Sara Mostafavi, Alexis Battle, Xiaowei Zhu, James~B Potash, Myrna~M Weissman,
+  Jianxin Shi, Kenneth Beckman, Christian Haudenschild, Courtney McCormick, Rui
+  Mei, et~al.
+\newblock Type i interferon signaling genes in recurrent major depression:
+  increased expression detected by whole-blood rna sequencing.
+\newblock {\em Molecular psychiatry}, 19(12):1267, 2014.
+
+\bibitem{robnik03}
+Marko Robnik-{\v{S}}ikonja and Igor Kononenko.
+\newblock Theoretical and empirical analysis of relieff and rrelieff.
+\newblock {\em Machine learning}, 53(1-2):23--69, 2003.
+
+\bibitem{mckinney_pajewski}
+Brett McKinney and Nicholas Pajewski.
+\newblock Six degrees of epistasis: statistical network models for gwas.
+\newblock {\em Frontiers in genetics}, 2:109, 2012.
+
+\bibitem{schork12}
+Nicholas~J Schork and Matthew~A Zapala.
+\newblock Statistical properties of multivariate distance matrix regression for
+  high-dimensional data analysis.
+\newblock {\em Frontiers in genetics}, 3:190, 2012.
+
+\bibitem{CoD}
+{Naomi S.} Altman and Martin Krzywinski.
+\newblock The curse(s) of dimensionality this-month.
+\newblock {\em Nature Methods}, 15(6):399--400, 6 2018.
+
+\end{thebibliography}
