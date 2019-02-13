@@ -10,8 +10,8 @@ library(privateEC)
 library(broom)
 library(tidyverse)
 # library(devtools)
-# install_github("insilico/glmSTIR") # glmSTIR install
-library(glmSTIR)
+# install_github("insilico/npdr") # npdr install
+library(npdr)
 
 rm(list = ls())
 set.seed(1618)
@@ -49,17 +49,17 @@ pheno.cc <- as.factor(cc.data[,"class"])
 functional.cc <- cc.3sets$signal.names # functional attributes
 ```
 
-### Run glmSTIR:
+### Run npdr:
 
 ```{r}
 #####
 glm.stir.cc.results <- 
-  glmSTIR("class", cc.data, regression.type="glm", 
+  npdr("class", cc.data, regression.type="glm", 
           attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
           nbd.metric = "manhattan", msurf.sd.frac = .5, 
-          fdr.method = "bonferroni", verbose = T) %>%
-  rownames_to_column('att') %>%
-  mutate(glmstir.log10 = -log10(pval.attr))
+          padj.method = "bonferroni", verbose = T) %>%
+  # rownames_to_column('att') %>%
+  mutate(npdr.log10 = -log10(pval.att))
 
 # get functional attribute detection stats
 glm.stir.cc.positives <- glm.stir.cc.results %>%
@@ -73,7 +73,7 @@ cat(glm.stir.cc.detect.stats$report)
 ### Run STIR:
 
 ```{r}
-# expect: glmSTIR gives same resutls as original t-STIR
+# expect: npdr gives same resutls as original t-STIR
 # stir interface requires splitting phenotype and predictor matrix, 
 # and requires finding the neighborhood separately.
 predictors.cc.mat <- cc.data %>% select(-class)
@@ -98,9 +98,9 @@ cat(tstat_stir.detect.stats$report)
 pcutoff <- -log10(0.05)
 test.df <- merge(multisurf_softed_imp, glm.stir.cc.results) %>% 
   mutate(functional = att %in% functional.cc)
-r2 <- round(cor(test.df$stir.log10, test.df$glmstir.log10), digits = 3)
+r2 <- round(cor(test.df$stir.log10, test.df$npdr.log10), digits = 3)
 
-p <- ggplot(test.df, aes(x=stir.log10,y=glmstir.log10)) + 
+p <- ggplot(test.df, aes(x=stir.log10,y=npdr.log10)) + 
   geom_smooth(method = 'lm', se = F, color = 'grey') + 
   geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
   theme_bw() + theme(legend.position = c(0.78, 0.23)) +
@@ -129,25 +129,25 @@ core.learn.cc <- CORElearn::attrEval("class", data = cc.data,
                                       costMatrix = NULL,
                                       outputNumericSplits=FALSE,
                                       kNearestEqual = knnSURF(n.samples.cc,.5))
-core.learn.cc.order <- order(core.learn.cc, decreasing = T)
+# core.learn.cc.order <- order(core.learn.cc, decreasing = T)
 corelearn.df <- data.frame(att=names(core.learn.cc), rrelief=core.learn.cc)
 last.imp.att <- which(glm.stir.cc.results$pval.adj>.05)[1]-1
-glmstir.beta.cutoff <- glm.stir.cc.results[last.imp.att, 'beta.attr']
+npdr.beta.cutoff <- glm.stir.cc.results[last.imp.att, 'beta.raw.att']
 
 test.df <- merge(corelearn.df, glm.stir.cc.results) %>% 
   mutate(functional = att %in% functional.cc)
-r2 <- round(cor(test.df$rrelief, test.df$beta.attr), digits = 3)
+r2 <- round(cor(test.df$rrelief, test.df$beta.raw.att), digits = 3)
 
-p <- ggplot(test.df, aes(x = rrelief, y = beta.attr)) + 
+p <- ggplot(test.df, aes(x = rrelief, y = beta.raw.att)) + 
   geom_smooth(method = "lm", se = F, color = "grey") + 
   geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
   theme_bw() + theme(legend.position = c(0.78, 0.17)) +
-  labs(colour = NULL, x = "Relief scores", y = "NPDR coefficients",
+  labs(colour = NULL, x = "Relief score", y = "NPDR coefficient",
        title = "NPDR and Relief-F importance score") +
   viridis::scale_color_viridis(discrete = TRUE, direction = -1,
                                labels = c('Non-functional', 'Funtional')) +
   annotate("text", x = 0.04, y = 0.35, label = deparse(bquote(R^2 == .(r2))), parse = T) +
-  geom_hline(yintercept=glmstir.beta.cutoff, linetype="dashed", alpha = 0.5)
+  geom_hline(yintercept=npdr.beta.cutoff, linetype="dashed", alpha = 0.5)
 p
 ```
 
@@ -157,10 +157,10 @@ Draw the Precision-Recall curve:
 ```{r}
 pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>% 
                         filter(functional == T) %>% 
-                        pull(beta.attr),
+                        pull(beta.raw.att),
                       scores.class1 = test.df %>% 
                         filter(functional == F) %>% 
-                        pull(beta.attr), 
+                        pull(beta.raw.att), 
                       curve = T)
 
 pr_relief <- PRROC::pr.curve(scores.class0 = test.df %>% 
@@ -187,8 +187,8 @@ q <- prr.dat %>%
   ggplot(aes(Recall, Precision, color = type)) +
   geom_path(size = 1) + theme_bw() +
   scale_color_manual(values = cbbPalette[c(6,8)]) +
-  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2)) + 
-  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) + 
+  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) + 
   annotate('text', x = 0.95, y = 0.92, label = 'NPDR \n AUC = 0.951', color = cbbPalette[6]) +
   annotate('text', x = 0.7, y = 0.43, label = 'Relief-F \n AUC = 0.846', color = cbbPalette[8]) +
   guides(color = FALSE) + 
@@ -198,4 +198,33 @@ q
 pq <- cowplot::plot_grid(p, q, labels = 'AUTO')
 ggsave(pq, filename = 'figs/npdr_relief_cc.pdf', height = 4, width = 8.5)
 ```
+
+
+
+What about auROC?
+
+```{r}
+ss_npdr <- pROC::roc(test.df$functional, test.df$beta.Z.att)
+ss_relief <- pROC::roc(test.df$functional, test.df$rrelief)
+ss_npdr
+ss_relief
+ss_df <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities), 
+                    Specificity = c(ss_npdr$specificities, ss_relief$specificities)) %>%
+  mutate(type = rep(c('NPDR', 'Relief'), each = length(ss_npdr$sensitivities)))
+
+ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +   
+  geom_path(size = 1) + theme_bw() +
+  scale_color_manual(values = cbbPalette[c(6,8)]) +
+  scale_x_reverse(breaks = seq(1, 0, -0.2), labels = scales::percent) + 
+  scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent) + 
+  annotate('text', x = 0.91, y = 0.9, label = 'NPDR \n AUC = 0.9967', color = cbbPalette[6]) +
+  annotate('text', x = 0.85, y = 0.65, label = 'Relief-F \n AUC = 0.9622', color = cbbPalette[8]) +
+  guides(color = FALSE) + 
+  labs(title = "ROC curve for detecting important attributes")
+
+```
+
+
+
+
 
