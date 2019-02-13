@@ -17,7 +17,9 @@ rm(list = ls())
 set.seed(1618)
 ```
 
+
 Utility functions:
+
 ```{r}
 geneLowVarianceFilter <- function(dataMatrix, percentile=0.5) {
   variances <- apply(as.matrix(dataMatrix), 2, var)
@@ -28,84 +30,107 @@ geneLowVarianceFilter <- function(dataMatrix, percentile=0.5) {
   # return the row mask and filtered data
   list(mask=mask, fdata=fdata)
 }
-
-splitFN <- function(elt, string_vector){
-  unlist(strsplit(string_vector[elt],'_'))[3]
-}
 ```
-
 
 
 Load data:
 
 ```{r}
 ### RNA-Seq data
-load('unfilteredMostafavi.Rdata')
+load('data/unfilteredMostafavi.Rdata')
 dim(unfiltered.mostafavi)  # 915 subjects x (15230 genes + 1 class)
-mdd.pheno <- unfiltered.mostafavi[, 'class']
+mdd.pheno <- unfiltered.mostafavi %>% 
+  select(class) %>% rownames_to_column('ids') 
 # 463 MDD, 452 HC
 
-## Match the RNAseq subject ids with the GWAS data to get the sex covariate 
-rnaseq.subject.ids.df <- data.frame(ids = row.names(unfiltered.mostafavi))
-fam.data <- read_table('MDD_LD.fam', col_names = 
+# Read in sex data.frame
+fam.data <- read_table('data/MDD_LD.fam', col_names = 
     c('pedigree', 'member', 'father', 'mother', 'sex', 'affected')) %>% 
-  mutate(short.ids = strsplit(pedigree,'_')[3])
-
-
-# sex.column <- fam.data$sex
-# 
-# gwas.subj.ids <- sapply(1:length(gwas.LONG.ids), splitFN, 
-#                         string_vector = gwas.subject.LONG.ids)
-# gwas.sex.df <- data.frame(ids = gwas.subject.ids, sex=sex.column)
-
-#create sex covariate column vector that has same subject id order as RNA-Seq data
-sex.merged <- merge(rnaseq.subject.ids.df,gwas.sex.df,by='ids')
-# sex.vec or sex.covar.mat will work with glmSTIR
-sex.vec <- sex.merged$sex
-sex.covar.mat <- as.matrix(sex.merged$sex, ncol=1)
-colnames(sex.covar.mat) <- 'sex'  # not required by glmSTIR to add column name
+  rowwise() %>% mutate(ids = unlist(strsplit(pedigree, "[_ ]+"))[3])
 # 274 male, 641 female
+```
 
-# assocation between MDD and sex
-chisq.test(mdd.pheno,sex.vec)
-table(mdd.pheno,sex.vec)
 
-### Filter RNA-Seq and run glmSTIR
+### Assocation between MDD and sex:
 
-unfiltered.predictors.mat <- unfiltered.mostafavi %>% select(- class)
+```{r}
+pheno.sex <- merge(mdd.pheno, fam.data, by = 'ids')
+chisq.test(fam.data$affected, fam.data$sex)
+# table(fam.data$affected, fam.data$sex)
+table(pheno.sex$class, pheno.sex$sex)
+# 1: HC; 2: MDD
+# table(fam.data$affected, pheno.sex$class)
 
+# table(pheno.sex$class, pheno.sex$affected)
+# pheno.sex$class== pheno.sex$affected
+```
+
+
+### Filter RNA-Seq and run NPDR:
+
+```{r}
+unfiltered.predictors.mat <- unfiltered.mostafavi %>% select(-class)
 # strict filter so it finishes in a couple minutes
 # use .5 in real analysis, but it will take a while (a day?)
 pct <- 0.7 # .9, 1,524 genes, .75 3,809 vars, .98 306vars 4.7mins, .7 4570vars
 filter <- geneLowVarianceFilter(unfiltered.predictors.mat, pct)
 #filtered.mostafavi <- filter$fdata
-filtered.mostafavi.df <- data.frame(filter$fdata, class = mdd.pheno)
+filtered.mostafavi.df <- data.frame(filter$fdata, class = mdd.pheno$class)
+filtered.pred <- filtered.mostafavi.df %>% select(-class)
 #unfiltered.mostafavi <- data.frame(predictors.mat, class = pheno.class)
 dim(filtered.mostafavi.df)
 
+```
 
-########################################## Univariate
+
+### Univariate analysis:
+
+#### Simple analysis with no sex adjustment:
+```{r}
 class.idx <- length(colnames(filtered.mostafavi.df))
 colnames(filtered.mostafavi.df)[class.idx]
 
-rnaseq.univariate <- univariateRegression(outcome='class', dataset=filtered.mostafavi.df, regression.type='glm')
-rnaseq.univariate[rnaseq.univariate[,3]<.05,]
-write.csv(rnaseq.univariate[1:20,],'ResultsRNA/univar.mdd.csv')
-rnaseq.univariate[1:40,]
+rnaseq.univariate <- univariateRegression(
+  outcome = 'class', 
+  dataset = filtered.mostafavi.df, 
+  regression.type = 'glm')
+head(rnaseq.univariate)
 
-rnaseq.univariate.sexadjust <- univariateRegression(outcome='class', dataset=filtered.mostafavi.df, 
-                                                    regression.type='glm', covars=as.factor(sex.vec))
-rnaseq.univariate.sexadjust[rnaseq.univariate.sexadjust[,3]<.05,]
-rnaseq.univariate.sexadjust[1:10,]
-write.csv(rnaseq.univariate.sexadjust[1:20,],'ResultsRNA/univar.mdd.sexadjust.csv')
+# rnaseq.univariate[rnaseq.univariate[,3]<.05,]
+# write.csv(rnaseq.univariate[1:20,],'ResultsRNA/univar.mdd.csv')
+# rnaseq.univariate[1:40,]
+```
 
-# univariate with sex as outcome
-rnaseq.sextest <- univariateRegression(outcome=as.factor(sex.vec), dataset=filtered.mostafavi.df[,-class.idx], regression.type='glm')
-rnaseq.sextest[rnaseq.sextest[,3]<.05,]
-write.csv(rnaseq.sextest[rnaseq.sextest[,3]<.05,],'ResultsRNA/univar.sexassoc.csv')
-write.csv(rnaseq.sextest[1:50,],'ResultsRNA/univar.sexassoc.csv')
 
-# compare list of genes for no adjust, sex-adjusted, and sex-associated
+#### After adjusting for sex:
+
+```{r}
+rnaseq.univariate.sexadjust <- univariateRegression(
+  outcome = 'class', dataset = filtered.mostafavi.df, 
+  regression.type = 'glm', covars = pheno.sex$sex)
+head(rnaseq.univariate.sexadjust)
+# rnaseq.univariate.sexadjust %>% filter(p.adj<.05)
+# rnaseq.univariate.sexadjust[1:10,]
+# write.csv(rnaseq.univariate.sexadjust[1:20,],'ResultsRNA/univar.mdd.sexadjust.csv')
+```
+
+
+#### Univariate with sex as outcome:
+
+```{r}
+rnaseq.sex <- univariateRegression(outcome = pheno.sex$sex-1,
+                                   dataset = filtered.pred,
+                                   regression.type='glm')
+rnaseq.sextest[rnaseq.sex[,3]<.05,]
+# write.csv(rnaseq.sextest[rnaseq.sextest[,3]<.05,],'ResultsRNA/univar.sexassoc.csv')
+# write.csv(rnaseq.sextest[1:50,],'ResultsRNA/univar.sexassoc.csv')
+
+```
+
+
+### Compare list of genes for no adjust, sex-adjusted, and sex-associated
+```{r}
+
 topx <- 20
 univ.compare <- cbind(rownames(rnaseq.univariate)[1:topx], rownames(rnaseq.univariate.sexadjust)[1:topx],
       rownames(rnaseq.sextest)[1:topx]); colnames(univ.compare) <-c('no-adjust', 'sex-adjust','sex-assoc')
@@ -115,7 +140,9 @@ univ.compare
 #      rownames(rnaseq.univariate.sexadjust)[1:topx], rnaseq.univariate.sexadjust[1:topx,],
 #      rownames(rnaseq.sextest)[1:topx], rnaseq.sextest[1:topx,])
 
+```
 
+```{r}
 ################################### run glmstir, no covariate adjustment
 start_time <- Sys.time()
 glmstir.mdd.rnaseq.results <- glmSTIR('class', filtered.mostafavi.df, regression.type='glm', attr.diff.type='numeric-abs',
@@ -141,9 +168,14 @@ glmstir.mdd.fdr.idx <- glmstir.mdd.rnaseq.results[,1]<.05
 glmstir.mdd.rnaseq.positives <- row.names(glmstir.mdd.rnaseq.results[glmstir.mdd.fdr.idx,]) # reSTIR p.adj<.05
 glmstir.mdd.rnaseq.positives
 glmstir.mdd.rnaseq.results[glmstir.mdd.fdr.idx,]
-write.csv(glmstir.mdd.rnaseq.results[glmstir.mdd.fdr.idx,],'ResultsRNA/NPDR.mdd.csv')
+# write.csv(glmstir.mdd.rnaseq.results[glmstir.mdd.fdr.idx,],'ResultsRNA/NPDR.mdd.csv')
+
+```
 
 
+
+
+```{r}
 library(glmnet)
 ######################### VECTOR MEMORY EXHAUSTED (LIMIT REACHED)
 ##### Run glmnetSTIR, penalized glmSTIR, no covar
@@ -198,7 +230,9 @@ write.csv(glmstir.mdd.sexadj1.rnaseq.results[glmstir.mdd.sex1.fdr.idx,],'Results
 #r=glm(trait~1, offset=c*t, family=binomial(link=probit))$residuals
 #fit=lm(r~genotypes) 
 #plink --bfile data --linear --covar covars.txt --adjust --out data
+```
 
+```{r}
 # sex-associated by glmSTIR
 start_time <- Sys.time()
 class.idx <- length(colnames(filtered.mostafavi.df))
@@ -238,7 +272,9 @@ stir.sex.compare2 <- cbind(rownames(glmstir.mdd.rnaseq.results)[1:topx],
                           )
 colnames(stir.sex.compare2) <-c('no-adjust', 'sex-assoc','sex-adjust1','sex-adjust2')
 stir.sex.compare2
+```
 
+```{r}
 library(randomForest)
 ranfor.fit <- randomForest(as.factor(class) ~ ., data = filtered.mostafavi.df) 
 rf.importance <- importance(ranfor.fit)  # variable 3 best
@@ -249,27 +285,6 @@ rf.sorted <- cbind(rownames(rf.importance)[x$ix],rf.importance[x$ix])
 rf.sorted[1:50,]
 write.csv(rf.sorted[1:50,],'ResultsRNA/randomForest.mdd.csv')
 
-
-library(privateEC)
-cncv.rnaseq <- consensus_nestedCV(train.ds = filtered.mostafavi.df, 
-                                        validation.ds =  filtered.mostafavi.df, 
-                                        label = 'class',
-                                        method.model = 'classification',
-                                        is.simulated = TRUE,
-                                        ncv_folds = c(10, 10),
-                                        param.tune = FALSE,
-                                        learning_method = 'rf', 
-                                        importance.algorithm = 'ReliefFequalK',
-                                        relief.k.method = 'k_half_sigma',     # surf k
-                                        num_tree = 500,
-                                        verbose = F)
-
-cat('\n Train Accuracy [',cncv.rnaseq$cv.acc,']\n')
-cat('\n Validation Accuracy [',cncv.rnaseq$Validation,']\n')
-cat('\n Selected Features \n [',cncv.rnaseq$Features,']\n')
-cat('\n Elapsed Time [',cncv.rnaseq$Elapsed,']\n')
-
-rownames(glmstir.mdd.rnaseq.results[glmstir.mdd.rnaseq.results$pval.adj<.05,])
 
 ```
 
