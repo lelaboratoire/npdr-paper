@@ -15,6 +15,9 @@ library(npdr)
 
 rm(list = ls())
 set.seed(1618)
+
+cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
 ```
 
 
@@ -83,7 +86,7 @@ stir.results <- stir::stir(predictors.cc.mat, neighbor.idx.observed, k = 0,
                      metric = "manhattan", method = "multisurf")
 multisurf_softed_imp <- stir.results$STIR_T %>% 
   rownames_to_column('att') %>%
-  mutate(stir.log10 = -log10(t.pval.adj))
+  mutate(stir.log10 = -log10(t.pval))
 
 # functional attribute detection stats
 tstat_stir.detect.stats <- detectionStats(
@@ -95,7 +98,7 @@ cat(tstat_stir.detect.stats$report)
 
 ### Compare NPDR and STIR
 ```{r}
-pcutoff <- -log10(0.05)
+pcutoff <- -log10(0.05/n.variables) # bonferoni adjustment
 test.df <- merge(multisurf_softed_imp, glm.stir.cc.results) %>% 
   mutate(functional = att %in% functional.cc)
 r2 <- round(cor(test.df$stir.log10, test.df$npdr.log10), digits = 3)
@@ -105,16 +108,18 @@ p <- ggplot(test.df, aes(x=stir.log10,y=npdr.log10)) +
   geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
   theme_bw() + theme(legend.position = c(0.78, 0.23)) +
   labs(colour = NULL, 
-       x = bquote('STIR ('~-log[10]~'p'[adj]~')'), 
-       y = bquote('NPDR ('~-log[10]~'p'[adj]~')'),
-       title = "Similarity between NPDR and RRelief") + 
-  annotate("text", x = 75, y = 88.5, label = deparse(bquote(R^2 == .(r2))), parse = T) + 
-  viridis::scale_color_viridis(discrete = TRUE, 
-                               labels = c('Non-functional', 'Funtional')) + 
+       x = bquote('STIR ('~-log[10]~'p'~')'), 
+       y = bquote('NPDR ('~-log[10]~'p'~')'),
+       title = "Similarity between NPDR and Relief-F score") + 
+  annotate("text", x = 60, y = 75, label = deparse(bquote(R^2 == .(r2))), parse = T) +
+  scale_color_manual(values = cbbPalette[c(1,2)],
+                     labels = c('Non-functional', 'Functional')) +
+  # viridis::scale_color_viridis(discrete = TRUE, 
+  #                              labels = c('Non-functional', 'Functional')) + 
   geom_vline(xintercept=pcutoff, linetype="dashed", alpha = 0.5) +
   geom_hline(yintercept=pcutoff, linetype="dashed", alpha = 0.5)
 p
-ggsave(p, filename = 'figs/npdr_stir_p_cc.pdf', height = 4, width = 4)
+ggsave(p, filename = '../figs/npdr_stir_p_cc.pdf', height = 4.5, width = 4.5 )
 
 
 
@@ -132,15 +137,13 @@ core.learn.cc <- CORElearn::attrEval("class", data = cc.data,
 # core.learn.cc.order <- order(core.learn.cc, decreasing = T)
 corelearn.df <- data.frame(att=names(core.learn.cc), rrelief=core.learn.cc)
 last.imp.att <- which(glm.stir.cc.results$pval.adj>.05)[1]-1
-npdr.beta.cutoff <- glm.stir.cc.results[last.imp.att, 'beta.raw.att']
+npdr.beta.cutoff <- glm.stir.cc.results[last.imp.att, 'beta.Z.att']
 
 test.df <- merge(corelearn.df, glm.stir.cc.results) %>% 
   mutate(functional = att %in% functional.cc)
-r2 <- round(cor(test.df$rrelief, test.df$beta.raw.att), digits = 3)
+r2 <- round(cor(test.df$rrelief, test.df$beta.Z.att), digits = 3)
 
-cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
-                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
-p <- ggplot(test.df, aes(x = rrelief, y = beta.raw.att)) + 
+p <- ggplot(test.df, aes(x = rrelief, y = beta.Z.att)) + 
   geom_smooth(method = "lm", se = F, color = "grey") + 
   geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
   theme_bw() + theme(legend.position = c(0.78, 0.17)) +
@@ -153,10 +156,10 @@ p <- ggplot(test.df, aes(x = rrelief, y = beta.raw.att)) +
   labs(colour = NULL, x = "Relief-F score", y = "NPDR coefficient",
        title = "NPDR and Relief-F importance score") +
   scale_color_manual(values = cbbPalette[c(1,2)],
-                     labels = c('Non-functional', 'Funtional')) +
+                     labels = c('Non-functional', 'Functional')) +
   # viridis::scale_color_viridis(discrete = TRUE, direction = -1,
   #                              labels = c('Non-functional', 'Funtional')) +
-  annotate("text", x = 0.04, y = 0.35, label = deparse(bquote(R^2 == .(r2))), parse = T) +
+  annotate("text", x = 0.038, y = 17, label = deparse(bquote(R^2 == .(r2))), parse = T) +
   geom_hline(yintercept=npdr.beta.cutoff, linetype="dashed", alpha = 0.5)
 p
 ```
@@ -167,10 +170,10 @@ Draw the Precision-Recall curve:
 ```{r}
 pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>% 
                         filter(functional == T) %>% 
-                        pull(beta.raw.att),
+                        pull(beta.Z.att),
                       scores.class1 = test.df %>% 
                         filter(functional == F) %>% 
-                        pull(beta.raw.att), 
+                        pull(beta.Z.att), 
                       curve = T)
 
 pr_relief <- PRROC::pr.curve(scores.class0 = test.df %>% 
@@ -198,14 +201,14 @@ q <- prr.dat %>%
   scale_color_manual(values = cbbPalette[c(6,8)]) + 
   scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) + 
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) + 
-  annotate('text', x = 0.95, y = 0.92, label = 'NPDR \n AUC = 0.951', color = cbbPalette[6]) +
+  annotate('text', x = 0.924, y = 0.9 , label = 'NPDR \n AUC = 0.972', color = cbbPalette[6]) +
   annotate('text', x = 0.7, y = 0.43, label = 'Relief-F \n AUC = 0.846', color = cbbPalette[8]) +
   guides(color = FALSE) + 
   labs(title = "PR curve for detecting important attributes")
 q  
 
 pq <- cowplot::plot_grid(p, q, labels = 'AUTO')
-ggsave(pq, filename = 'figs/npdr_relief_cc.pdf', height = 4, width = 8.5)
+ggsave(pq, filename = '../figs/npdr_relief_cc.pdf', height = 4, width = 8.5)
 ```
 
 
@@ -277,15 +280,15 @@ for (i in 1:n_sims){
   
   test.df <- merge(corelearn.df, glm.stir.cc.results) %>% 
     mutate(functional = att %in% functional.cc)
-  r2_vec[i] <- round(cor(test.df$rrelief, test.df$beta.raw.att), digits = 3)
+  r2_vec[i] <- round(cor(test.df$rrelief, test.df$beta.Z.att), digits = 3)
   
   # compute area under the precision-recall curve
   pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>% 
                         filter(functional == T) %>% 
-                        pull(beta.raw.att),
+                        pull(beta.Z.att),
                       scores.class1 = test.df %>% 
                         filter(functional == F) %>% 
-                        pull(beta.raw.att), 
+                        pull(beta.Z.att), 
                       curve = T)
   pr_relief <- PRROC::pr.curve(scores.class0 = test.df %>% 
                         filter(functional == T) %>% 
@@ -303,11 +306,12 @@ for (i in 1:n_sims){
 
 ```{r}
 pr_df <- data.frame(aupr = c(pr_relief_vec, pr_npdr_vec),
-                    type = rep(c('Relief', 'NPDR'), each = n_sims))
-levels(pr_df$type)
+                    type = rep(c('Relief-F', 'NPDR'), each = n_sims))
 pr_df$type <- factor(pr_df$type, levels = rev(levels(pr_df$type)))
+summary(r2_vec)
 pr_compare <- t.test(pr_npdr_vec, pr_relief_vec)
 print(pr_compare$p.value)
+
 pr_p <- round(pr_compare$p.value, 3)
 pr <- ggplot(pr_df, aes(x = type, y = aupr, fill = type, color = type)) + 
   geom_boxplot(alpha = 0.3, color = 'grey30', outlier.size = -1, width = 0.5) +
@@ -318,7 +322,7 @@ pr <- ggplot(pr_df, aes(x = type, y = aupr, fill = type, color = type)) +
   annotate("text", x = 1.5, y = 0.67, label = paste('p < 0.0001')) + 
   theme_bw() + guides(fill = F, color = F) 
 pr
-ggsave(pr, filename = 'figs/pr_compare.pdf', height = 3, width = 5)
+ggsave(pr, filename = '../figs/pr_compare.pdf', height = 3, width = 5)
  
 ```
 
