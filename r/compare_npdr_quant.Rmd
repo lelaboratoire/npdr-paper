@@ -1,0 +1,271 @@
+---
+title: "Comparing NPDR, STIR and Relief-F"
+output: html_document
+---
+
+### Load packages:
+
+```{r echo=FALSE}
+library(privateEC)
+library(broom)
+library(tidyverse)
+# library(devtools)
+# install_github("insilico/npdr") # npdr install
+library(npdr)
+
+rm(list = ls())
+set.seed(1618)
+
+cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
+```
+
+
+### Simulate case-control interaction effect data:
+
+```{r}
+#####
+
+##### simulate case-control interaction effect data 
+n.samples <- 300     # 100 samples in train/holdout/test
+n.variables <- 100   # 100 features
+label <- "qtrait"   # tells simulator to do quantitative trait and adds this colname
+type <- "mainEffect"
+bias <- 0.8          # moderate effect size
+pct.signals <- 0.1   # pct functional features
+verbose <- FALSE
+qtrait.3sets <- createSimulation(num.samples = n.samples,
+                              num.variables = n.variables,
+                              pct.signals = pct.signals,
+                              label = label,
+                              bias = bias,
+                              pct.train = 1/3,
+                              pct.holdout = 1/3,
+                              pct.validation = 1/3,
+                              sim.type = type,
+                              save.file = NULL,
+                              verbose = verbose)
+  # combine train and holdout into 200 samples x 100 attributes
+  # ignore validation set for now; qtrait = quantitative outcome
+qtrait.data <- rbind(qtrait.3sets$train,qtrait.3sets$holdout)
+#validation.data <- data.sets$validation
+n.samples.qtrait <- dim(qtrait.data)[1]
+pheno.qtrait <- as.factor(qtrait.data[,label])
+functional.qtrait <- qtrait.3sets$signal.names # functional attributes
+```
+
+### Run npdr:
+
+```{r}
+#####
+npdr.qtrait.results <- 
+  npdr("qtrait", qtrait.data, regression.type="lm", 
+          attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
+          nbd.metric = "manhattan", msurf.sd.frac = .5, 
+          padj.method = "bonferroni", verbose = T) %>%
+  # rownames_to_column('att') %>%
+  mutate(npdr.log10 = -log10(pval.att))
+
+# get functional attribute detection stats
+npdr.qtrait.positives <- npdr.qtrait.results %>%
+  filter(pval.adj < .05) %>%
+  pull(att)
+npdr.qtrait.detect.stats <- detectionStats(functional.qtrait, npdr.qtrait.positives)
+cat(npdr.qtrait.detect.stats$report)
+
+```
+
+
+
+### Compute Relief-F score with the `CORElearn` package 
+(fixed $k$ with theoretical surf value)
+
+```{r}
+core.learn.qtrait <- CORElearn::attrEval(label, data = qtrait.data,
+                                      estimator = "RReliefFequalK",
+                                      costMatrix = NULL,
+                                      outputNumericSplits=FALSE,
+                                      kNearestEqual = knnSURF(n.samples.qtrait,.5))
+corelearn.df <- data.frame(att=names(core.learn.qtrait), rrelief=core.learn.qtrait)
+last.imp.att <- which(npdr.qtrait.results$pval.adj>.05)[1]-1
+npdr.beta.cutoff <- npdr.qtrait.results[last.imp.att, 'beta.Z.att']
+
+test.df <- merge(corelearn.df, npdr.qtrait.results) %>% 
+  mutate(functional = att %in% functional.qtrait)
+r2 <- round(cor(test.df$rrelief, test.df$beta.Z.att), digits = 3)
+
+p <- ggplot(test.df, aes(x = rrelief, y = beta.Z.att)) + 
+  geom_smooth(method = "lm", se = F, color = "grey") + 
+  geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
+  theme_bw() + theme(legend.position = c(0.78, 0.17)) +
+  labs(colour = NULL, x = "Relief-F score", y = "NPDR coefficient",
+       title = "NPDR and Relief-F importance score") +
+  scale_color_manual(values = cbbPalette[c(1,2)],
+                     labels = c('Non-functional', 'Functional')) +
+  annotate("text", x = 0.08, y = 35, label = deparse(bquote(R^2 == .(r2))), parse = T) +
+  geom_hline(yintercept=npdr.beta.cutoff, linetype="dashed", alpha = 0.5)
+p
+```
+
+
+Draw the Precision-Recall curve:
+
+```{r}
+pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>% 
+                        filter(functional == T) %>% 
+                        pull(beta.Z.att),
+                      scores.class1 = test.df %>% 
+                        filter(functional == F) %>% 
+                        pull(beta.Z.att), 
+                      curve = T)
+
+pr_relief <- PRROC::pr.curve(scores.class0 = test.df %>% 
+                        filter(functional == T) %>% 
+                        pull(rrelief), 
+                      scores.class1 = test.df %>% 
+                        filter(functional == F) %>% 
+                        pull(rrelief), 
+                      curve = T)
+
+x <- as.data.frame(pr_npdr$curve) 
+colnames(x) <- paste0(c('Recall', 'Precision', 'w'))
+y <- as.data.frame(pr_relief$curve) 
+colnames(y) <- paste0(c('Recall', 'Precision', 'w'))
+
+prr.dat <- rbind(x, y) %>% 
+  mutate(type = rep(c('NPDR', 'Relief-F'), each = nrow(x)))
+
+pr_npdr
+pr_relief
+
+q <- prr.dat %>%
+  ggplot(aes(Recall, Precision, color = type)) +
+  geom_path(size = 1) + theme_bw() +
+  scale_color_manual(values = cbbPalette[c(6,8)]) + 
+  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) + 
+  annotate('text', x = 0.75, y = 0.9 , label = 'NPDR \n AUC = 0.611', color = cbbPalette[6]) +
+  annotate('text', x = 0.35, y = 0.6, label = 'Relief-F \n AUC = 0.522', color = cbbPalette[8]) +
+  guides(color = FALSE) + 
+  labs(title = "PR curve for detecting important attributes")
+q  
+
+pq <- cowplot::plot_grid(p, q, labels = 'AUTO')
+ggsave(pq, filename = '../figs/npdr_relief_qtrait.pdf', height = 4, width = 8.5)
+```
+
+
+
+What about auROC?
+
+```{r}
+ss_npdr <- pROC::roc(test.df$functional, test.df$beta.Z.att)
+ss_relief <- pROC::roc(test.df$functional, test.df$rrelief)
+ss_npdr
+ss_relief
+ss_df <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities), 
+                    Specificity = c(ss_npdr$specificities, ss_relief$specificities)) %>%
+  mutate(type = rep(c('NPDR', 'Relief'), each = length(ss_npdr$sensitivities)))
+
+ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +   
+  geom_path(size = 1) + theme_bw() +
+  scale_color_manual(values = cbbPalette[c(6,8)]) +
+  scale_x_reverse(breaks = seq(1, 0, -0.2), labels = scales::percent) + 
+  scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent) + 
+  annotate('text', x = 0.91, y = 0.9, label = 'NPDR \n AUC = 0.9089', color = cbbPalette[6]) +
+  annotate('text', x = 0.85, y = 0.65, label = 'Relief-F \n AUC = 0.8444', color = cbbPalette[8]) +
+  guides(color = FALSE) + 
+  labs(title = "ROC curve for detecting important attributes")
+
+```
+
+
+How much better is NPDR? Is this just by chance? Let's do some replication:
+
+```{r}
+n_sims <- 100
+r2_vec <- vector(mode = 'numeric', length = n_sims)
+pr_npdr_vec <- vector(mode = 'numeric', length = n_sims)
+pr_relief_vec <- vector(mode = 'numeric', length = n_sims)
+
+set.seed(16183)
+for (i in 1:n_sims){
+  qtrait.3sets <- createSimulation(num.samples = n.samples,
+                              num.variables = n.variables,
+                              pct.signals = pct.signals,
+                              label = label,
+                              bias = bias,
+                              pct.train = 1/3,
+                              pct.holdout = 1/3,
+                              pct.validation = 1/3,
+                              sim.type = type,
+                              save.file = NULL,
+                              verbose = verbose)
+  qtrait.data <- rbind(qtrait.3sets$train, qtrait.3sets$holdout)
+  n.samples.qtrait <- nrow(qtrait.data)
+  functional.qtrait <- qtrait.3sets$signal.names # functional attributes
+
+  npdr.qtrait.results <- 
+  npdr(label, qtrait.data, regression.type="lm", 
+          attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
+          nbd.metric = "manhattan", msurf.sd.frac = .5, 
+          padj.method = "bonferroni", verbose = T) %>%
+  mutate(npdr.log10 = -log10(pval.att))
+  
+  core.learn.qtrait <- CORElearn::attrEval(label, data = qtrait.data,
+                                      estimator = "RReliefFequalK",
+                                      costMatrix = NULL,
+                                      outputNumericSplits=FALSE,
+                                      kNearestEqual = knnSURF(n.samples.qtrait,.5))
+  corelearn.df <- data.frame(att=names(core.learn.qtrait), rrelief=core.learn.qtrait)
+  
+  test.df <- merge(corelearn.df, npdr.qtrait.results) %>% 
+    mutate(functional = att %in% functional.qtrait)
+  r2_vec[i] <- round(cor(test.df$rrelief, test.df$beta.Z.att), digits = 3)
+  
+  # compute area under the precision-recall curve
+  pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>% 
+                        filter(functional == T) %>% 
+                        pull(beta.Z.att),
+                      scores.class1 = test.df %>% 
+                        filter(functional == F) %>% 
+                        pull(beta.Z.att), 
+                      curve = T)
+  pr_relief <- PRROC::pr.curve(scores.class0 = test.df %>% 
+                        filter(functional == T) %>% 
+                        pull(rrelief), 
+                      scores.class1 = test.df %>% 
+                        filter(functional == F) %>% 
+                        pull(rrelief), 
+                      curve = T)
+  pr_npdr_vec[i] <- pr_npdr$auc.integral
+  pr_relief_vec[i] <- pr_relief$auc.integral
+}
+
+```
+
+
+```{r}
+pr_df <- data.frame(aupr = c(pr_relief_vec, pr_npdr_vec),
+                    type = rep(c('Relief-F', 'NPDR'), each = n_sims))
+pr_df$type <- factor(pr_df$type, levels = rev(levels(pr_df$type)))
+summary(r2_vec)
+pr_compare <- t.test(pr_npdr_vec, pr_relief_vec)
+print(pr_compare$p.value)
+
+pr_p <- round(pr_compare$p.value, 3)
+pr <- ggplot(pr_df, aes(x = type, y = aupr, fill = type, color = type)) + 
+  geom_boxplot(alpha = 0.3, color = 'grey30', outlier.size = -1, width = 0.5) +
+  labs(x = NULL, y = 'Area under the PR curve') + 
+  geom_jitter(height = 0, width = 0.1) +
+  scale_color_manual(values = cbbPalette[c(8,6)]) +
+  scale_fill_manual(values = cbbPalette[c(8,6)]) +
+  annotate("text", x = 1.5, y = 0.36, label = paste('p < 0.0001')) + 
+  theme_bw() + guides(fill = F, color = F) 
+pr
+ggsave(pr, filename = '../figs/pr_compare_qtrait.pdf', height = 3, width = 5)
+ 
+```
+
+
+
