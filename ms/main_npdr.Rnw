@@ -111,6 +111,7 @@ University of Pennsylvania, Philadelphia, PA 19104}
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
+\setkeys{Gin}{width=1\textwidth}
 % \begin{titlingpage}
 \maketitle
 \begin{abstract}
@@ -492,7 +493,7 @@ With multiSURF neighborhood $\mathcal{N}_{\alpha=1/2}$, we apply NPDR with and w
 
 \begin{figure}[!tpb]%figure2
 \centerline{\includegraphics[]{../figs/npdrs_mdd.pdf}}
-\caption{{\bf To adjust or to not adjust.}
+\caption{{\bf To adjust or not to adjust.}
 Gene scatter plot of $-\log_{10}$ adjusted significance for association with major depressive disorder using NPDR without correction for sex (horizontal axis) and with correction for sex (vertical axis). NPDR without sex correction finds [47] genes that are significant at the Bonferroni-adjusted 0.05 level (above horizontal dashed line) [28] of which are also significantly associated with sex ($p^\textrm{sex}_\textrm{adj} < 0.05$).  NPDR with adjustment for sex finds [23] genes that are significant at the Bonferroni-adjusted 0.05 level (right of vertical dashed line) only 3 of which are also significantly associated with sex, thus eliminating most of the confounding variables.}
 \label{fig:npdrs_mdd}
 \end{figure}
