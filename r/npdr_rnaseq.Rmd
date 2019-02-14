@@ -222,21 +222,30 @@ with_without_sex <- data.frame(rnaseq.sex) %>%
   merge(npdr.mdd.sexassoc.results, by = 'att') %>%
   mutate(nlog10_nosex = -log10(pval.adj.x)) %>%
   mutate(nlog10_sex = -log10(pval.adj.y)) %>%
-  mutate(significant = as.factor((pval.adj.x < 0.05) + (pval.adj.y <0.05))) %>%
+  mutate(significant = as.factor((pval.adj.x < 0.05) + (pval.adj.y < 0.05))) %>%
   mutate(sig.genes = ifelse(pval.adj.x < 0.05, att, NA)) %>%
-  rename(p.sex.adj = p.adj)
+  mutate(nlog10_sex_genes = -log10(p.adj))
 
+save(with_without_sex, file = paste0(pct, '_mdd_results.Rdata'))
+```
+
+
+
+```{r}
 # with_without_sex$sig.genes <- NA
 # with_without_sex[t.stir$t.pval.adj.stir < 0.05, "sig.genes"] <- t.stir[t.stir$t.pval.adj.stir < 0.05, "attribute"] 
 # t.stir$t.sig <- as.factor((t.stir$regT.padj <0.05) + (t.stir$t.pval.adj.stir <0.05))
 
 pboth <- ggplot(with_without_sex, aes(x = nlog10_nosex, y = nlog10_sex)) + 
-  geom_point(alpha = 0.7, shape = 21, size = 2.5, aes(fill = p.sex.adj)) + theme_bw() +
+  geom_point(alpha = 0.7, shape = 21, size = 2.5, aes(fill = nlog10_sex_genes)) + 
+  theme_bw() +
   geom_hline(yintercept = -log10(0.05), linetype = 2, alpha = 0.8, color = cbbPalette[1]) + 
   geom_vline(xintercept = -log10(0.05), linetype = 2, alpha = 0.8, color = cbbPalette[1]) + 
   geom_abline(slope = 1, intercept = 0, alpha = 0.5, linetype = 3) +
-  annotate("text", 13, -log10(0.05) + 0.2, label = "0.05 FDR", size = 3, color = cbbPalette[1]) +
-  annotate("text", -log10(0.05) - 0.2, 7.5, label = "0.05 FDR", size = 3, color = cbbPalette[1], angle = 90) +
+  annotate("text", 13, -log10(0.05) + 0.2, label = "0.05 FDR", 
+           size = 3, color = cbbPalette[1]) +
+  annotate("text", -log10(0.05) - 0.2, 7.5, label = "0.05 FDR", 
+           size = 3, color = cbbPalette[1], angle = 90) +
   # scale_fill_continuous(label = 'p.sex.adj') + 
   labs(x = bquote('Vanilla NPDR ('~-log[10]~'p'[adj]~')'),
        y = bquote('Sex-adjusted NPDR ('~-log[10]~'p'[adj]~')')) +
