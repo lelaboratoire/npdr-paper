@@ -83,7 +83,7 @@ table(pheno.sex$class, pheno.sex$sex)
 unfiltered.predictors.mat <- unfiltered.mostafavi %>% select(-class)
 # strict filter so it finishes in a couple minutes
 # use .5 in real analysis, but it will take a while (a day?)
-pct <- 0.98 # .9, 1,524 genes, .75 3,809 vars, .98 306vars 4.7mins, .7 4570vars
+pct <- 0 # .9, 1,524 genes, .75 3,809 vars, .98 306vars 4.7mins, .7 4570vars
 filter <- geneLowVarianceFilter(unfiltered.predictors.mat, pct)
 filtered.mostafavi.df <- data.frame(filter$fdata, class = mdd.pheno$class)
 filtered.pred <- filtered.mostafavi.df %>% select(-class)
@@ -123,7 +123,7 @@ gene_sex <- univarRegress(
 # Summarize all univariate analyses:
 uni_w_wo_sex <- data.frame(gene_mdd) %>%
   merge(gene_sex_mdd, by = 'att') %>%
-  merge(gene_sex, by = 'att') 
+  merge(gene_sex, by = 'att')
 
 ```
 
@@ -172,8 +172,8 @@ npdr_w_wo_sex <- data.frame(gene_sex) %>%
   merge(npdr_mdd_sex, by = 'att') %>%
   mutate(nlog10.nosex = -log10(p.adj.npdr.nosex)) %>%
   mutate(nlog10.sex = -log10(p.adj.npdr.sex)) %>%
-  mutate(significant = as.factor((p.adj.npdr.nosex < 0.05) + (p.adj.npdr.sex < 0.05))) %>%
-  mutate(sig.genes = ifelse(p.adj.npdr.nosex < 0.05, att, NA)) %>%
+  mutate(significant = as.factor((p.adj.npdr.nosex < 0.01) + (p.adj.npdr.sex < 0.01))) %>%
+  mutate(sig.genes = ifelse((p.adj.npdr.nosex < 0.01) | p.adj.npdr.sex < 0.01, att, NA)) %>%
   mutate(nlog10.sex.genes = -log10(p.adj.gene.sex))
 
 save(npdr_w_wo_sex, uni_w_wo_sex, file = paste0('../results/', pct, '_mdd_results.Rdata'))
@@ -181,13 +181,12 @@ save(npdr_w_wo_sex, uni_w_wo_sex, file = paste0('../results/', pct, '_mdd_result
 
 
 ```{r}
-library(randomForest)
-ranfor.fit <- randomForest(as.factor(class) ~ ., data = filtered.mostafavi.df) 
+set.seed(1618)
+ranfor.fit <- randomForest::randomForest(as.factor(class) ~ ., data = filtered.mostafavi.df, importance = T) 
 rf.importance <- importance(ranfor.fit)  # variable 3 best
 rf_imp_sorted <- rf.importance %>%
   data.frame() %>%
-  rownames_to_column('att') %>%
-  arrange(desc(MeanDecreaseGini))
+  rownames_to_column('att') 
 
 save(rf_imp_sorted, file = paste0('../results/rf_', pct, '_mdd_results.Rdata'))
 ```
