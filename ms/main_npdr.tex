@@ -198,7 +198,11 @@ An example projected difference between two instances $i$ and $j$ for a continuo
                                             & = {|\hat{X}_{ia}-\hat{X}_{ja}|}.
  \end{aligned}
 \end{equation}
-We use a simplified d$_{ij}(a)$ notation in place of the $\text{diff}(a,(i,j))$ notation that is customary in Relief-based methods. We omit the division by $\max(a)-\min(a)$ used by Relief to constrain scores to the interval from $-1$ to $1$. NPDR scores are regression coefficients with corresponding P values, so this scaling is not necessary for comparing attribute scores. The scaling may alleviate bias in the distance calculation. However, standardizing the data matrix $X$ ($\hat{X}$) should have the same effect without division by $\max(a)-\min(a)$, which has usual distribution properties for distances (expand). The numeric d$^{\text{num}}_{ij}(a)$ projection is simply the absolute difference between row elements $i$ and $j$ of the data matrix $X^{m \times p}$ for the attribute column $a$. 
+We use a simplified d$_{ij}(a)$ notation in place of the $\text{diff}(a,(i,j))$ notation that is customary in Relief-based methods.
+We omit the division by $\max(a)-\min(a)$ used by Relief to constrain scores to the interval from $-1$ to $1$.
+As we show in subsequent sections, NPDR scores are [standardized] regression coefficients with corresponding P values, so any scaling operation at this stage is unnecessary for comparing attribute scores. 
+\emph{Omit: The scaling may alleviate bias in the distance calculation. However, standardizing the data matrix $X$ ($\hat{X}$) should have the same effect without division by $\max(a)-\min(a)$, which has usual distribution properties for distances (expand).}
+The numeric d$^{\text{num}}_{ij}(a)$ projection is simply the absolute difference between row elements $i$ and $j$ of the data matrix $X^{m \times p}$ for the attribute column $a$. 
 
 This numeric projection function (Eq.~\ref{eq:diff}) is appropriate for gene expression and other quantitative predictors and outcomes. For genome-wide association study (GWAS) data, where attributes are categorical, one simply modifies the type in the projection function~\cite{titv}, but the projected-distance regression methods will be otherwise unchanged. The $\text{d}_{ij}(a)$ quantity is typically part of the metric to define the neighborhood, but it is also essential for computing the importance coefficients (Sec. \ref{sec:regress}).  The regression models below (Eqs.~\ref{eq:lin_reg},~\ref{eq:lin_reg_cov},~\ref{eq:too_logit}) will be fit for all nearest neighbors $i$ and $j$ in the defined neighborhood (discussed next). 
 
@@ -390,7 +394,7 @@ $\mathcal{L}$ is the negative log-likelihood for each pair of instances $i$ and 
 \end{equation}
 The elastic-net parameter $\alpha$ mixes the amount of lasso ($\alpha$=1) and ridge ($\alpha$=0) penalty. Our implementation allows any value of $\alpha$, but we use lasso as the default to choose one predictor (attribute diff vector) when a set of predictors is correlated. The overall penalty strength $\lambda$ is chosen by cross-validation.  {\it Could set constant $\lambda$ as option.} For case-control, we use binomial link function for the hit/miss projected distances in the likelihood optimization, which leads to elastic net treating positive and negative $\beta_{a_i}$ coefficients similarly when shrinking. One can simply remove any negative coefficients after shrinkage, but a better approach may be to modify the likelihood to ordinal or directional logistic regression.   
 
-\subsubsection{Comparing NPDR to existing methods}
+\subsubsection{Comparing NPDR to existing Relief-based methods}
 We examine the slight differences between the importance scores computed from NPDR, STIR and traditional Relief-based methods.
 Roughly speaking, the formulas for importance scores become more generalized over time (Table \ref{tab:compare_npdr}).
 Specifically, for binary outcome, STIR incorporates sample variance of the nearest neighbor distances to enable the calculation of statistical significance with the assumptions of a t-test, while NPDR assumes intra- and inter-class differences are randomly sampled from one distribution and computes the importance score from a logistic regression. This generalization enables NPDR to have desirable properties and be applicable to a wider range of problems.
@@ -420,12 +424,13 @@ Supports covariates         & \ding{55}                               & \ding{55
 % [Comparison with different values of k? Discuss the theoretical value $k=m/6$ and how it might relate to multiSURF average k.] 
 
 \subsubsection{Simulation methods}
-To compare power and false positive performance for multiple feature selection methods, we use the simulation tool from our private Evaporative Cooling (pEC) software \cite{le17} that was designed to simulate realistic main effects, correlations, and interactions found in gene expression or resting-state fMRI correlation data. In the current study, we first simulate main effect data with $m=100$ subjects ($50$ cases and $50$ controls) and $p=1000$ real-valued attributes with 10\% functional (true positive association with outcome).
+To compare power and false positive performance for multiple feature selection methods, we use the simulation tool from our private Evaporative Cooling (privateEC) software \cite{le17} that was designed to simulate realistic main effects, correlations, and interactions found in gene expression or resting-state fMRI correlation data. In the current study, we first simulate main effect data with $m=100$ subjects ($50$ cases and $50$ controls) and $p=1000$ real-valued attributes with 10\% functional (true positive association with outcome).
 We chose a sample size consistent with real gene expression data but on the smaller end to demonstrate a more challenging scenario.
 Likewise, an effect size bias of $b=0.8$ was selected to be sufficiently challenging with power approximately 40\%. 
 
-For interactions, we use the differential co-expression network-based simulation tool in pEC, which is described in Refs.~\cite{le17, lareau15}. 
-We first induce a co-expression network on an Erd\H{o}s-R\'enyi random graph with $0.1$ attachment probability, which is near the critical value for a giant component. We give connected genes a higher average correlation, approximately $r_{\text{connected}}=0.8$. %($s_{\text{int}}=.8$) ($s_{\text{int}}=.4$ gives $r_{\text{connected}}=0.9$).
+For interactions, we use the differential co-expression network-based simulation tool in privateEC, which is described in Refs.~\cite{le17, lareau15}. 
+We first induce a co-expression network on an Erd\H{o}s-R\'enyi random graph with $0.1$ attachment probability, which is near the critical value for a giant component.
+We give connected genes a higher average correlation, approximately $r_{\text{connected}}=0.8$. %($s_{\text{int}}=.8$) ($s_{\text{int}}=.4$ gives $r_{\text{connected}}=0.9$).
 This connection correlation induces interaction effect because the interaction is created by disrupting the correlation of these connections. %and we create a correlated data matrix by applying a Cholesky transformation of the designed covariance matrix to random normal data of size $m \times p$.  
 Finally, we simulate functional effects on the outcome of functional variables by permuting their values in cases but leaving the controls unpermuted, thereby leading to a final differential correlation network. 
 
@@ -455,14 +460,14 @@ We also compared NPDR regression coefficients with standard Relief scores becaus
 Similarly, for continuous outcome simulations, we compare NPDR regression coefficients with standard RRelief scores. We use the fixed-$k$ neighborhood that approximates multiSURF. Compare Glmnet cross-validated hyperparameters with glmnet-NPDR? Interactions have correlation built in; it would be interesting to do main effect simulations with and without correlation (maybe another paper to test the effect of correlation). Compare with random forest importance (fairly common in the machine learning field). Implement the new Cholesky correlation -- maybe later. Include a Random Forest importance score comparison. I wouldn't mind showing Random Forest can't find interactions again (although it could because of the small number of background attributes). 
 
 \subsection{Simulation comparison for case-control outcome data} 
-In simulation with $m = 100$ samples and $p = 100$ attributes, while the logistic regression and t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yielded very similar results ($R_P^2 = 0.999$, see Supplementary Fig. S1). 
+In simulations with $m = 100$ samples and $p = 100$ attributes, while the logistic regression and t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yielded very similar results ($R_P^2 = 0.999$, see Supplementary Fig. S1). 
 [NPDR vs STIR here]
 
-In one replicate of simulation with $m = 100$ samples and $p = 100$ attributes, we show that NPDR correctly detects 8 out of 10 functional attributes (Fig with a Bonferroni cutoff \ref{fig:npdr_relief_cc}).
-Meanwhile, Relief-F does not produce a threshold; hence, in practice, this value is frequenly arbitrarily selected.
+In one replicate of simulation with $m = 100$ samples and $p = 100$ attributes, we show that NPDR correctly detects 8 out of 10 functional attributes with a Bonferroni cutoff (Fig \ref{fig:npdr_relief_cc}).
+On the other hand, because Relief-F does not produce a threshold, in practice, this value is arbitrarily selected.
 While the importance scores computed from the two methods are similar ($R^2 = 0.884$), there is a greater separation between the functional and nonfunctional group on the NPDR coefficient compared to Relief-F score.
-In other words, if a vertical line was drawn as a Relief-F score cutoff that yields a reasonable number of correct functional attributes, it will include at least several of incorrect ones. 
-The precision-recall curve clearly demonstrates NPDR outperforms Relief-F in this simulated datasets.
+In other words, if a vertical line was drawn as an arbitrary Relief-F score cutoff that yields a reasonable number of correct functional attributes, it will include at least several incorrect ones. 
+The precision-recall curve clearly demonstrates NPDR outperforms Relief-F in this simulated dataset.
 Across 100 simulations, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S2).
 
 \begin{figure}[!tbp]
@@ -471,11 +476,9 @@ Across 100 simulations, NPDR yields significantly higher auPRC (P < 0.0001, see 
 \label{fig:npdr_relief_cc}
 \end{figure}
 
+For a dataset of the size simulated in our study ($m=100$ samples and $p=100$ attributes), NPDR has a [X]-second runtime on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. 
 
-
-For a dataset of the size simulated in our study ($m=100$ samples and $p=1,000$ attributes) NPDR has a X-second runtime on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. 
-
-Old: The increasing Recall with $k$ is expected for main effects because ReliefF becomes more myopic (more like a univariate t-test) as $k$ increases \cite{robnik03,mckinney13}. The increase in Recall is limited in part by the maximum number of neighbors being $\bar{k}_{\max{}} =\lfloor (m-1)/2\rfloor=49$. 
+% Old: The increasing Recall with $k$ is expected for main effects because ReliefF becomes more myopic (more like a univariate t-test) as $k$ increases \cite{robnik03,mckinney13}. The increase in Recall is limited in part by the maximum number of neighbors being $\bar{k}_{\max{}} =\lfloor (m-1)/2\rfloor=49$. 
 
 \subsection{Simulation comparison for continuous outcome data} 
 
@@ -485,11 +488,17 @@ For simulated data with continuous outcomes, we compare NPDR using a linear mode
 \subsection{Real-world RNA-Seq data with confounding}
 
 TODO:
-- Supplementary table of genes with expression associated with sex (339 adjusted P value less than .05).
+- Supplementary table of genes with expression associated with sex ([339] adjusted P value less than .05).
 - Also show univariate analysis with and without adjustment in supplement? 
-- Add random forest results
+
 
 With multiSURF neighborhood $\mathcal{N}_{\alpha=1/2}$, we apply NPDR with and without adjusting for the sex covariate.
+Several genes including UTY, PRKY, and USP9Y are removed from the list of MDD-associated genes when you adjust for the sex covariate, which indicates suprious associations between these genes and diagnostic phenotype due to confounding by sex.
+These genes are Y-linked (i.e., Y chromosome (male)) genes and mainly expressed in testis.
+For example, the RPS4Y2 ribosomal protein S4 Y-linked 2 has been shown by tissue specific studies to mainly express in prostate and testis \cite{lopes2010human}.
+Meanwhile, highly expressed in the brain as well as testis, the gene C2orf55 (KIAA1211L) is associated with sex but remains in the adjusted NPDR list ($p_\textrm{adj} < 0.05$) and may be relevant to MDD pathophysiology.
+[other genes here]
+In summary, this comparison suggests the NPDR with covariate adjustment effectively removes sex-related confounding variables.
 
 
 \begin{figure}[!tpb]%figure2
@@ -499,42 +508,22 @@ Gene scatter plot of $-\log_{10}$ adjusted significance for association with maj
 \label{fig:npdrs_mdd}
 \end{figure}
 
-Several genes including UTY, PRKY, and USP9Y are removed from the list of MDD-associated genes when you adjust for the sex covariate.
-This is noteworthy because they are likely suprious associations due to confounding by sex.
-These genes are Y-linked (i.e., Y chromosome (male)) genes and mainly expressed in testis.
-This suggests the NPDR with covariate adjustment removes sex-related confounding variables. 
 
-RPS4Y2 ribosomal protein S4 Y-linked 2. Tissue specific studies show this gene is mainly expressed in prostate and testis. 
+Sensitivity to confounders go beyond nearest-neighbors feature selection algorithms.
+Lacking the ability to include covariates, even powerful methods like random forest are expected to produce attribute importance scores that are biased with respect to sex.
+Like previous feature selection methods before STIR, importance scores produced by random forest does not follow a distribution.
+Hence, instead of P values, we compare NPDR standardized $\beta$ coefficient and random forest Gini-based importance score (Fig. \ref{fig:npdr_rf_mdd}).
+Most genes with high random forest importance score but low NPDR coefficient are highly associated with sex (dark pink - purple).
+However, there is a consensus between the two methods in giving high scores for genes such as [].
 
-Discussion? The gene C2orf55 (KIAA1211L) is associated with sex and remains in the adjusted NPDR list, but it may be relevant to MDD pathophysiology. It is highly expressed in the testis but also brain and possibly associated with bipolar? https://www.ncbi.nlm.nih.gov/gene/343990
 
-%With pct=.9 (1,500 genes), correction gets rid of most male-specific genes like
-%"UTY"        "PRKY"      "RPS4Y1 and 2"     "EIF1AY"     "USP9Y"     "ZFY"       
- %"CYorf15B"   "DDX3Y"        "TTTY14"     "RPS4Y2"  
-%
-%No correction.
-%> NPDR.mdd.rnaseq.positives
- %[1] "UTY"        "PRKY"       "KDM5D"      "RPS4Y1"     "TTTY15"     "EIF1AY"     "USP9Y"      "NCRNA00185" "ZFY"       
-%[10] "CYorf15A"   "CYorf15B"   "DDX3Y"      "BCORP1"     "XIST"       "TTTY14"     "RPS4Y2"     "CAV2"       "TTTY10"    
-%[19] "MAP7D2"     "TMSB4Y"     "TSIX"       "PLAC4"      "FTCD"       "SNORD50A"   "CXorf36"    "FFAR3"      "HEPH"      
-%[28] "PNLDC1"     "KRT7" 
-%Correction    
-%> NPDR.mdd.sexadj1.rnaseq.positives
- %[1] "CAV2"      "PLAC4"     "TTTY10"    "FTCD"      "SNORD50A"  "LOC220594" "PNLDC1"    "KRT7"      "SCN5A"    
-%[10] "FFAR3"     "FGF13"     "EPO"       "DLGAP5"    "TTLL10"    "MUC5B"     "TMSB4Y"    "PKDREJ"    "LRGUK"    
-%[19] "C8orf30A"  "POMZP3"    "CXCL3"     "MCHR1"     "FAM46C"    "SIGLEC14"  "KIAA1217"  "MYO18B"    "XIST"     
-%[28] "ADAMTSL2" 
-%
-%Correction for univariate model gets rid of RPS4Y2 which is definitely a male-specific gene.
-% 
-%> rnaseq.univariate[rnaseq.univariate[,3]<.05,]
-%            beta       pval      p.adj
-%MCOLN3 15.405264 1.5927e-07 0.00024257
-%RPS4Y2 -9.493886 2.8660e-05 0.04362100
-%> rnaseq.univariate.sexadjust[1:2,]
- %            beta       pval    p.adj
-%MCOLN3    13.13554 1.2133e-05 0.018479
-%LOC220594  7.60994 9.5382e-04 1.000000
+\begin{figure}[!tpb]%figure2
+\centerline{\includegraphics[]{../figs/npdr_rf_mdd.pdf}}
+\caption{{\bf NPDR vs random forest feature importance.}
+Gene scatter plot of importance score for association with major depressive disorder using random forest and NPDR with correction for sex. Many genes with high random forest importance score also have high association with sex. Genes are labeled if they are NPDR significance or have Gini importance $>0.4$.}
+\label{fig:npdr_rf_mdd}
+\end{figure}
+
 
 
 %\textcolor{red}{Using STIR with fixed $k=m/6$, we identified 41 FDR-adjusted significant genes (not plotted). These 41 STIR $k=m/6$ genes include 31 of the 32 STIR-multiSURF genes. Thus, as we found in the simulation studies, these two versions of STIR perform similarly, with multiSURF being more conservative. Future studies will address the replication of the statistically significant STIR effects, the characterization of STIR interactions and the mathematical connection between neighbor-finding methods in STIR. The STIR runtime for the RNA-Seq data was approximately 19 seconds on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. }
@@ -542,55 +531,10 @@ Discussion? The gene C2orf55 (KIAA1211L) is associated with sex and remains in t
 % DSTYK, MIR324, HECW2, FBXL2, MDS2, RBPMS, PHKB, NHLH1, MED29, DMWD, PIBF1, APOBEC3C, NIPSNAP3A, MED19, OSBP2, PRG2, ADAMDEC1, ROR2, B4GALT7, GDPD3, BRP44L, LOC220594 and NELF.
 
 
-% \begin{table}[!tbp]
-% \processtable{Top major depressive disorder (MDD)-associated genes from RNA-Seq analysis with STIR-multiSURF at $0.05$ FDR.  \label{Tab:01}} { \begin{tabular}{@{}cl >{\raggedright}p{4.3cm} c@{}}\toprule Rank & Gene & Description & STIR p-adj \\\midrule
-% % \begin{tabular}{lll}
-% 1  & MPC1      & Mitochondrial Pyruvate Carrier 1                                     & 8.69E-16     \\
-% 2  & DSTYK     & Dual Serine/Threonine And Tyrosine Protein Kinase                    & 8.56E-06     \\
-% 3  & MIR324    & MicroRNA 324                                                         & 1.95E-05     \\
-% 4  & HECW2     & HECT, C2 And WW Domain Containing E3 Ubiquitin Protein Ligase 2      & 0.0001       \\
-% 5  & FBXL2     & F-Box And Leucine Rich Repeat Protein 2                              & 0.0017       \\
-% 6  & MDS2      & Myelodysplastic Syndrome 2 Translocation Associated                  & 0.0027       \\
-% 7  & RBPMS     & RNA Binding Protein, MRNA Processing Factor                          & 0.0054       \\
-% 8  & PHKB      & Phosphorylase Kinase Regulatory Subunit Beta                         & 0.0075       \\
-% 9  & NHLH1     & Nescient Helix-Loop-Helix 1                                          & 0.0100       \\
-% 10 & MED29     & Mediator Complex Subunit 29                                          & 0.0115       \\
-% 11 & DMWD      & DM1 Locus, WD Repeat Containing                                      & 0.0124       \\
-% 12 & PIBF1     & Progesterone Immunomodulatory Binding Factor 1                       & 0.0133       \\
-% 13 & NSMF      & NMDA Receptor Synaptonuclear Signaling And Neuronal Migration Factor & 0.0149       \\
-% 14 & APOBEC3C  & Apolipoprotein B MRNA Editing Enzyme Catalytic Subunit 3C            & 0.0160       \\
-% 15 & NIPSNAP3A & Nipsnap Homolog 3A                                                   & 0.0198       \\
-% 16 & MED19     & Mediator Complex Subunit 19                                          & 0.0222       \\
-% 17 & OSBP2     & Oxysterol Binding Protein 2                                          & 0.0228       \\
-% 18 & PRG2      & Proteoglycan 2, Pro Eosinophil Major Basic Protein                   & 0.0231       \\
-% 19 & ADAMDEC1  & ADAM Like Decysin 1                                                  & 0.0246       \\
-% 20 & ROR2      & Receptor Tyrosine Kinase Like Orphan Receptor 2                      & 0.0283       \\
-% 21 & B4GALT7   & Beta-1,4-Galactosyltransferase 7                                     & 0.0326       \\
-% 22 & GDPD3     & Glycerophosphodiester Phosphodiesterase Domain Containing 3          & 0.0492\\\botrule      
-% \end{tabular}}{}
-% \end{table}
-
  
-% Using the STIR genes in Table \ref{Tab:01}, we predicted a functional interaction network (Supplement Fig. 2) with the Integrative Multi-species Prediction Tool (\cite{wong15}). Functional interactions were predicted between STIR MDD genes MED29 and MED19 in a cluster of other MED genes. STIR gene B4GALT7 was also predicted to be in this MED cluster, and the STIR gene NIPSNAP3A connects clusters of other STIR genes.  
-%\subsubsection{This is subsubheading}
 
 %\citealp{Boffelli03} might want to know about  text text\break
 
-% \begin{figure}[!htpb]%figure3
-% \centerline{\includegraphics[trim = 0 -10 0 -30, scale = 0.5]{geneNet.pdf}}
-% \caption{Predicted functional interaction network from STIR-detected seed genes (red nodes) from Table \ref{Tab:01}. Additional genes (black nodes) and functional interactions predicted from the Integrative Multi-species Prediction Tool v2.0 (\cite{wong15}).}\label{fig:geneNet}
-% \end{figure}
-
-%\enlargethispage{6pt}
-% \begin{table}[!t]
-% \processtable{This is table caption\label{Tab:01}} {\begin{tabular}{@{}llll@{}}\toprule head1 &
-% head2 & head3 & head4\\\midrule
-% row1 & row1 & row1 & row1\\
-% row2 & row2 & row2 & row2\\
-% row3 & row3 & row3 & row3\\
-% row4 & row4 & row4 & row4\\\botrule
-% \end{tabular}}{This is a footnote}
-% \end{table}
 
 
 \section{Discussion}
@@ -623,13 +567,13 @@ We applied NPDR to a real RNA-Seq dataset for MDD to demonstrate the identificat
 
 We also derived the theoretical mapping between the average $k$ expected for fixed-$k$ Relief neighborhoods and radius-based Relief neighborhoods. One reason this relationship is useful is to compare with implementations of Relief that do not include the multiSURF neighborhood. For fixed-$k$ neighborhoods, we expect the NPDR approach will handle imbalanced data in a less biased way than the original fixed-$k$ methods, which focus on hit/miss neighborhoods separately. By identifying the nearest neighbors independently of hit/miss status, the neighborhood should naturally reflect the imbalance in the data. The hit/miss status of each pair is computed separately as a categorical outcome regression variable. This should make NPDR scores with fixed-$k$ ($\mathcal{N}_{k_\alpha}$) similar to fixed radius ($\mathcal{N}_{R_\alpha}$) for balanced and imbalanced data.    
 
-Power for detecting main effects is highest with the myopic maximum $k=k_{\text{max}}=\lfloor (m-1)/2\rfloor$. Real biological data will likely contain a mixture of main effects and epistasis network effects \cite{mckinney_pajewski}. STIR feature selection could be embedded in the backwards elimination of private Evaporative Cooling (pEC) for feature selection and classification \cite{le17} or embedded in a nested cross-validation approach. Nested CV and pEC can also return classification and optimize $\alpha$ or $k$. 
+Power for detecting main effects is highest with the myopic maximum $k=k_{\text{max}}=\lfloor (m-1)/2\rfloor$. Real biological data will likely contain a mixture of main effects and epistasis network effects \cite{mckinney_pajewski}. STIR feature selection could be embedded in the backwards elimination of private Evaporative Cooling (privateEC) for feature selection and classification \cite{le17} or embedded in a nested cross-validation approach. Nested CV and privateEC can also return classification and optimize $\alpha$ or $k$. 
 
 %The study focuses on obtaining a reasonable estimate of the probability of statistically significant association between an attribute and the outcome while taking into account the complex underlying architecture of interaction among attributes. 
 
-Note to self. glmnet NPDR and using the $\text{d}^{\text{(type)}}_{ij}(A)$ design matrix of all attributes to create a $p \times p$ nearest-neighbor based gene network for hub and module based on the correlation between genes based on the projected distances vectors. Like STIR before it, NPDR P values suffer from deflation due to dependence among the nearest neighbors in the neighborhood, $\mathcal{N}$. The FDR procedure does a good job of selecting the true positives from the false positives (so I think it's not a really big concern), but it would be nice to address the dependence of neighbors in $\mathcal{N}$. One approach would be to create a batch-like indicator variable with $m$ states (a lot), indicating from which instance $i$ a batch of neighbors comes from. This neighbor batch could be used as a covariate in NPDR. Really case and controls should be evenly distributed within each ``batch,'' so I'm not sure this would solve the problem. Another thought is to create a weight variable that counts how often each pair happens and use this as a covariate. Another possible approach would be to use principle components of the design matrix (might require fixed-$k$) as covariates in the NPDR regression model. The hypothesis is that the PCs would capture the neighborhood structure within $\mathcal{N}$. Requires some thought on how to map down to PCs with $m$ samples from all the neighbor pairs.   
+Note to self. glmnet NPDR and using the $\text{d}^{\text{(type)}}_{ij}(A)$ design matrix of all attributes to create a $p \times p$ nearest-neighbor based gene network for hub and module based on the correlation between genes based on the projected distances vectors. Like STIR before it, NPDR P values suffer from deflation due to dependence among the nearest neighbors in the neighborhood, $\mathcal{N}$. The FDR procedure does a good job of selecting the true positives from the false positives (so I think it's not a really big concern), but it would be nice to address the dependence of neighbors in $\mathcal{N}$. One approach would be to create a batch-like indicator variable with $m$ states (a lot), indicating from which instance $i$ a batch of neighbors comes from. This neighbor batch could be used as a covariate in NPDR. Really case and controls should be evenly distributed within each ``batch,'' so I'm not sure this would solve the problem. Another thought is to create a weight variable that counts how often each pair happens and use this as a covariate. Another possible approach would be to use principle components of the design matrix (might require fixed-$k$) as covariates in the NPDR regression model. The hypothesis is that the PCs would capture the neighborhood structure within $\mathcal{N}$. Requires some thought on how to map down to PCs with $m$ samples from all the neighbor pairs.
 
-A related distance-based regression method is Multivariate Distance Matrix Regression (MDMR)~\cite{schork12}. The MDMR approach uses an F-statistic to test for the association of distance matrices between two sets of factors. The MDMR regression is performed for the distance matrix for all pairs of instances, not a subset of nearest neighbors, which makes it susceptible to missing interactions. Also MDMR focuses on sets of factors, whereas NPDR projects distances onto each attribute, allowing for hypothesis testing of individual attributes (i.e., perform feature selection). While NPDR uses the context of all attributes to compute nearest neighbors, it focuses on the projected regression of each attribute at a time and uses the nearest neighbors to allow for detection of interactions. The ability to remove imposters from the set of nearest neighbors illustrates the blessings of dimensionality for Relief-based methods, but this class of nearest-neighbor methods is still, of course, susceptible to the curses of dimensionality~\cite{CoD}. NPDR can also be used to compute the importance of sets of factors. The penalized version of NPDR uses the set of all attributes in a multiple projected-distance regression. 
+A related distance-based regression method is Multivariate Distance Matrix Regression (MDMR)~\cite{schork12}. The MDMR approach uses an F-statistic to test for the association of distance matrices between two sets of factors. The MDMR regression is performed for the distance matrix for all pairs of instances, not a subset of nearest neighbors, which makes it susceptible to missing interactions. Also MDMR focuses on sets of factors, whereas NPDR projects distances onto each attribute, allowing for hypothesis testing of individual attributes (i.e., perform feature selection). While NPDR uses the context of all attributes to compute nearest neighbors, it focuses on the projected regression of each attribute at a time and uses the nearest neighbors to allow for detection of interactions. The ability to remove imposters from the set of nearest neighbors illustrates the blessings of dimensionality for Relief-based methods, but this class of nearest-neighbor methods is still, of course, susceptible to the curses of dimensionality~\cite{CoD}. NPDR can also be used to compute the importance of sets of factors. The penalized version of NPDR uses the set of all attributes in a multiple projected-distance regression.
 
 Multi-state categorical outcomes can be analyzed (similar to multi-state ReliefF) with NPDR by grouping all miss types together. This can be improved by using multinomial regression in NPDR. Application to GWAS data requires no additional modifications of the algorithm other than specification of a different diff function for categorical variables~\cite{titv}, and the covariate option allows for principle components to be included to adjust for population structure. 
 
