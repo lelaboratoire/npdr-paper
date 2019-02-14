@@ -110,7 +110,7 @@ p <- ggplot(test.df, aes(x=stir.log10,y=npdr.log10)) +
   labs(colour = NULL, 
        x = bquote('STIR ('~-log[10]~'p'~')'), 
        y = bquote('NPDR ('~-log[10]~'p'~')'),
-       title = "Similarity between NPDR and Relief-F score") + 
+       title = NULL) + 
   annotate("text", x = 60, y = 75, label = deparse(bquote(R^2 == .(r2))), parse = T) +
   scale_color_manual(values = cbbPalette[c(1,2)],
                      labels = c('Non-functional', 'Functional')) +
@@ -121,9 +121,9 @@ p <- ggplot(test.df, aes(x=stir.log10,y=npdr.log10)) +
 p
 ggsave(p, filename = '../figs/npdr_stir_p_cc.pdf', height = 4.5, width = 4.5 )
 
-
-
 ```
+
+
 
 ### Compute Relief-F score with the `CORElearn` package 
 (fixed $k$ with theoretical surf value)
@@ -147,12 +147,12 @@ p <- ggplot(test.df, aes(x = rrelief, y = beta.Z.att)) +
   geom_smooth(method = "lm", se = F, color = "grey") + 
   geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
   theme_bw() + theme(legend.position = c(0.78, 0.17)) +
-  theme(axis.title.x = element_text(color = cbbPalette[8]),
-        axis.title.y = element_text(color = cbbPalette[6]),
-        axis.text.x = element_text(color = cbbPalette[8]),
-        axis.text.y = element_text(color = cbbPalette[6]),        
-        axis.ticks.x = element_line(color = cbbPalette[8]),
-        axis.ticks.y = element_line(color = cbbPalette[6])) +
+  # theme(axis.title.x = element_text(color = cbbPalette[8]),
+  #       axis.title.y = element_text(color = cbbPalette[6]),
+  #       axis.text.x = element_text(color = cbbPalette[8]),
+  #       axis.text.y = element_text(color = cbbPalette[6]),        
+  #       axis.ticks.x = element_line(color = cbbPalette[8]),
+  #       axis.ticks.y = element_line(color = cbbPalette[6])) +
   labs(colour = NULL, x = "Relief-F score", y = "NPDR coefficient",
        title = "NPDR and Relief-F importance score") +
   scale_color_manual(values = cbbPalette[c(1,2)],
