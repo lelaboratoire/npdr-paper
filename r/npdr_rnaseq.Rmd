@@ -33,6 +33,15 @@ geneLowVarianceFilter <- function(dataMatrix, percentile=0.5) {
   # return the row mask and filtered data:
   list(mask=mask, fdata=fdata)
 }
+
+clean_df_results <- function(input_df, ana_name){
+  input_df %>%
+  data.frame() %>%
+  rownames_to_column('att') %>%
+  rename(!!sym(paste0('beta.', ana_name)) := beta,
+         !!sym(paste0('pval.', ana_name)) := pval,
+         !!sym(paste0('p.adj.', ana_name)) := p.adj)
+}
 ```
 
 
@@ -74,76 +83,47 @@ table(pheno.sex$class, pheno.sex$sex)
 unfiltered.predictors.mat <- unfiltered.mostafavi %>% select(-class)
 # strict filter so it finishes in a couple minutes
 # use .5 in real analysis, but it will take a while (a day?)
-pct <- 0.7 # .9, 1,524 genes, .75 3,809 vars, .98 306vars 4.7mins, .7 4570vars
+pct <- 0.98 # .9, 1,524 genes, .75 3,809 vars, .98 306vars 4.7mins, .7 4570vars
 filter <- geneLowVarianceFilter(unfiltered.predictors.mat, pct)
 filtered.mostafavi.df <- data.frame(filter$fdata, class = mdd.pheno$class)
 filtered.pred <- filtered.mostafavi.df %>% select(-class)
 dim(filtered.mostafavi.df)
-
 ```
 
 
 ### Univariate analysis:
 
-#### Simple analysis with no sex adjustment:
 ```{r}
+# Simple analysis with no sex adjustment:
 class.idx <- length(colnames(filtered.mostafavi.df))
 colnames(filtered.mostafavi.df)[class.idx]
 
-rnaseq.uni <- univarRegress(
+gene_mdd <- univarRegress(
   outcome = 'class', 
   dataset = filtered.mostafavi.df, 
-  regression.type = 'glm')
-head(rnaseq.uni)
+  regression.type = 'glm') %>%
+  clean_df_results('gene.mdd')
 
-# rnaseq.uni[rnaseq.uni[,3]<.05,]
-# write.csv(rnaseq.uni[1:20,],'ResultsRNA/univar.mdd.csv')
-# rnaseq.uni[1:40,]
-```
+# After adjusting for sex:
+gene_sex_mdd <- univarRegress(
+  outcome = 'class', dataset = filtered.mostafavi.df, 
+  regression.type = 'glm', covars = pheno.sex$sex) %>%
+  clean_df_results('gene.sex.mdd')
 
-
-#### After adjusting for sex:
-
-```{r}
+# Univariate with sex as outcome:
 # check if the rows are the same order: 0 = good
 sum(pheno.sex$ids != rownames(filtered.mostafavi.df))
 
-rnaseq.uni.sexadjust <- univarRegress(
-  outcome = 'class', dataset = filtered.mostafavi.df, 
-  regression.type = 'glm', covars = pheno.sex$sex)
-head(rnaseq.uni.sexadjust)
-# rnaseq.uni.sexadjust %>% filter(p.adj<.05)
-# rnaseq.uni.sexadjust[1:10,]
-# write.csv(rnaseq.uni.sexadjust[1:20,],'ResultsRNA/univar.mdd.sexadjust.csv')
-```
+gene_sex <- univarRegress(
+  outcome = pheno.sex$sex-1,
+  dataset = filtered.pred,
+  regression.type='glm') %>%
+  clean_df_results('gene.sex')
 
-
-#### Univariate with sex as outcome:
-
-```{r}
-rnaseq.sex <- univarRegress(outcome = pheno.sex$sex-1,
-                            dataset = filtered.pred,
-                            regression.type='glm')
-# rnaseq.sex[rnaseq.sex[,3]<.05,]
-# write.csv(rnaseq.sex[rnaseq.sex[,3]<.05,],'ResultsRNA/univar.sexassoc.csv')
-# write.csv(rnaseq.sex[1:50,],'ResultsRNA/univar.sexassoc.csv')
-
-```
-
-
-#### Compare top 20 genes for no-adjust, sex-adjusted, and sex-associated:
-
-```{r}
-topx <- 20
-univ.compare <- data.frame(NoAdjust = rownames(rnaseq.uni)[1:topx],
-                           SexAdjust = rownames(rnaseq.uni.sexadjust)[1:topx],
-                           SexAssoc = rownames(rnaseq.sex)[1:topx])
-# colnames(univ.compare) <-c('no-adjust', 'sex-adjust','sex-assoc')
-univ.compare
-
-#cbind(rnaseq.uni[1:topx,],
-#      rownames(rnaseq.uni.sexadjust)[1:topx], rnaseq.uni.sexadjust[1:topx,],
-#      rownames(rnaseq.sex)[1:topx], rnaseq.sex[1:topx,])
+# Summarize all univariate analyses:
+uni_w_wo_sex <- data.frame(gene_mdd) %>%
+  merge(gene_sex_mdd, by = 'att') %>%
+  merge(gene_sex, by = 'att') 
 
 ```
 
@@ -159,40 +139,17 @@ npdr.mdd.rnaseq.results <- npdr('class', filtered.mostafavi.df, regression.type=
 end_time <- Sys.time()
 end_time - start_time  # about 5 min for pct=.98, 306vars, 18min for pct=.9 and 1524 vars
 
-npdr.mdd.rnaseq.results[1:10,]  # top 10, p-value sorted
-#pval.adj    pval.attr beta.attr   beta.0       pval.0
-#UTY      1.123919e-12 3.684982e-15 -7.865203 11.06278 1.901189e-28
-#RPS4Y1   3.090827e-11 1.013386e-13 -7.439146 10.71743 8.431560e-27
-#PRKY     3.098578e-11 1.015927e-13 -7.438815 10.72223 8.005256e-27
-#KDM5D    7.089015e-11 2.324267e-13 -7.328682 10.65013 1.741177e-26
-#EIF1AY   7.169368e-10 2.350613e-12 -7.011925 10.42237 1.960046e-25
-#TTTY15   2.649630e-09 8.687310e-12 -6.826728 10.29496 7.424777e-25
-#USP9Y    8.428545e-09 2.763457e-11 -6.658654 10.15141 3.266155e-24
-#CYorf15A 1.483237e-08 4.863073e-11 -6.575069 10.10700 5.143328e-24
-#DDX3Y    1.849974e-08 6.065488e-11 -6.542115 10.06183 8.147345e-24
-#CYorf15B 2.475517e-08 8.116450e-11 -6.498426 10.03785 1.039183e-23
-
-npdr.mdd.atts <- npdr.mdd.rnaseq.results %>%
-  filter(pval.adj < 0.05) %>%
-  pull(att)
-npdr.mdd.atts
-# npdr.mdd.rnaseq.positives <- row.names(npdr.mdd.rnaseq.results[npdr.mdd.fdr.idx,]) # reSTIR p.adj<.05
-# npdr.mdd.rnaseq.positives
-# npdr.mdd.rnaseq.results[npdr.mdd.atts,]
-# write.csv(npdr.mdd.rnaseq.results[npdr.mdd.fdr.idx,],'ResultsRNA/NPDR.mdd.csv')
-
+npdr_mdd_nosex <- npdr.mdd.rnaseq.results %>%
+  rename(beta.npdr.nosex = beta.Z.att,
+         pval.npdr.nosex  = pval.att,
+         p.adj.npdr.nosex = pval.adj)
 ```
-
-
-
-
 
 ### Run NPDR, adjusting for sex:
 
 ```{r}
 # sex-associated by npdr
 start_time <- Sys.time()
-# class.idx <- length(colnames(filtered.mostafavi.df))
 npdr.mdd.sexassoc.results <- npdr('class', filtered.mostafavi.df, 
                                       regression.type='glm', attr.diff.type='numeric-abs',
                                       nbd.method='multisurf', nbd.metric = 'manhattan',
@@ -202,149 +159,24 @@ npdr.mdd.sexassoc.results <- npdr('class', filtered.mostafavi.df,
 end_time <- Sys.time()
 end_time - start_time  # about 5 min for pct=.98, 306vars
 
-
-sexassoc.idx <- npdr.mdd.sexassoc.rnaseq.results$pval.adj<.05
-# length(sexassoc.idx)
-npdr.mdd.sexassoc.results[1:20,] 
-topx <- 20
-stir.sex.compare <- data.frame(NoAdjust = npdr.mdd.rnaseq.results[1:topx, 'att'],
-                               SexAssoc = npdr.mdd.sexassoc.results[1:topx, 'att'])
-                      # rownames(npdr.mdd.sexadj.rnaseq.results)[1:topx],
-                      # rownames(npdr.mdd.sexassoc.results)[1:topx])
-# colnames(stir.sex.compare) <-c('no-adjust', 'sex-adjust','sex-assoc')
-stir.sex.compare
-```
-
-```{r}
-with_without_sex <- data.frame(rnaseq.sex) %>%
-  rownames_to_column('att') %>%
-  merge(npdr.mdd.rnaseq.results, by = 'att') %>%
-  merge(npdr.mdd.sexassoc.results, by = 'att') %>%
-  mutate(nlog10_nosex = -log10(pval.adj.x)) %>%
-  mutate(nlog10_sex = -log10(pval.adj.y)) %>%
-  mutate(significant = as.factor((pval.adj.x < 0.05) + (pval.adj.y < 0.05))) %>%
-  mutate(sig.genes = ifelse(pval.adj.x < 0.05, att, NA)) %>%
-  mutate(nlog10_sex_genes = -log10(p.adj))
-
-save(with_without_sex, file = paste0(pct, '_mdd_results.Rdata'))
+npdr_mdd_sex <- npdr.mdd.sexassoc.results %>%
+  rename(beta.npdr.sex = beta.Z.att,
+         pval.npdr.sex  = pval.att,
+         p.adj.npdr.sex = pval.adj)
 ```
 
 
-
 ```{r}
-# with_without_sex$sig.genes <- NA
-# with_without_sex[t.stir$t.pval.adj.stir < 0.05, "sig.genes"] <- t.stir[t.stir$t.pval.adj.stir < 0.05, "attribute"] 
-# t.stir$t.sig <- as.factor((t.stir$regT.padj <0.05) + (t.stir$t.pval.adj.stir <0.05))
+npdr_w_wo_sex <- data.frame(gene_sex) %>%
+  merge(npdr_mdd_nosex, by = 'att') %>%
+  merge(npdr_mdd_sex, by = 'att') %>%
+  mutate(nlog10.nosex = -log10(p.adj.npdr.nosex)) %>%
+  mutate(nlog10.sex = -log10(p.adj.npdr.sex)) %>%
+  mutate(significant = as.factor((p.adj.npdr.nosex < 0.05) + (p.adj.npdr.sex < 0.05))) %>%
+  mutate(sig.genes = ifelse(p.adj.npdr.nosex < 0.05, att, NA)) %>%
+  mutate(nlog10.sex.genes = -log10(p.adj.gene.sex))
 
-pboth <- ggplot(with_without_sex, aes(x = nlog10_nosex, y = nlog10_sex)) + 
-  geom_point(alpha = 0.7, shape = 21, size = 2.5, aes(fill = nlog10_sex_genes)) + 
-  theme_bw() +
-  geom_hline(yintercept = -log10(0.05), linetype = 2, alpha = 0.8, color = cbbPalette[1]) + 
-  geom_vline(xintercept = -log10(0.05), linetype = 2, alpha = 0.8, color = cbbPalette[1]) + 
-  geom_abline(slope = 1, intercept = 0, alpha = 0.5, linetype = 3) +
-  annotate("text", 13, -log10(0.05) + 0.2, label = "0.05 FDR", 
-           size = 3, color = cbbPalette[1]) +
-  annotate("text", -log10(0.05) - 0.2, 7.5, label = "0.05 FDR", 
-           size = 3, color = cbbPalette[1], angle = 90) +
-  # scale_fill_continuous(label = 'p.sex.adj') + 
-  labs(x = bquote('Vanilla NPDR ('~-log[10]~'p'[adj]~')'),
-       y = bquote('Sex-adjusted NPDR ('~-log[10]~'p'[adj]~')')) +
-  ggrepel::geom_text_repel(aes(label = sig.genes, size = significant), #check_overlap = TRUE, 
-            hjust=-0.12, vjust=1.5, fontface = "italic",
-            segment.alpha = 0.3
-            # , position=position_jitter(width=0,height=0.2)
-            ) +
-  # guides(fill=) + 
-  theme(legend.position = c(0.9, 0.75)) +
-  # scale_fill_manual(values = c("white", cbbPalette[2], "grey30")) +
-  guides(size=FALSE) + coord_fixed(ratio = 1) +
-  # theme(axis.title = element_text(size = 8),
-  #       axis.text = element_text(size = 7)) +
-  scale_size_discrete(range = c(2,2))
-ggsave(pboth, filename = '../figs/npdrs_mdd.pdf')
-```
-
-
-
-```{r}
-### remove sex-associated/confounded genes from distance matrix and neighborhood calculation 
-# npdr.mdd.sexadj2.rnaseq <- npdr('class', filtered.mostafavi.df, regression.type='glm', 
-#                                        attr.diff.type='numeric-abs', 
-#                                        nbd.method='multisurf', nbd.metric = 'manhattan', msurf.sd.frac=0.5,
-#                                        covars=sex.vec,                   # works with sex.covar.mat as well
-#                                        covar.diff.type='match-mismatch', # for categorical covar like sex
-#                                        #rm.attr.from.dist=c(), # length=0
-#                                        #rm.attr.from.dist = rownames(npdr.mdd.sexassoc.rnaseq.results)[1:topx],
-#                                        # rm.attr.from.dist = rownames(rnaseq.sex[1:40,]),
-#                                        padj.method='fdr', verbose=TRUE)
-# rownames(npdr.mdd.sexadj2.rnaseq[npdr.mdd.sexadj2.rnaseq$pval.adj<.05,]) 
-# stir.sex.compare2 <- cbind(rownames(npdr.mdd.rnaseq.results)[1:topx], 
-#                            rownames(npdr.mdd.sexassoc.rnaseq.results)[1:topx],
-#                            rownames(npdr.mdd.sexadj.rnaseq.results)[1:topx],
-#                            rownames(npdr.mdd.sexadj2.rnaseq)[1:topx]
-#                           )
-# colnames(stir.sex.compare2) <-c('no-adjust', 'sex-assoc','sex-adjust1','sex-adjust2')
-# stir.sex.compare2
-```
-
-
-Try penalize regressions:
-
-```{r}
-library(glmnet)
-# ######################### VECTOR MEMORY EXHAUSTED (LIMIT REACHED)
-# ##### Run glmnetSTIR, penalized npdr, no covar
-# glmnetSTIR.mdd.results <- npdr('class', filtered.mostafavi.df, regression.type='glmnet', attr.diff.type='numeric-abs',
-#                                  nbd.method='multisurf', nbd.metric = 'manhattan', msurf.sd.frac=.5,
-#                                  glmnet.alpha=1, glmnet.family='binomial',
-#                                  padj.method='bonferroni', verbose=T)
-# # attributes with npdr adjusted p-value less than .05 
-# glmnetSTIR.mdd.results.mat <- as.matrix(glmnetSTIR.mdd.results)
-# # .05 regression coefficient threshold is arbitrary
-# # not sure why glment did not force zeros
-# # Finds more interactions than regular glmnet, but not nearly as good as regular npdr
-# nonzero.glmnetSTIR.mdd.mask <- abs(glmnetSTIR.mdd.results.mat[,1])>.05  
-# as.matrix(glmnetSTIR.mdd.results.mat[nonzero.glmnetSTIR.mdd.mask,],ncol=1)
-# 
-# ## run npdr with covariates
-# start_time <- Sys.time()
-# # sex.vec or sex.covar.mat will work as the covariate variable.
-# # works with multiple covariates. 
-# npdr.mdd.sexadj1.rnaseq.results <- npdr('class', filtered.mostafavi.df, regression.type='glm', 
-#                                       attr.diff.type='numeric-abs', 
-#                                       nbd.method='multisurf', 
-#                                       nbd.metric = 'manhattan', msurf.sd.frac=0.5,
-#                                       covars=sex.vec,                   # works with sex.covar.mat as well
-#                                       covar.diff.type='match-mismatch', # for categorical covar like sex 
-#                                       padj.method='bonferroni', verbose=TRUE)
-# end_time <- Sys.time()
-# end_time - start_time
-# 
-# # When you adjust for sex, these obviously male-related confounders
-# # are no longer significant: USP9Y, UTY, PRKY.
-# npdr.mdd.sexadj1.rnaseq.results[1:20,]  # top 10, p-value sorted
-# #              pval.adj    pval.attr beta.attr     beta.0       pval.0
-# #TTTY10    4.271299e-10 1.400426e-12  7.084009 -10.369698 3.406002e-25
-# #LOC220594 3.977758e-05 1.304183e-07 -5.278257  -4.643482 3.425865e-06
-# #NEBL      2.879843e-04 9.442108e-07  4.902923  -9.064953 1.246584e-19
-# #FAM22A    4.053387e-04 1.328979e-06 -4.835370  -4.725455 2.296010e-06
-# #HTR6      2.981664e-03 9.775946e-06 -4.422071  -5.414826 6.134819e-08
-# #CHGB      3.596614e-03 1.179218e-05 -4.381395  -4.703197 2.561187e-06
-# #HBG2      6.686266e-03 2.192218e-05  4.244356  -8.827761 1.067923e-18
-# #HLA.L     6.742079e-03 2.210518e-05 -4.242492  -4.898121 9.675759e-07
-# #HLA.DQA2  9.171833e-03 3.007158e-05 -4.172924  -5.204169 1.948665e-07
-# #RPS4Y2    1.962924e-02 6.435816e-05  3.996234  -7.980825 1.453586e-15
-# 
-# npdr.mdd.sex1.fdr.idx <- npdr.mdd.sexadj1.rnaseq.results$pval.adj<.05
-# npdr.mdd.sexadj1.rnaseq.positives <- row.names(npdr.mdd.sexadj1.rnaseq.results[npdr.mdd.sex1.fdr.idx,]) # reSTIR p.adj<.05
-# npdr.mdd.sexadj1.rnaseq.positives
-# npdr.mdd.sexadj1.rnaseq.results[npdr.mdd.sex1.fdr.idx,]
-# # write.csv(npdr.mdd.sexadj1.rnaseq.results[npdr.mdd.sex1.fdr.idx,],'ResultsRNA/NPDR.mdd.sexadjust.csv')
-# 
-# ##### residualize?
-# #r=glm(trait~1, offset=c*t, family=binomial(link=probit))$residuals
-# #fit=lm(r~genotypes) 
-# #plink --bfile data --linear --covar covars.txt --adjust --out data
+save(npdr_w_wo_sex, uni_w_wo_sex, file = paste0('../results/', pct, '_mdd_results.Rdata'))
 ```
 
 
@@ -352,13 +184,11 @@ library(glmnet)
 library(randomForest)
 ranfor.fit <- randomForest(as.factor(class) ~ ., data = filtered.mostafavi.df) 
 rf.importance <- importance(ranfor.fit)  # variable 3 best
-x<-sort(rf.importance, decreasing=T, index.return=T)
-x$ix
-rownames(rf.importance)[x$ix]
-rf.sorted <- cbind(rownames(rf.importance)[x$ix],rf.importance[x$ix])
-rf.sorted[1:50,]
-write.csv(rf.sorted[1:50,],'ResultsRNA/randomForest.mdd.csv')
+rf_imp_sorted <- rf.importance %>%
+  data.frame() %>%
+  rownames_to_column('att') %>%
+  arrange(desc(MeanDecreaseGini))
 
-
+save(rf_imp_sorted, file = paste0('../results/rf_', pct, '_mdd_results.Rdata'))
 ```
 
