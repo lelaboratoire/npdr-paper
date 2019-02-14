@@ -427,12 +427,13 @@ We first induce a co-expression network on an Erd\H{o}s-R\'enyi random graph wit
 This connection correlation induces interaction effect because the interaction is created by disrupting the correlation of these connections. %and we create a correlated data matrix by applying a Cholesky transformation of the designed covariance matrix to random normal data of size $m \times p$.  
 Finally, we simulate functional effects on the outcome of functional variables by permuting their values in cases but leaving the controls unpermuted, thereby leading to a final differential correlation network. 
 
-All resulting p-values (from STIR and NPDR) are adjusted for multiple testing using the Benjamini-Hochberg procedure \cite{benjamini01}.
+All resulting p-values (from STIR and NPDR) are adjusted for multiple testing using the [Benjamini-Hochberg] procedure \cite{benjamini01}.
 Attributes with adjusted p-values less than 0.05 are counted as a positive test (null hypothesis rejected), else the test is negative.
-Variables that are not shrunk to zero by regularization (glmnet and regularized NPDR) are counted as positive tests.
+[Variables that are not shrunk to zero by regularization (glmnet and regularized NPDR) are counted as positive tests.]
+We remark that, even though the terminology used here is very similar to traditional sample classification problems, we instead focus on evaluating the scoring ability of each method on the attributes.
 We assess the performance of each method by averaging the area under the precision-recall curve (auPRC) across 100 replicates of each simulation scenario.
-We remark that, instead of performing traditional classification of samples, we focus on whether the methods assign higher scores to the functional features.
-Therefore, assuming relatively few functional features compared to non-functional ones, the precision and recall are useful and objective measures of the scoring ability of each method on the features.
+Assuming relatively few functional attributes compared to non-functional ones, the precision and recall are useful and objective measures to assess how good the methods are in assigning higher scores to the correct functional attributes.
+
 
 \subsubsection{RNA-Seq dataset with confounding}
 To test the ability of NPDR to correct for confounding, we use the RNA-Seq study in Ref.~\cite{mostafavi14} that consists of RNA-Seq measurements of 15,231 genes in 463 MDD cases and 452 controls.
@@ -441,33 +442,30 @@ The chi-square between MDD and sex is $25.746$ ($p=3.89e-7$).
 We analyzed 4,570 genes that passed a low variation filter (genes with the lowest [70]$^{th}$ percentile variation removed).
 We applied NPDR with multiSURF neighborhood and tested the 4,570 high variation genes with and without sex as a covariate. 
 We applied univariate logistic regression with and without sex as a covariate to these genes, and we directly tested each gene for association with sex.
-We used FDR with the 0.05 threshold.
+All P values were adjusted with the Bonferroni procedure.
 
 % \end{methods}
 
 \section{Results}
 For case-control data, we compare the performance of NPDR using directional logistic model (Eq.~\ref{eq:too_logit}) with the original STIR (which is based on a t-test).
 We simulate main effect and interaction effect data sets, and compare based on adjusted P values.
-We also compare NPDR regression coefficients with standard Relief scores because the latter does not have an associated P value. We use the multiSURF neighborhood $\mathcal{N}_{\alpha=1/2}$ for these methods.
+We also compared NPDR regression coefficients with standard Relief scores because the latter does not have an associated P value. We use the multiSURF neighborhood $\mathcal{N}_{\alpha=1/2}$ for these methods.
 Similarly, for continuous outcome simulations, we compare NPDR regression coefficients with standard RRelief scores. We use the fixed-$k$ neighborhood that approximates multiSURF. Compare Glmnet cross-validated hyperparameters with glmnet-NPDR? Interactions have correlation built in; it would be interesting to do main effect simulations with and without correlation (maybe another paper to test the effect of correlation). Compare with random forest importance (fairly common in the machine learning field). Implement the new Cholesky correlation -- maybe later. Include a Random Forest importance score comparison. I wouldn't mind showing Random Forest can't find interactions again (although it could because of the small number of background attributes). 
 
 \subsection{Simulation comparison for case-control outcome data} 
-
+In simulation with $m = 100$ samples and $p = 100$ attributes, while the logistic regression and t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yielded very similar results ($R_P^2 = 0.999$, see Supplementary Fig. S1). 
 [NPDR vs STIR here]
 
-In one replicate of simulation with $m = 100$ samples and $p = 100$ attributes, we show that NPDR correctly detects 8 out of 10 functional attributes (Fig with a Bonferoni cutoff \ref{fig:npdr_relief_cc}).
+In one replicate of simulation with $m = 100$ samples and $p = 100$ attributes, we show that NPDR correctly detects 8 out of 10 functional attributes (Fig with a Bonferroni cutoff \ref{fig:npdr_relief_cc}).
 Meanwhile, Relief-F does not produce a threshold; hence, in practice, this value is frequenly arbitrarily selected.
 While the importance scores computed from the two methods are similar ($R^2 = 0.884$), there is a greater separation between the functional and nonfunctional group on the NPDR coefficient compared to Relief-F score.
 In other words, if a vertical line was drawn as a Relief-F score cutoff that yields a reasonable number of correct functional attributes, it will include at least several of incorrect ones. 
 The precision-recall curve clearly demonstrates NPDR outperforms Relief-F in this simulated datasets.
-Across 100 simulations, NPDR yields significantly higher auPRC (P < 0.0001).
+Across 100 simulations, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S2).
 
 \begin{figure}[!tbp]
-%\centerline{\includegraphics[trim = 0 20 0 0, scale = 0.65]{kAdj.pdf}}
 \centerline{\includegraphics[trim = 0 0 0 0]{../figs/npdr_relief_cc.pdf}}
-% \centerline{\includegraphics[trim = 23 10 5 0, clip, scale = 0.65]{kAdjRevFacet.pdf}}
-% \centerline{\includegraphics[trim = 0 0 0 0, scale = 0.65]{kAdjRev.eps}}
-\caption{{\bf Comparison of NPDR and Relief-F results.} Importance score computed from the Relief-F and NPDR algorithm (standardized $\beta$ coefficient, Table \ref{tab:compare_npdr}) from one replicate of simulation with $m = 100$ samples and $p = 100$ attributes (A). Area under the precision-recall curve used to assessed algorithm performance (B).}
+\caption{{\bf Comparison of NPDR and Relief-F results.} Importance score computed from the Relief-F and NPDR algorithm (standardized $\beta$ coefficient, Table \ref{tab:compare_npdr}) from one replicate of simulation with $m = 100$ samples and $p = 100$ attributes (A). Area under the precision-recall curve used to assess algorithm performance (B).}
 \label{fig:npdr_relief_cc}
 \end{figure}
 
@@ -481,20 +479,28 @@ Old: The increasing Recall with $k$ is expected for main effects because ReliefF
 
 For simulated data with continuous outcomes, we compare NPDR using a linear model (Eq.~\ref{eq:lin_reg}) with standard RReliefF from CORElearn, and univariate linear regression. Because CORElearn does not include the adaptive multiSURF neighborhood, we use a fixed-$k$ neighborhood $\mathcal{N}_{\bar{k}_{1/2}}$ for NPDR and RReliefF. The value $\bar{k}_{1/2}=30$ (Eq.~\ref{eq:kbar}) is the expected number of nearest neighbors corresponding to a multiSURF neighborhood. Just do main effects (simulating continuous outcomes with interactions is non-trivial) but with and without correlation? It is important to note CORElearn and other standard Relief-based methods do not have P values, which is one of the advantages of NPDR. Thus, we compare these methods based on their power to detect the functional variables based for a sliding threshold of top scores. A threshold makes it difficult to compare with glmnet because it is harder to specify a number of selected variables with glmnet. To address this and showcase P values, we could do a separate comparison with NPDR with P value, linear regression, and glmnet and regularized NPDR.
 
+
 \subsection{Real-world RNA-Seq data with confounding}
 
-Instead of tables, plot top 50 significant NPDR genes without sex adjustment (x-axis) vs with adjustment. Use -log10 p-adjust and show .05 cutoffs. Color genes read that are sex-associated and green those that are not (or even use a spectrum...). Label gene names for plot points for .05 significant genes? Supplementary table of genes with expression associated with sex (339 adjusted P value less than .05). Also show univariate analysis with and without adjustment in supplement? We used NDPR with multiSURF neighborhood $\mathcal{N}_{\alpha=1/2}$.
+TODO:
+- Supplementary table of genes with expression associated with sex (339 adjusted P value less than .05).
+- Also show univariate analysis with and without adjustment in supplement? 
+- Add random forest results
 
-\begin{figure}[!tpb]%figure1
-% \centerline{\includegraphics[trim = 0 420 0 20, clip, scale = 0.45]{STIRt.pdf}}
-% \centerline{\includegraphics[trim = 6 5 4 0, clip, scale = 0.55]{tstir.pdf}}
-\centerline{\includegraphics[]{../figs/npdr_relief_cc.pdf}}
-\caption{
-{\bf Old plot but it has some properties for the plot we want to create.} Gene scatter plot of multiple-test-adjusted -log$_{10}$ significance for association with major depressive disorder from RNA-Seq using NPDR without correction for sex (horizontal axis) and with correction for sex (vertical axis). NPDR without adjustment finds 47 genes that are significant at the FDR-adjusted 0.05 level (above horizontal dashed line) 28 of which are also significantly associated with sex (in red).  NPDR with adjustment for sex finds 23 genes that are significant at the FDR-adjusted 0.05 level (to right of vertical dashed line) only 3 of which are also significantly associated with sex, thus eliminating most of the confounding variables.}
-\label{fig:real:stir:t}
+With multiSURF neighborhood $\mathcal{N}_{\alpha=1/2}$, we apply NPDR with and without adjusting for the sex covariate.
+
+
+\begin{figure}[!tpb]%figure2
+\centerline{\includegraphics[]{../figs/npdrs_mdd.pdf}}
+\caption{{\bf To adjust or to not adjust.}
+Gene scatter plot of $-\log_{10}$ adjusted significance for association with major depressive disorder using NPDR without correction for sex (horizontal axis) and with correction for sex (vertical axis). NPDR without sex correction finds [47] genes that are significant at the Bonferroni-adjusted 0.05 level (above horizontal dashed line) [28] of which are also significantly associated with sex ($p^\textrm{sex}_\textrm{adj} < 0.05$).  NPDR with adjustment for sex finds [23] genes that are significant at the Bonferroni-adjusted 0.05 level (right of vertical dashed line) only 3 of which are also significantly associated with sex, thus eliminating most of the confounding variables.}
+\label{fig:npdrs_mdd}
 \end{figure}
 
-Genes UTY, PRKY, and USP9Y are removed from the list of fdr-adjusted genes when you adjust for the sex covariate. This is noteworthy because they are likely suprious associations due to confounding by sex. These genes are Y-linked (i.e., Y chromosome (male)) genes and mainly expressed in testis. This suggests the NPDR with covariate adjustment removes sex-related confounding variables. 
+Several genes including UTY, PRKY, and USP9Y are removed from the list of MDD-associated genes when you adjust for the sex covariate.
+This is noteworthy because they are likely suprious associations due to confounding by sex.
+These genes are Y-linked (i.e., Y chromosome (male)) genes and mainly expressed in testis.
+This suggests the NPDR with covariate adjustment removes sex-related confounding variables. 
 
 RPS4Y2 ribosomal protein S4 Y-linked 2. Tissue specific studies show this gene is mainly expressed in prostate and testis. 
 
@@ -583,13 +589,10 @@ Discussion? The gene C2orf55 (KIAA1211L) is associated with sex and remains in t
 % row4 & row4 & row4 & row4\\\botrule
 % \end{tabular}}{This is a footnote}
 % \end{table}
-%\begin{figure}[!tpb]%figure2
-%%\centerline{\includegraphics{fig02.eps}}
-%\caption{Caption, caption.}\label{fig:02}
-%\end{figure}
+
 
 \section{Discussion}
-NPDR is the first method to our knowledge to combine projected distances and nearest-neighbors into a generalized linear model regression framework to perform feature selection. The use of nearest neighbors allows it to detect interacting features, an ability it shares with Relief-based methods, but NPDR is a departure from Relief in four ways. (1) For feature selection with a continuous outcome, it does not rely on the idea of a hit/miss group like current RRelief approaches~\cite{urbanowicz17}. Rather, NPDR simply does a regression between the outcome and attribute projected distances. (2) For feature selection with case-control outcomes, NPDR uses a directional logistic model to fit pairwise projected distance regressors of hit and miss group. (3) This distance-based regression formalism provides a simple mechanism for NPDR to correct for covariates, which is often neglected in machine learning and has been a limitation of Relief-based methods. (4) For any outcome data type (case-control or regression) and predictor data type, NPDR computes the statistical significance of attribute importance scores, which allows for statistically based thresholds that can adjust for multiple hypothesis testing. (5) We introduced a regularized NPDR that adds another layer of multivariate modeling to an already multi-dimensional nearest-neighbor method to shrink correlated projected attribute differences.  
+NPDR is the first method to our knowledge to combine projected distances and nearest-neighbors into a generalized linear model regression framework to perform feature selection. The use of nearest neighbors allows it to detect interacting attributes, an ability it shares with Relief-based methods, but NPDR is a departure from Relief in four ways. (1) For feature selection with a continuous outcome, it does not rely on the idea of a hit/miss group like current RRelief approaches~\cite{urbanowicz17}. Rather, NPDR simply does a regression between the outcome and attribute projected distances. (2) For feature selection with case-control outcomes, NPDR uses a directional logistic model to fit pairwise projected distance regressors of hit and miss group. (3) This distance-based regression formalism provides a simple mechanism for NPDR to correct for covariates, which is often neglected in machine learning and has been a limitation of Relief-based methods. (4) For any outcome data type (case-control or regression) and predictor data type, NPDR computes the statistical significance of attribute importance scores, which allows for statistically based thresholds that can adjust for multiple hypothesis testing. (5) We introduced a regularized NPDR that adds another layer of multivariate modeling to an already multi-dimensional nearest-neighbor method to shrink correlated projected attribute differences.  
 
 The regression formalism of NPDR is a novel way to perform RRelief by defining the attribute importance as the regression coefficient between the projected attribute differences and the numeric outcome differences between neighbors.  For linear regression, NPDR shares some similarity with the original RRelief algorithm because the regression coefficient is related to the correlation coefficient. The RRelief importance score is a weighted correlation between attribute and outcome differences, while the NPDR regression coefficient is a covariance between attribute and outcome differences divided by the variance in the outcome. The NPDR model may also include an offset if the diffs are not centered and the model may include correction terms for covariates that may be confounding. 
 
