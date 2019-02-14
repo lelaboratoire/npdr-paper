@@ -27,7 +27,7 @@ cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
 #####
 n.samples <- 300     # 100 samples in train/holdout/test
 n.variables <- 100   # 100 features
-label <- "class" # tells simulator to do case/control and adds this colname
+label <- "class"     # tells simulator to do case/control and adds this colname
 type <- "interactionErdos" # or mainEffect
 # type <-"mainEffect"
 bias <- 0.4          # moderate effect size
@@ -48,7 +48,7 @@ cc.3sets <- createSimulation(num.samples = n.samples,
 # ignore validation set for now; cc = case.control (binary outcome)
 cc.data <- rbind(cc.3sets$train, cc.3sets$holdout)
 n.samples.cc <- nrow(cc.data)
-pheno.cc <- as.factor(cc.data[,"class"])
+pheno.cc <- as.factor(cc.data[,label])
 functional.cc <- cc.3sets$signal.names # functional attributes
 ```
 
@@ -57,7 +57,7 @@ functional.cc <- cc.3sets$signal.names # functional attributes
 ```{r}
 #####
 glm.stir.cc.results <- 
-  npdr("class", cc.data, regression.type="glm", 
+  npdr(label, cc.data, regression.type="glm", 
           attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
           nbd.metric = "manhattan", msurf.sd.frac = .5, 
           padj.method = "bonferroni", verbose = T) %>%
@@ -129,7 +129,7 @@ ggsave(p, filename = '../figs/npdr_stir_p_cc.pdf', height = 4.5, width = 4.5 )
 (fixed $k$ with theoretical surf value)
 
 ```{r}
-core.learn.cc <- CORElearn::attrEval("class", data = cc.data,
+core.learn.cc <- CORElearn::attrEval(label, data = cc.data,
                                       estimator = "ReliefFequalK",
                                       costMatrix = NULL,
                                       outputNumericSplits=FALSE,
@@ -265,13 +265,13 @@ for (i in 1:n_sims){
   functional.cc <- cc.3sets$signal.names # functional attributes
 
   glm.stir.cc.results <- 
-  npdr("class", cc.data, regression.type="glm", 
+  npdr(label, cc.data, regression.type="glm", 
           attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
           nbd.metric = "manhattan", msurf.sd.frac = .5, 
           padj.method = "bonferroni", verbose = T) %>%
   mutate(npdr.log10 = -log10(pval.att))
   
-  core.learn.cc <- CORElearn::attrEval("class", data = cc.data,
+  core.learn.cc <- CORElearn::attrEval(label, data = cc.data,
                                       estimator = "ReliefFequalK",
                                       costMatrix = NULL,
                                       outputNumericSplits=FALSE,
