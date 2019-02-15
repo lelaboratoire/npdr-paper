@@ -431,14 +431,8 @@ Supports covariates         & \ding{55}                               & \ding{55
 
 
 \subsection{Real and simulated datasets}
-
-% \subsubsection{Approximate $k$-equivalence of ReliefF to multiSURF}
-
-
-% [Comparison with different values of k? Discuss the theoretical value $k=m/6$ and how it might relate to multiSURF average k.] 
-
 \subsubsection{Simulation methods}
-To compare power and false positive performance for multiple feature selection methods, we use the simulation tool from our private Evaporative Cooling (privateEC) software \cite{le17} that was designed to simulate realistic main effects, correlations, and interactions found in gene expression or resting-state fMRI correlation data. In the current study, we first simulate main effect data with $m=100$ subjects ($50$ cases and $50$ controls) and $p=1000$ real-valued attributes with 10\% functional (true positive association with outcome).
+To compare power and false positive performance for multiple feature selection methods, we use the simulation tool from our private Evaporative Cooling (privateEC) software \cite{le17} that was designed to simulate realistic main effects, correlations, and interactions found in gene expression or resting-state fMRI correlation data. In the current study, we first simulate main effect data with $m=200$ subjects ($100$ cases and $100$ controls) and $p=1000$ real-valued attributes with 10\% functional (true positive association with outcome).
 We chose a sample size consistent with real gene expression data but on the smaller end to demonstrate a more challenging scenario.
 Likewise, an effect size bias of $b=0.8$ was selected to be sufficiently challenging with power approximately 40\%. 
 
@@ -453,14 +447,13 @@ Attributes with adjusted p-values less than 0.05 are counted as a positive test 
 [Variables that are not shrunk to zero by regularization (glmnet and regularized NPDR) are counted as positive tests.]
 We remark that, even though the terminology used here is very similar to traditional sample classification problems, we instead focus on evaluating the scoring ability of each method on the attributes.
 We assess the performance of each method by averaging the area under the precision-recall curve (auPRC) across 100 replicates of each simulation scenario.
-Assuming relatively few functional attributes compared to non-functional ones, the precision and recall are useful and objective measures to assess how good the methods are in assigning higher scores to the correct functional attributes.
+Assuming relatively few functional attributes compared to non-functional ones, the precision and recall measures are robust to imbalanced data and hence useful to assess how good the methods are in assigning higher scores to the correct functional attributes.
 
 
 \subsubsection{RNA-Seq dataset with confounding}
 To test the ability of NPDR to correct for confounding, we use the RNA-Seq study in Ref.~\cite{mostafavi14} that consists of RNA-Seq measurements of 15,231 genes in 463 MDD cases and 452 controls.
 Of the 915 subjects, 641 are female and 274 are male.
 The chi-square between MDD and sex is $25.746$ ($p=3.89e-7$).
-We analyzed 4,570 genes that passed a low variation filter (genes with the lowest [70]$^{th}$ percentile variation removed).
 We applied NPDR with multiSURF neighborhood and tested the 4,570 high variation genes with and without sex as a covariate. 
 We applied univariate logistic regression with and without sex as a covariate to these genes, and we directly tested each gene for association with sex.
 All P values were adjusted with the Bonferroni procedure.
@@ -474,8 +467,8 @@ We also compared NPDR regression coefficients with standard Relief scores becaus
 Similarly, for continuous outcome simulations, we compare NPDR regression coefficients with standard RRelief scores. We use the fixed-$k$ neighborhood that approximates multiSURF. Compare Glmnet cross-validated hyperparameters with glmnet-NPDR? Interactions have correlation built in; it would be interesting to do main effect simulations with and without correlation (maybe another paper to test the effect of correlation). Compare with random forest importance (fairly common in the machine learning field). Implement the new Cholesky correlation -- maybe later. Include a Random Forest importance score comparison. I wouldn't mind showing Random Forest can't find interactions again (although it could because of the small number of background attributes). 
 
 \subsection{Simulation comparison for case-control outcome data} 
-In simulations with $m = 100$ samples and $p = 100$ attributes, while the logistic regression and t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yielded very similar results ($R_P^2 = 0.999$, see Supplementary Fig. S1). \emph{[Replication?]}
-In one replicate of simulation with $m = 100$ samples and $p = 100$ attributes, we show that NPDR correctly detects 8 out of 10 functional attributes with a Bonferroni cutoff (Fig \ref{fig:npdr_relief_cc}).
+In simulations with $m = 200$ samples and $p = 1000$ attributes, while the logistic regression and t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yielded very similar results ($R_P^2 = 0.999$, see Supplementary Fig. S1). \emph{[Replication?]}
+Furthermore, we show that NPDR correctly detects [] out of 100 functional attributes with a Bonferroni cutoff (Fig \ref{fig:npdr_relief_cc}).
 On the other hand, because Relief-F does not produce a threshold, in practice, this value is arbitrarily selected.
 While the importance scores computed from the two methods are similar ($R^2 = 0.884$), there is a greater separation between the functional and nonfunctional group on the NPDR coefficient compared to Relief-F score.
 In other words, if a vertical line was drawn as an arbitrary Relief-F score cutoff that yields a reasonable number of correct functional attributes, it will include at least several incorrect ones. 
@@ -483,21 +476,19 @@ The precision-recall curve clearly demonstrates NPDR outperforms Relief-F in thi
 Across 100 simulations, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S2).
 
 \begin{figure}[!tbp]
-\centerline{\includegraphics[trim = 0 0 0 0]{../figs/npdr_relief_cc.pdf}}
-\caption{{\bf Comparison of NPDR and Relief-F results.} Importance score computed from the Relief-F and NPDR algorithm (standardized $\beta$ coefficient, Table \ref{tab:compare_npdr}) from one replicate of simulation with $m = 100$ samples and $p = 100$ attributes (A). Area under the precision-recall curve used to assess algorithm performance (B).}
+\centerline{\includegraphics[trim = 0 0 0 0]{../figs/npdr_relief_cc_1000.pdf}}
+\caption{{\bf Comparison of NPDR and Relief-F results.} Importance score computed from the Relief-F and NPDR algorithm (standardized $\beta$ coefficient, Table \ref{tab:compare_npdr}) from one replicate of simulation with $m = 200$ samples and $p = 1000$ attributes (A). Area under the precision-recall curve used to assess algorithm performance (B).}
 \label{fig:npdr_relief_cc}
 \end{figure}
 
-For a dataset of the size simulated in our study ($m=100$ samples and $p=100$ attributes), NPDR has a [X]-second runtime on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. 
+For a dataset of the size simulated in our study ($m=200$ samples and $p=1000$ attributes), NPDR has a [X]-second runtime on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. 
 
 % Old: The increasing Recall with $k$ is expected for main effects because ReliefF becomes more myopic (more like a univariate t-test) as $k$ increases \cite{robnik03,mckinney13}. The increase in Recall is limited in part by the maximum number of neighbors being $\bar{k}_{\max{}} =\lfloor (m-1)/2\rfloor=49$. 
 
 \subsection{Simulation comparison for continuous outcome data} 
-\emph{Should we move this to supplement?}
-
 For simulated data with continuous outcomes, we compare NPDR using a linear model (Eq.~\ref{eq:lin_reg}) with standard RReliefF from CORElearn, [and univariate linear regression].
 Because CORElearn does not include the adaptive multiSURF neighborhood, we use a fixed-$k$ neighborhood $\mathcal{N}_{\bar{k}_{1/2}}$ for NPDR and RReliefF.
-The value $\bar{k}_{1/2}=30$ (Eq.~\ref{eq:kbar}) is the expected number of nearest neighbors corresponding to a multiSURF neighborhood.
+The [value] $\bar{k}_{1/2}=30$ (Eq.~\ref{eq:kbar}) is the expected number of nearest neighbors corresponding to a multiSURF neighborhood.
 Because of the structural difference between simulation of main and interaction effect, it is not trivial to 
 Therefore, we aim to simulate similar correlation between NPDR and Relief-F importance score as in the case of binary outcome data with interaction effect (Fig. \ref{npdr_relief_qtrait}A).
 The auPRC of both methods are less than before, which is likely due to differences in the simulated effect size as well as underlying structure of the data.
@@ -513,7 +504,6 @@ Nevertheless, across 100 simulations, NPDR still yields significantly higher auP
 \subsection{Real-world RNA-Seq data with confounding}
 
 TODO:
-- Supplementary table of genes with expression associated with sex ([339] adjusted P value less than .05).
 - Also show univariate analysis with and without adjustment in supplement? 
 
 
@@ -524,7 +514,7 @@ For example, the RPS4Y2 ribosomal protein S4 Y-linked 2 has been shown by tissue
 Meanwhile, highly expressed in the brain as well as testis, the gene C2orf55 (KIAA1211L) is associated with sex but remains in the adjusted NPDR list ($p_\textrm{adj} < 0.05$) and may be relevant to MDD pathophysiology.
 [other genes here]
 In summary, this comparison suggests the NPDR with covariate adjustment effectively removes sex-related confounding variables.
-
+A list of 485 genes with expression associated with sex (Bonferroni-adjusted P value $<0.0001$) and their statistical significance are included in the Supplementary Table S1.
 
 \begin{figure}[!tpb]%figure2
 \centerline{\includegraphics[]{../figs/npdrs_mdd.pdf}}
