@@ -28,7 +28,7 @@ cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
 
 ##### simulate case-control interaction effect data 
 n.samples <- 300     # 100 samples in train/holdout/test
-n.variables <- 100   # 100 features
+n.variables <- 1000   # 100 features
 label <- "qtrait"   # tells simulator to do quantitative trait and adds this colname
 type <- "mainEffect"
 bias <- 0.8          # moderate effect size
@@ -102,7 +102,7 @@ p <- ggplot(test.df, aes(x = rrelief, y = beta.Z.att)) +
        title = "NPDR and Relief-F importance score") +
   scale_color_manual(values = cbbPalette[c(1,2)],
                      labels = c('Non-functional', 'Functional')) +
-  annotate("text", x = 0.08, y = 35, label = deparse(bquote(R^2 == .(r2))), parse = T) +
+  annotate("text", x = 0.3, y = 100, label = deparse(bquote(R^2 == .(r2))), parse = T) +
   geom_hline(yintercept=npdr.beta.cutoff, linetype="dashed", alpha = 0.5)
 p
 ```
@@ -131,12 +131,10 @@ x <- as.data.frame(pr_npdr$curve)
 colnames(x) <- paste0(c('Recall', 'Precision', 'w'))
 y <- as.data.frame(pr_relief$curve) 
 colnames(y) <- paste0(c('Recall', 'Precision', 'w'))
-
+auprc_npdr <- round(pr_npdr$auc.integral, 3)
+auprc_relief <- round(pr_relief$auc.integral, 3)
 prr.dat <- rbind(x, y) %>% 
   mutate(type = rep(c('NPDR', 'Relief-F'), each = nrow(x)))
-
-pr_npdr
-pr_relief
 
 q <- prr.dat %>%
   ggplot(aes(Recall, Precision, color = type)) +
@@ -144,14 +142,15 @@ q <- prr.dat %>%
   scale_color_manual(values = cbbPalette[c(6,8)]) + 
   scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) + 
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) + 
-  annotate('text', x = 0.75, y = 0.9 , label = 'NPDR \n AUC = 0.611', color = cbbPalette[6]) +
-  annotate('text', x = 0.35, y = 0.6, label = 'Relief-F \n AUC = 0.522', color = cbbPalette[8]) +
+  annotate('text', x = 0.77, y = 0.9 , label = paste0('NPDR \n AUC = ', auprc_npdr), color = cbbPalette[6]) +
+  annotate('text', x = 0.35, y = 0.6, label = paste0('Relief-F \n AUC = ', auprc_relief), color = cbbPalette[8]) +
   guides(color = FALSE) + 
   labs(title = "PR curve for detecting important attributes")
 q  
 
 pq <- cowplot::plot_grid(p, q, labels = 'AUTO')
 ggsave(pq, filename = '../figs/npdr_relief_qtrait.pdf', height = 4, width = 8.5)
+npdr_relief_qtrait <- pq
 ```
 
 
@@ -161,22 +160,24 @@ What about auROC?
 ```{r}
 ss_npdr <- pROC::roc(test.df$functional, test.df$beta.Z.att)
 ss_relief <- pROC::roc(test.df$functional, test.df$rrelief)
-ss_npdr
-ss_relief
+auroc_npdr <- round(ss_npdr$auc, 3)
+auroc_relief <- round( ss_relief$auc, 3)
+
 ss_df <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities), 
                     Specificity = c(ss_npdr$specificities, ss_relief$specificities)) %>%
   mutate(type = rep(c('NPDR', 'Relief'), each = length(ss_npdr$sensitivities)))
 
-ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +   
+roc <- ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +   
   geom_path(size = 1) + theme_bw() +
   scale_color_manual(values = cbbPalette[c(6,8)]) +
   scale_x_reverse(breaks = seq(1, 0, -0.2), labels = scales::percent) + 
   scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent) + 
-  annotate('text', x = 0.91, y = 0.9, label = 'NPDR \n AUC = 0.9089', color = cbbPalette[6]) +
-  annotate('text', x = 0.85, y = 0.65, label = 'Relief-F \n AUC = 0.8444', color = cbbPalette[8]) +
+  annotate('text', x = 0.89, y = 0.9, label = paste0('NPDR \n AUC = ', auroc_npdr), color = cbbPalette[6]) +
+  annotate('text', x = 0.7, y = 0.5, label = paste0('Relief-F \n AUC = ', auroc_relief), color = cbbPalette[8]) +
   guides(color = FALSE) + 
   labs(title = "ROC curve for detecting important attributes")
-
+ggsave(roc, filename = '../figs/npdr_relief_auroc_qtrait.pdf', height = 4, width = 5 )
+npdr_relief_auroc_qtrait <- roc
 ```
 
 
@@ -260,11 +261,22 @@ pr <- ggplot(pr_df, aes(x = type, y = aupr, fill = type, color = type)) +
   geom_jitter(height = 0, width = 0.1) +
   scale_color_manual(values = cbbPalette[c(8,6)]) +
   scale_fill_manual(values = cbbPalette[c(8,6)]) +
-  annotate("text", x = 1.5, y = 0.36, label = paste('p < 0.0001')) + 
+  annotate("text", x = 1.5, y = 0.58, label = paste('p < 0.0001')) + 
   theme_bw() + guides(fill = F, color = F) 
 pr
 ggsave(pr, filename = '../figs/pr_compare_qtrait.pdf', height = 3, width = 5)
- 
+pr_compare_qtrait <- pr
+pr_df_qtrait <- pr_df
+ss_df_qtrait <- ss_df
+test_df_qtrait <- test.df
+prr_dat_qtrait <- prr.dat
+
+save(pr_compare_qtrait, npdr_relief_auroc_qtrait, npdr_relief_qtrait, 
+     file = '../results/plots_qtrait.Rdata')
+
+save(pr_compare_qtrait, pr_df_qtrait, ss_df_qtrait, test_df_qtrait, prr_dat_qtrait,
+     file = '../results/df_qtrait.Rdata')
+
 ```
 
 
