@@ -10,8 +10,8 @@ set.seed(1618)
 cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
                 "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
 
-load('../results/0.7_mdd_results.Rdata')
-load('../results/rf_0.7_mdd_results.Rdata')
+load('../results/0_mdd_results.Rdata')
+load('../results/rf_0_mdd_results.Rdata')
 ```
 
 
@@ -31,12 +31,17 @@ pboth <- ggplot(npdr_w_wo_sex, aes(x = nlog10.nosex, y = nlog10.sex)) +
   ggrepel::geom_text_repel(aes(label = sig.genes), #check_overlap = TRUE, 
             hjust=-0.12, vjust=1.5, fontface = "italic",
             seed = 1618, #angle = 45,
-            size = 2.5, segment.alpha = 0.3) +
+            size = 2, segment.alpha = 0.3) +
   viridis::scale_fill_viridis(option = 'B', direction = -1) + 
-  theme_bw() + theme(legend.position = c(0.9, 0.75)) +
+  theme_bw() + #theme(legend.position = c(0.9, 0.75)) +
+  theme(legend.position = c(0.9, 0.8), 
+      legend.key.height = unit(1, "line"),
+      legend.key.width = unit(0.8, "line"),
+      legend.text = element_text(size = 8),
+      legend.title = element_text(size = 8))
   coord_fixed(ratio = 1) 
 pboth
-ggsave(pboth, filename = '../figs/npdrs_mdd.pdf', width = 6.5, height = 4)
+ggsave(pboth, filename = '../figs/npdrs_mdd.pdf', width = 6, height = 4.5)
 ```
 
 
@@ -44,13 +49,15 @@ ggsave(pboth, filename = '../figs/npdrs_mdd.pdf', width = 6.5, height = 4)
 npdr_rf_df <- npdr_w_wo_sex %>%
   select(att, beta.npdr.sex, nlog10.sex.genes, sig.genes, p.adj.npdr.sex) %>%
   merge(rf_imp_sorted, by = 'att') %>%
-  mutate(imp.genes = ifelse((p.adj.npdr.sex < 0.05) | (MeanDecreaseGini > 0.4), att, NA)) 
+  mutate(imp.genes = ifelse((p.adj.npdr.sex < 0.01) | 
+                            (MeanDecreaseGini > 0.2) |
+                            (p.adj.npdr.sex < 0.05), att, NA)) 
 
 p_npdr_rf <- ggplot(npdr_rf_df, aes(x = MeanDecreaseGini, y = beta.npdr.sex)) + 
   geom_point(alpha = 0.7, shape = 21, size = 1.5, aes(fill = nlog10.sex.genes)) + 
   geom_hline(yintercept = 0, linetype = 2, color = cbbPalette[1]) + 
   scale_x_continuous(breaks = seq(-1,1,0.2)) +
-  scale_y_continuous(breaks = seq(-8,5,2)) +
+  scale_y_continuous(breaks = seq(-8,8,2)) +
   labs(x = bquote('Random forest Gini importance'),
        y = bquote('Sex-adjusted NPDR'~beta),
        fill = bquote(''~-log[10]~'p'['sex'])) +
@@ -70,4 +77,22 @@ ggsave(p_npdr_rf, filename = '../figs/npdr_rf_mdd.pdf', width = 6, height = 4)
 
 ```
 
+
+Summarize results:
+
+```{r}
+best_genes <- npdr_rf_df %>%
+  filter(p.adj.npdr.sex < 0.05) %>%
+  arrange(p.adj.npdr.sex) %>%
+  select(-c(HC, MDD))
+
+sex_genes <- npdr_w_wo_sex %>%
+  mutate(p.bon.gene.sex = p.adjust(pval.gene.sex, method = 'bonferroni')) %>%
+  select(att, beta.gene.sex, pval.gene.sex, p.bon.gene.sex) %>%
+  filter(p.bon.gene.sex < 0.05) %>%
+  arrange(p.bon.gene.sex)
+
+write_csv(sex_genes, '../results/sex_genes.csv')
+write_csv(best_genes, '../results/best_0.05_npdr_genes.csv')
+```
 
