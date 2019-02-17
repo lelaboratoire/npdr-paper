@@ -1,0 +1,81 @@
+---
+title: "Plots together"
+output: html_document
+---
+
+Combine plots together:
+
+```{r}
+rm(list = ls())
+load('../results/df_cc.Rdata')
+load('../results/df_qtrait.Rdata')
+
+library(ggplot2)
+library(cowplot)
+cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
+```
+
+```{r}
+p_qtrait <- ggplot(test_df_qtrait, aes(x = rrelief, y = beta.Z.att)) + 
+  geom_smooth(method = "lm", se = F, color = "grey") + 
+  geom_point(aes(colour = functional), alpha = 0.7, size = 2) +
+  theme_bw() + theme(legend.position = c(0.75, 0.17)) +
+  labs(colour = NULL, x = "Relief-F score", y = "NPDR coefficient",
+       title = NULL) +
+  scale_color_manual(values = cbbPalette[c(1,2)],
+                     labels = c('Non-functional', 'Functional')) +
+  annotate("text", x = 0.23, y = 80, label = deparse(bquote(R^2 == .(r2_qtrait))), parse = T) +
+  geom_hline(yintercept=npdr.beta.cutoff.qtrait, linetype="dashed", alpha = 0.5)
+
+q_qtrait <- prr_dat_qtrait %>%
+  ggplot(aes(Recall, Precision, color = type)) +
+  geom_path(size = 1) + theme_bw() +
+  scale_color_manual(values = cbbPalette[c(6,8)]) + 
+  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) + 
+  annotate('text', x = 0.74, y = 0.9 , label = paste0('NPDR \n AUC = ', auprc_npdr_qtrait), color = cbbPalette[6]) +
+  annotate('text', x = 0.23, y = 0.58, label = paste0('Relief-F \n AUC = ', auprc_relief_qtrait), color = cbbPalette[8]) +
+  guides(color = FALSE)
+
+
+p_cc <- ggplot(test_df_cc, aes(x = rrelief, y = beta.Z.att)) + 
+  geom_smooth(method = "lm", se = F, color = "grey") + 
+  geom_point(aes(colour = functional), alpha = 0.7, size = 2) +
+  theme_bw() + theme(legend.position = c(0.75, 0.17)) +
+  labs(colour = NULL, x = "Relief-F score", y = "NPDR coefficient",
+       title = NULL) +
+  scale_color_manual(values = cbbPalette[c(1,2)],
+                     labels = c('Non-functional', 'Functional')) +
+  annotate("text", x = 0.055, y = 24, label = deparse(bquote(R^2 == .(r2_cc))), parse = T) +
+  geom_hline(yintercept=npdr.beta.cutoff.cc, linetype="dashed", alpha = 0.5)
+
+
+q_cc <- prr_dat_cc %>%
+  ggplot(aes(Recall, Precision, color = type)) +
+  geom_path(size = 1) + theme_bw() +
+  scale_color_manual(values = cbbPalette[c(6,8)]) + 
+  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) + 
+  annotate('text', x = 0.71, y = 0.91 , label = paste0('NPDR \n AUC = ', auprc_npdr_cc), color = cbbPalette[6]) +
+  annotate('text', x = 0.71, y = 0.4, label = paste0('Relief-F \n AUC = ', auprc_relief_cc), color = cbbPalette[8]) +
+  guides(color = FALSE) #+ 
+
+p_cc
+```
+
+
+```{r}
+qtrait <- plot_grid(p_qtrait, q_qtrait, labels=c('A', 'B'))
+title_q <- ggdraw() + draw_label('Continuous outcome data with main effect')
+qp <- plot_grid(title_q, qtrait, ncol=1, rel_heights=c(0.1, 1)) 
+
+cc <- plot_grid(p_cc, q_cc, labels=c('C', 'D'))
+title_c <- ggdraw() + draw_label('Binary outcome data with interaction effect') 
+ccp <- plot_grid(title_c, cc, ncol=1, rel_heights=c(0.1, 1)) 
+ 
+fig1 <- plot_grid(qp, ccp, nrow = 2)
+ggsave(fig1, filename = '../figs/fig1.svg', height = 7, width = 7)
+ggsave(fig1, filename = '../figs/fig1.pdf', height = 7, width = 7)
+```
+
