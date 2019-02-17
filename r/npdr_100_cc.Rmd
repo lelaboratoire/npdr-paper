@@ -1,0 +1,124 @@
+---
+title: "Comparing NPDR and Relief-F, 100 replications"
+output: html_document
+---
+
+### Load packages:
+
+```{r echo=FALSE}
+library(privateEC)
+library(broom)
+library(tidyverse)
+# library(devtools)
+# install_github("insilico/npdr") # npdr install
+library(npdr)
+
+rm(list = ls())
+set.seed(1618)
+
+cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
+```
+
+
+
+```{r}
+n_sims <- 100
+r2_vec <- vector(mode = 'numeric', length = n_sims)
+pr_npdr_vec <- vector(mode = 'numeric', length = n_sims)
+pr_relief_vec <- vector(mode = 'numeric', length = n_sims)
+n.samples <- 300     # 100 samples in train/holdout/test
+n.variables <- 1000   # 100 features
+label <- "class"     # tells simulator to do case/control and adds this colname
+type <- "interactionErdos" # or mainEffect
+# type <-"mainEffect"
+bias <- 0.4          # moderate effect size
+pct.signals <- 0.1   # pct functional features
+verbose <- FALSE
+
+set.seed(16183)
+for (i in 1:n_sims){
+  cc.3sets <- createSimulation(num.samples = n.samples,
+                              num.variables = n.variables,
+                              pct.signals = pct.signals,
+                              label = label,
+                              bias = bias,
+                              pct.train = 1/3,
+                              pct.holdout = 1/3,
+                              pct.validation = 1/3,
+                              sim.type = type,
+                              save.file = NULL,
+                              verbose = verbose)
+  # combine train and holdout into 200 samples x 100 attributes
+  # ignore validation set for now; cc = case.control (binary outcome)
+  cc.data <- rbind(cc.3sets$train, cc.3sets$holdout)
+  n.samples.cc <- nrow(cc.data)
+  functional.cc <- cc.3sets$signal.names # functional attributes
+
+  glm.stir.cc.results <- 
+  npdr(label, cc.data, regression.type="glm", 
+          attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
+          nbd.metric = "manhattan", msurf.sd.frac = .5, 
+          padj.method = "bonferroni", verbose = T) %>%
+  mutate(npdr.log10 = -log10(pval.att))
+  
+  core.learn.cc <- CORElearn::attrEval(label, data = cc.data,
+                                      estimator = "ReliefFequalK",
+                                      costMatrix = NULL,
+                                      outputNumericSplits=FALSE,
+                                      kNearestEqual = knnSURF(n.samples.cc,.5))
+  corelearn.df <- data.frame(att=names(core.learn.cc), rrelief=core.learn.cc)
+  
+  test.df <- merge(corelearn.df, glm.stir.cc.results) %>% 
+    mutate(functional = att %in% functional.cc)
+  r2_vec[i] <- round(cor(test.df$rrelief, test.df$beta.Z.att), digits = 3)
+  
+  # compute area under the precision-recall curve
+  pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>% 
+                        filter(functional == T) %>% 
+                        pull(beta.Z.att),
+                      scores.class1 = test.df %>% 
+                        filter(functional == F) %>% 
+                        pull(beta.Z.att), 
+                      curve = T)
+  pr_relief <- PRROC::pr.curve(scores.class0 = test.df %>% 
+                        filter(functional == T) %>% 
+                        pull(rrelief), 
+                      scores.class1 = test.df %>% 
+                        filter(functional == F) %>% 
+                        pull(rrelief), 
+                      curve = T)
+  pr_npdr_vec[i] <- pr_npdr$auc.integral
+  pr_relief_vec[i] <- pr_relief$auc.integral
+}
+
+```
+
+
+```{r}
+pr_df <- data.frame(aupr = c(pr_relief_vec, pr_npdr_vec),
+                    type = rep(c('Relief-F', 'NPDR'), each = n_sims))
+pr_df$type <- factor(pr_df$type, levels = rev(levels(pr_df$type)))
+summary(r2_vec)
+pr_compare <- t.test(pr_npdr_vec, pr_relief_vec)
+print(pr_compare$p.value)
+
+pr_p <- round(pr_compare$p.value, 3)
+pr <- ggplot(pr_df, aes(x = type, y = aupr, fill = type, color = type)) + 
+  geom_boxplot(alpha = 0.3, color = 'grey30', outlier.size = -1, width = 0.5) +
+  labs(x = NULL, y = 'Area under the PR curve') + 
+  geom_jitter(height = 0, width = 0.1) +
+  scale_color_manual(values = cbbPalette[c(8,6)]) +
+  scale_fill_manual(values = cbbPalette[c(8,6)]) +
+  annotate("text", x = 1.5, y = 0.56, label = paste('p < 0.0001')) + 
+  theme_bw() + guides(fill = F, color = F) 
+pr
+ggsave(pr, filename = paste0('../figs/pr_compare_', n.variables, '.pdf'), height = 3, width = 5)
+pr_compare_cc <- pr
+
+# save(pr_compare_cc, file = '../results/plots_100_cc.Rdata')
+save.image(file = '../results/npdr_100_cc.Rdata')
+```
+
+
+
