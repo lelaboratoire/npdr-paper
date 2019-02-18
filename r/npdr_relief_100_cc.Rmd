@@ -55,7 +55,7 @@ for (i in 1:n_sims){
   n.samples.cc <- nrow(cc.data)
   functional.cc <- cc.3sets$signal.names # functional attributes
 
-  glm.stir.cc.results <- 
+  npdr.cc.results <- 
   npdr(label, cc.data, regression.type="glm", 
           attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
           nbd.metric = "manhattan", msurf.sd.frac = .5, 
@@ -69,7 +69,7 @@ for (i in 1:n_sims){
                                       kNearestEqual = knnSURF(n.samples.cc,.5))
   corelearn.df <- data.frame(att=names(core.learn.cc), rrelief=core.learn.cc)
   
-  test.df <- merge(corelearn.df, glm.stir.cc.results) %>% 
+  test.df <- merge(corelearn.df, npdr.cc.results) %>% 
     mutate(functional = att %in% functional.cc)
   r2_vec[i] <- round(cor(test.df$rrelief, test.df$beta.Z.att), digits = 3)
   
@@ -116,7 +116,6 @@ pr
 ggsave(pr, filename = paste0('../figs/pr_compare_', n.variables, '.pdf'), height = 3, width = 5)
 pr_compare_cc <- pr
 
-# save(pr_compare_cc, file = '../results/plots_100_cc.Rdata')
 save.image(file = '../results/npdr_100_cc.Rdata')
 ```
 

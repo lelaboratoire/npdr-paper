@@ -25,7 +25,7 @@ cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
 
 ```{r}
 #####
-n.samples <- 300     # 100 samples in train/holdout/test
+n.samples <- 300     # 100 samples in train/holdout
 n.variables <- 1000   # 100 features
 label <- "class"     # tells simulator to do case/control and adds this colname
 type <- "interactionErdos" # or mainEffect
@@ -56,7 +56,7 @@ functional.cc <- cc.3sets$signal.names # functional attributes
 
 ```{r}
 #####
-glm.stir.cc.results <- 
+npdr.cc.results <- 
   npdr(label, cc.data, regression.type="glm", 
           attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
           nbd.metric = "manhattan", msurf.sd.frac = .5, 
@@ -65,11 +65,11 @@ glm.stir.cc.results <-
   mutate(npdr.log10 = -log10(pval.att))
 
 # get functional attribute detection stats
-glm.stir.cc.positives <- glm.stir.cc.results %>%
+npdr.cc.positives <- npdr.cc.results %>%
   filter(pval.adj < .05) %>%
   pull(att)
-glm.stir.cc.detect.stats <- detectionStats(functional.cc, glm.stir.cc.positives)
-cat(glm.stir.cc.detect.stats$report)
+npdr.cc.detect.stats <- detectionStats(functional.cc, npdr.cc.positives)
+cat(npdr.cc.detect.stats$report)
 
 ```
 
@@ -99,7 +99,7 @@ cat(tstat_stir.detect.stats$report)
 ### Compare NPDR and STIR
 ```{r}
 pcutoff <- -log10(0.05/n.variables) # bonferoni adjustment
-test.df <- merge(multisurf_softed_imp, glm.stir.cc.results) %>% 
+test.df <- merge(multisurf_softed_imp, npdr.cc.results) %>% 
   mutate(functional = att %in% functional.cc)
 r2_cc <- round(cor(test.df$stir.log10, test.df$npdr.log10), digits = 3)
 
@@ -111,7 +111,7 @@ p <- ggplot(test.df, aes(x=stir.log10,y=npdr.log10)) +
        x = bquote('STIR ('~-log[10]~'p'~')'), 
        y = bquote('NPDR ('~-log[10]~'p'~')'),
        title = NULL) + 
-  annotate("text", x = 130, y = 130, label = deparse(bquote(R^2 == .(r2_cc))), parse = T) +
+  annotate("text", x = 130, y = 130, label = deparse(bquote(R^2 > 0.99)), parse = T) +
   scale_color_manual(values = cbbPalette[c(1,2)],
                      labels = c('Non-functional', 'Functional')) +
   # viridis::scale_color_viridis(discrete = TRUE, 
@@ -137,8 +137,8 @@ core.learn.cc <- CORElearn::attrEval(label, data = cc.data,
                                       kNearestEqual = knnSURF(n.samples.cc,.5))
 # core.learn.cc.order <- order(core.learn.cc, decreasing = T)
 corelearn.df <- data.frame(att=names(core.learn.cc), rrelief=core.learn.cc)
-last.imp.att <- which(glm.stir.cc.results$pval.adj>.05)[1]-1
-npdr.beta.cutoff.cc <- glm.stir.cc.results[last.imp.att, 'beta.Z.att']
+last.imp.att <- which(npdr.cc.results$pval.adj>.05)[1]-1
+npdr.beta.cutoff.cc <- npdr.cc.results[last.imp.att, 'beta.Z.att']
 
 
 ```
@@ -146,7 +146,7 @@ npdr.beta.cutoff.cc <- glm.stir.cc.results[last.imp.att, 'beta.Z.att']
 Plot:
 
 ```{r}
-test.df <- merge(corelearn.df, glm.stir.cc.results) %>% 
+test.df <- merge(corelearn.df, npdr.cc.results) %>% 
   mutate(functional = att %in% functional.cc)
 r2_cc <- round(cor(test.df$rrelief, test.df$beta.Z.att), digits = 3)
 
