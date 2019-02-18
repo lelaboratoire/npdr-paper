@@ -1,0 +1,80 @@
+---
+title: "Comparing NPDR, STIR and Relief-F"
+output: html_document
+---
+
+### Load packages:
+
+```{r echo=FALSE}
+library(privateEC)
+library(broom)
+library(tidyverse)
+# library(devtools)
+# install_github("insilico/npdr") # npdr install
+library(npdr)
+
+rm(list = ls())
+set.seed(1618)
+
+cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
+```
+
+
+
+```{r}
+n_sims <- 100
+r2_vec <- vector(mode = 'numeric', length = n_sims)
+pr_npdr_vec <- vector(mode = 'numeric', length = n_sims)
+pr_relief_vec <- vector(mode = 'numeric', length = n_sims)
+n.samples <- 200     # 100 samples in train/holdout
+n.variables <- 1000   # 100 features
+label <- "class"     # tells simulator to do case/control and adds this colname
+type <- "interactionErdos" # or mainEffect
+# type <-"mainEffect"
+bias <- 0.4          # moderate effect size
+pct.signals <- 0.1   # pct functional features
+verbose <- FALSE
+
+set.seed(1618)
+for (i in 1:n_sims){
+  cc.3sets <- createSimulation(num.samples = n.samples,
+                              num.variables = n.variables,
+                              pct.signals = pct.signals,
+                              label = label,
+                              bias = bias,
+                              pct.train = 1/2,
+                              pct.holdout = 1/2,
+                              pct.validation = 0,
+                              sim.type = type,
+                              save.file = NULL,
+                              verbose = verbose)
+  # combine train and holdout into 200 samples x 100 attributes
+  # ignore validation set for now; cc = case.control (binary outcome)
+  cc.data <- rbind(cc.3sets$train, cc.3sets$holdout)
+  n.samples.cc <- nrow(cc.data)
+  functional.cc <- cc.3sets$signal.names # functional attributes
+  pheno.cc <- as.factor(cc.data[,label])
+
+  npdr.cc.results <- 
+    npdr(label, cc.data, regression.type="glm", 
+            attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
+            nbd.metric = "manhattan", msurf.sd.frac = .5, 
+            padj.method = "bonferroni", verbose = T) %>%
+    mutate(npdr.log10 = -log10(pval.att))
+  
+  predictors.cc.mat <- cc.data %>% select(-class)
+  neighbor.idx.observed <- stir::find.neighbors(predictors.cc.mat, 
+                                          pheno.cc, k = 0, method = "multisurf")
+  stir.results <- stir::stir(predictors.cc.mat, neighbor.idx.observed, k = 0, 
+                       metric = "manhattan", method = "multisurf")
+  multisurf_softed_imp <- stir.results$STIR_T %>% 
+    rownames_to_column('att') %>%
+    mutate(stir.log10 = -log10(t.pval))
+  test.df <- merge(multisurf_softed_imp, npdr.cc.results) 
+  r2_vec[i] <- cor(test.df$stir.log10, test.df$npdr.log10)
+}
+summary(r2_vec)
+(r2_ci <- gmodels::ci(r2_vec, confidence=0.95))
+save.image(file = '../results/npdr_stir_100_cc.Rdata')
+```
