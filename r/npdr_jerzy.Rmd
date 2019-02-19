@@ -52,14 +52,6 @@ load('../data/0.8genes.filtered.corrected.Rdata') ### RNA-Seq data
 dim(rnaSeq)  # 915 subjects x (15230 genes + 1 class)
 mdd.pheno <- data.frame(class = phenos) %>% 
    rownames_to_column('ids')
-
-# 463 MDD, 452 HC
-
-# Read in sex data.frame:
-# fam.data <- read_table('../data/MDD_LD.fam', col_names = 
-#     c('pedigree', 'member', 'father', 'mother', 'sex', 'affected')) %>% 
-#   rowwise() %>% mutate(ids = unlist(strsplit(pedigree, "[_ ]+"))[3])
-# 274 male, 641 female
 ```
 
 
@@ -73,15 +65,10 @@ pheno.sex <- covs.short %>%
 chisq.test(fam.data$affected, fam.data$sex)
 # table(fam.data$affected, fam.data$sex)
 table(pheno.sex$class, pheno.sex$sex)
-# 1: HC; 2: MDD
-# table(fam.data$affected, pheno.sex$class)
-
-# table(pheno.sex$class, pheno.sex$affected)
-# pheno.sex$class== pheno.sex$affected
 ```
 
 
-### Filter RNA-Seq and run NPDR:
+### Filter RNA-Seq:
 
 ```{r}
 unfiltered.predictors.mat <- rnaSeq
@@ -127,7 +114,7 @@ gene_sex_mdd <- univarRegress(
 sum(pheno.sex$ids != rownames(filtered.jerzy.df))
 
 gene_sex <- univarRegress(
-  outcome = filtered.jerzy.df %>% pull(class),
+  outcome = pheno.sex$sex,
   dataset = filtered.pred,
   regression.type='glm') %>%
   clean_df_results('gene.sex')
