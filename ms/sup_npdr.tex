@@ -21,7 +21,7 @@ University of Pennsylvania, Philadelphia, PA 19104}
 
 \begin{figure}[h]%figure2
 \centerline{\includegraphics[]{../figs/npdr_stir_p_cc.pdf}}
-\caption{\emph{Similarity between NPDR and STIR} in one simulation of $m = 100$ samples and $p = 100$ attributes.}
+\caption{\emph{Similarity between NPDR and STIR} in one simulation of $m = 100$ samples and $p = 100$ attributes. In 100 replications, $R_P^2$ ranges from 0.9827 to 0.9994.}
 \label{fig:npdr_stir}
 \end{figure}
 
@@ -39,5 +39,17 @@ University of Pennsylvania, Philadelphia, PA 19104}
 \label{fig:auPRC_qtrait}
 \end{figure}
 
+
+
+\begin{figure}[h]%figure2
+\centerline{\includegraphics[]{../figs/jerzy_npdrs_mdd.pdf}}
+\caption{\emph{NPDR with and without sex adjustment to analyze MDD-associated genes in Le et al.'s RNASeq dataset}. Adjustment of the sex covariate does not make a big difference in the resulting P values for each important gene. Both methods yield consistent results with STIR from previous study (Fig. 4 of Ref. \cite{stir})}
+\label{fig:jerzy_npdrs_mdd}
+\end{figure}
+
+
+
+\bibliographystyle{unsrt}
+\bibliography{NPDR_refs}   % name of bib file
 
 \end{document}

@@ -1,0 +1,9 @@
+ \newcommand{\noop}[1]{}
+\begin{thebibliography}{1}
+
+\bibitem{stir}
+Trang~T Le, Ryan~J Urbanowicz, Jason~H Moore, and Brett~A McKinney.
+\newblock Statistical inference relief (stir) feature selection.
+\newblock {\em Bioinformatics}, page bty788, 2018.
+
+\end{thebibliography}
