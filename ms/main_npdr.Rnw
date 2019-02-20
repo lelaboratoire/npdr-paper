@@ -346,7 +346,7 @@ for the regression coefficients of the $p_c$ covariates and
 \end{equation}
 for the projection differences between instances $i$ and $j$ for each of the $p_c$ covariates with the appropriate projection type for each covariate data type (e.g., numeric or categorical). The predictor attribute $a$ may be numeric or categorical, which determines the type used in $\text{d}_{ij}(a)$. The NPDR test statistic is again $\beta_a$ with alternative hypothesis $\beta_a \ge 0$ as in Eq. (\ref{eq:linreg_null}). 
 
-\subsubsection{Binary outcomes with covariates: directional logistic regression NPDR}
+\subsubsection{Binary outcomes with covariates: logistic regression NPDR}
 We now apply the GLM formalism to enable NPDR to handle binary outcome data (e.g., binary phenotype), which is what the original STIR was designed for. Nonetheless, NPDR can also adjust for covariates.
 We model the probability $p^{\text{miss}}_{ij}$ that subjects $i$ and $j$ are in the opposite class (misses) versus the same class (hits) from the neighbor projected distances with a logit function. We find the parameters of the following model that minimize the least-squares error over $\forall(i,j) \in \mathcal{N}$:   
 %\begin{equation}
@@ -488,7 +488,8 @@ While the importance scores computed from the two methods are similar ($R^2 = 0.
 In other words, if a vertical line was drawn as an arbitrary Relief-F score cutoff that yields a reasonable number of correct functional attributes, it will include at least several incorrect ones. 
 The precision-recall curve clearly demonstrates NPDR outperforms Relief-F in this simulated dataset.
 Across 100 simulations of moderate effect size, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S2).
-Expectedly, when the effect size [...]
+Expectedly, when the effect size increases, the auPRC values of both methods approach 100\% and become closer together.
+In summary, as the effect size varies, NPDR produces importance score at least as good as, if not better than, Relief-F.
 
 \begin{figure}[!tbp]
 \centerline{\includegraphics[trim = 0 0 0 0]{../figs/fig1.pdf}}
@@ -509,14 +510,7 @@ Therefore, we aim to simulate similar correlation between NPDR and Relief-F impo
 The auPRC of both methods are less than before, which is likely due to differences in the simulated effect size as well as underlying structure of the data.
 Nevertheless, across 100 simulations, NPDR still yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S3).
 
-
-% \begin{figure}[h]
-% \centerline{\includegraphics[]{../figs/npdr_relief_qtrait.pdf}}
-% \caption{{\bf Comparison of NPDR and Relief-F results for continuous outcome data.} Importance score computed from the Relief-F and NPDR algorithm (standardized $\beta$ coefficient, Table \ref{tab:compare_npdr}) from one replicate of simulation with $m = 100$ samples and $p = 100$ attributes (A). Area under the precision-recall curve used to assess algorithm performance (B).}
-% \label{fig:npdr_relief_qtrait}
-% \end{figure}
-
-\subsection{Real-world RNA-Seq data with confounding}
+\subsection{Real-world RNA-Seq data with a confounding factor}
 
 TODO:
 - Also show univariate analysis with and without adjustment in supplement? 
@@ -538,7 +532,6 @@ Gene scatter plot of $-\log_{10}$ adjusted significance for association with maj
 \label{fig:npdrs_mdd}
 \end{figure}
 
-
 Sensitivity to confounders extends beyond nearest-neighbors feature selection algorithms.
 When covariates are not accounted for, even powerful methods are expected to produce biased attribute importance scores.
 On the other hand, it is not trivial to include covariates in most widely used machine learning models including random forest.
@@ -553,6 +546,8 @@ Moreover, like previous feature selection methods before STIR, importance scores
 Hence, instead of P values, we compare NPDR standardized $\beta$ coefficient and random forest Gini-based importance score (Fig. \ref{fig:npdr_rf_mdd}).
 Most genes with high random forest importance score but low NPDR coefficient are highly associated with sex (dark pink - purple).
 However, there is a consensus between the two methods in giving high scores for genes such as [].
+
+Furthermore, we recall that, when the data contain many non-functional attributes, random forest likely underestimate the importance of the interacting attributes \cite{mckinney2009capturing,winham2012snp}.
 
 
 \begin{figure}[!tpb]%figure2
