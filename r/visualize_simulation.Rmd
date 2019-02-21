@@ -16,6 +16,10 @@ cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
                 "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
 ```
 
+# Plot of simulation result, one time run
+
+Require run `1_npdr_cc.Rmd`, `1_npdr_qtrait.Rmd`.
+
 ## Generate figure 1:
 
 ```{r}
@@ -119,8 +123,9 @@ roc
 ggsave(roc, filename = '../figs/npdr_relief_auroc.pdf', height = 4 , width = 6)
 ```
 
-## Compare NPDR and STIR:
 
+## Compare NPDR and STIR:
+Require run `1_npdr_cc.Rmd`, `2_npdr_qtrait.Rmd`.
 ```{r}
 p <- ggplot(npdr_stir, aes(x=stir.log10,y=npdr.log10)) + 
   geom_smooth(method = 'lm', se = F, color = 'grey') + 
@@ -141,7 +146,8 @@ p
 ggsave(p, filename = paste0('../figs/npdr_stir_p_cc.pdf'), height = 4.5, width = 4.5 )
 ```
 
-## Replications of auPRC for Supplement:
+# Replications of auPRC for Supplement:
+Require run `2_npdr_relief_100_cc.Rmd`, `2_npdr_relief_100_qtrait.Rmd`.
 
 ```{r}
 load('../results/npdr_100_cc.Rdata')
