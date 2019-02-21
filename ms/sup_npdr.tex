@@ -14,34 +14,33 @@ University of Pennsylvania, Philadelphia, PA 19104}
 
 \usepackage{Sweave}
 \begin{document}
-\maketitle
 \input{sup_npdr-concordance}
+\setkeys{Gin}{width=1\textwidth}
+\maketitle
 \newpage
 % \section{Performance comparison between NPDR and Relief-F}
 
-\begin{figure}[h]%figure2
+\begin{figure}[h]%figure1
 \centerline{\includegraphics[]{../figs/npdr_stir_p_cc.pdf}}
-\caption{\emph{Similarity between NPDR and STIR} in one simulation of $m = 100$ samples and $p = 100$ attributes. In 100 replications, $R_P^2$ ranges from 0.9827 to 0.9994.}
+\caption{\emph{Similarity between NPDR and STIR} in one simulation of $m = 200$ samples and $p = 1000$ attributes. In 100 replications, $R_P^2$ ranges from 0.9827 to 0.9994.}
 \label{fig:npdr_stir}
 \end{figure}
 
 \begin{figure}[h]%figure2
-\centerline{\includegraphics[]{../figs/pr_compare_cc.pdf}}
-\caption{\emph{auPRC of Relief-F and NPDR for binary outcome data}. Across 100 simulations of $m = 100$ samples and $p = 100$ attributes, NPDR yields significantly higher auPRC.}
-\label{fig:auPRC_cc}
+\centerline{\includegraphics[]{../figs/npdr_relief_auroc.pdf}}
+\caption{\emph{auROC of Relief-F and NPDR for binary and continuous outcome data}.}
+\label{fig:auROC}
+\end{figure}
+
+\begin{figure}[h]%figure2
+\centerline{\includegraphics[]{../figs/pr_compare_100.pdf}}
+\caption{\emph{auPRC of Relief-F and NPDR for binary and continuous outcome data}. In both cases, across 100 simulations of $m = 200$ samples and $p = 1000$ attributes, NPDR yields significantly higher auPRC.}
+\label{fig:auPRC}
 \end{figure}
 
 
 
-\begin{figure}[h]%figure2
-\centerline{\includegraphics[]{../figs/pr_compare_qtrait.pdf}}
-\caption{\emph{auPRC of Relief-F and NPDR for continuous outcome data}. Across 100 simulations of $m = 100$ samples and $p = 100$ attributes, NPDR yields significantly higher auPRC.}
-\label{fig:auPRC_qtrait}
-\end{figure}
-
-
-
-\begin{figure}[h]%figure2
+\begin{figure}[h]%figure4
 \centerline{\includegraphics[]{../figs/jerzy_npdrs_mdd.pdf}}
 \caption{\emph{NPDR with and without sex adjustment to analyze MDD-associated genes in Le et al.'s RNASeq dataset}. Adjustment of the sex covariate does not make a big difference in the resulting P values for each important gene. Both methods yield consistent results with STIR from previous study (Fig. 4 of Ref. \cite{stir})}
 \label{fig:jerzy_npdrs_mdd}

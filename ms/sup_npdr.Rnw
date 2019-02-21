@@ -13,29 +13,28 @@ University of Pennsylvania, Philadelphia, PA 19104}
 \renewcommand{\Authands}{ and }
 
 \begin{document}
-\maketitle
 \SweaveOpts{concordance=TRUE}
+\setkeys{Gin}{width=1\textwidth}
+\maketitle
 \newpage
 % \section{Performance comparison between NPDR and Relief-F}
 
 \begin{figure}[h]%figure1
 \centerline{\includegraphics[]{../figs/npdr_stir_p_cc.pdf}}
-\caption{\emph{Similarity between NPDR and STIR} in one simulation of $m = 100$ samples and $p = 100$ attributes. In 100 replications, $R_P^2$ ranges from 0.9827 to 0.9994.}
+\caption{\emph{Similarity between NPDR and STIR} in one simulation of $m = 200$ samples and $p = 1000$ attributes. In 100 replications, $R_P^2$ ranges from 0.9827 to 0.9994.}
 \label{fig:npdr_stir}
 \end{figure}
 
 \begin{figure}[h]%figure2
-\centerline{\includegraphics[]{../figs/pr_compare_cc.pdf}}
-\caption{\emph{auPRC of Relief-F and NPDR for binary outcome data}. Across 100 simulations of $m = 100$ samples and $p = 100$ attributes, NPDR yields significantly higher auPRC.}
-\label{fig:auPRC_cc}
+\centerline{\includegraphics[]{../figs/npdr_relief_auroc.pdf}}
+\caption{\emph{auROC of Relief-F and NPDR for binary and continuous outcome data}.}
+\label{fig:auROC}
 \end{figure}
 
-
-
-\begin{figure}[h]%figure3
-\centerline{\includegraphics[]{../figs/pr_compare_qtrait.pdf}}
-\caption{\emph{auPRC of Relief-F and NPDR for continuous outcome data}. Across 100 simulations of $m = 100$ samples and $p = 100$ attributes, NPDR yields significantly higher auPRC.}
-\label{fig:auPRC_qtrait}
+\begin{figure}[h]%figure2
+\centerline{\includegraphics[]{../figs/pr_compare_100.pdf}}
+\caption{\emph{auPRC of Relief-F and NPDR for binary and continuous outcome data}. In both cases, across 100 simulations of $m = 200$ samples and $p = 1000$ attributes, NPDR yields significantly higher auPRC.}
+\label{fig:auPRC}
 \end{figure}
 
 
