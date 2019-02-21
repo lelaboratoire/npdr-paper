@@ -497,7 +497,7 @@ In summary, as the effect size varies, NPDR produces importance score at least a
 \label{fig:npdr_relief}
 \end{figure}
 
-For a dataset of the size simulated in our study ($m=200$ samples and $p=1000$ attributes), NPDR has a [X]-second runtime on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. 
+For a dataset of the size simulated in our study ($m=200$ samples and $p=1000$ attributes), on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM, NPDR has a 24-second and 3-second runtime for binary outcome and continuous outcome data, respectively.
 
 % Old: The increasing Recall with $k$ is expected for main effects because ReliefF becomes more myopic (more like a univariate t-test) as $k$ increases \cite{robnik03,mckinney13}. The increase in Recall is limited in part by the maximum number of neighbors being $\bar{k}_{\max{}} =\lfloor (m-1)/2\rfloor=49$. 
 
@@ -517,18 +517,18 @@ TODO:
 
 
 With multiSURF neighborhood $\mathcal{N}_{\alpha=1/2}$, we apply NPDR with and without adjusting for the sex covariate.
-Several genes including UTY, PRKY, and USP9Y are removed from the list of MDD-associated genes when you adjust for the sex covariate, which indicates suprious associations between these genes and diagnostic phenotype due to confounding by sex.
-These genes are Y-linked (i.e., Y chromosome (male)) genes and mainly expressed in testis.
+[Several] genes including PRKY, UTY, and USP9Y are removed from the list of MDD-associated genes when you adjust for the sex covariate, which indicates suprious associations between these genes and diagnostic phenotype due to confounding by sex.
+Many of these genes are Y-linked (i.e., Y chromosome (male)) genes and mainly expressed in testis.
 For example, the RPS4Y2 ribosomal protein S4 Y-linked 2 has been shown by tissue specific studies to mainly express in prostate and testis \cite{lopes2010human}.
 Meanwhile, highly expressed in the brain as well as testis, the gene C2orf55 (KIAA1211L) is associated with sex but remains in the adjusted NPDR list ($p_\textrm{adj} < 0.05$) and may be relevant to MDD pathophysiology.
 [other genes here]
 In summary, this comparison suggests the NPDR with covariate adjustment effectively removes sex-related confounding variables.
-A list of 485 genes with expression associated with sex (Bonferroni-adjusted P value $<0.0001$) and their statistical significance are included in the Supplementary Table S1.
+A list of 485 genes with expression most associated with sex (Bonferroni-adjusted P value $<0.0001$) and their statistical significance are included in the Supplementary Table S1.
 
 \begin{figure}[!tpb]%figure2
 \centerline{\includegraphics[]{../figs/mostafavi_npdrs_mdd.pdf}}
 \caption{{\bf To adjust or not to adjust.}
-Gene scatter plot of $-\log_{10}$ adjusted significance for association with major depressive disorder using NPDR without correction for sex (horizontal axis) and with correction for sex (vertical axis). NPDR without sex correction finds [47] genes that are significant at the Bonferroni-adjusted 0.05 level (above horizontal dashed line) [28] of which are also significantly associated with sex ($p^\textrm{sex}_\textrm{adj} < 0.05$).  NPDR with adjustment for sex finds [23] genes that are significant at the Bonferroni-adjusted 0.05 level (right of vertical dashed line) only 3 of which are also significantly associated with sex, thus eliminating most of the confounding variables.}
+Gene scatter plot of $-\log_{10}$ adjusted significance for association with major depressive disorder using NPDR without correction for sex (horizontal axis) and with correction for sex (vertical axis). NPDR without sex correction finds 87 genes that are significant at the Bonferroni-adjusted 0.05 level (above horizontal dashed line), 53 of which are also significantly associated with sex ($p^\textrm{sex}_\textrm{adj} < 0.05$).  NPDR with adjustment for sex finds 56 genes that are significant at the Bonferroni-adjusted 0.05 level (right of vertical dashed line) and 19 of which are also significantly associated with sex, thus eliminating many of the confounding variables. Genes with $p_\textrm{adj} < 0.001$ in either method are labeled.}
 \label{fig:npdrs_mdd}
 \end{figure}
 
@@ -557,7 +557,7 @@ Gene scatter plot of importance score for association with major depressive diso
 \label{fig:npdr_rf_mdd}
 \end{figure}
 
-
+For this RNA-Seq dataset of MDD ($m=915$ samples and $p=15,231$ attributes), NPDR has a 2.3-hour runtime on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. 
 
 %\textcolor{red}{Using STIR with fixed $k=m/6$, we identified 41 FDR-adjusted significant genes (not plotted). These 41 STIR $k=m/6$ genes include 31 of the 32 STIR-multiSURF genes. Thus, as we found in the simulation studies, these two versions of STIR perform similarly, with multiSURF being more conservative. Future studies will address the replication of the statistically significant STIR effects, the characterization of STIR interactions and the mathematical connection between neighbor-finding methods in STIR. The STIR runtime for the RNA-Seq data was approximately 19 seconds on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. }
 % Reproducing associations from the original study is not feasible because we focused on female subjects to avoid confounding (using 360 MDD and 282 controls) and Relief-based methods are currently not adept at correcting for covariates. However, we note that the top STIR association, Mitochondrial Pyruvate Carrier I (MPC1), also known as Brain Protein 44-Like (BRP44L), forms heterocomplex with MPC2 to mediate uptake of pyruvate into mitochondria (\cite{herzig12}). This interaction is noteworthy because MPC2 contains a variant that is associated with Schizophrenia in GWAS of East Asians (\cite{xiao16}). While an association with Schizophrenia seems indirect to MDD, symptom complexes such as anhedonia and psychosis can be shared across psychiatric disorders (\cite{lee13}).

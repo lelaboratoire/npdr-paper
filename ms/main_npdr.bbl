@@ -163,6 +163,19 @@ Alexandra~M Lopes, Ricardo~N Miguel, Carole~A Sargent, Peter~J Ellis,
   spermatogenesis.
 \newblock {\em BMC molecular biology}, 11(1):33, 2010.
 
+\bibitem{mckinney2009capturing}
+Brett~A McKinney, James~E Crowe~Jr, Jingyu Guo, and Dehua Tian.
+\newblock Capturing the spectrum of interaction effects in genetic association
+  studies by simulated evaporative cooling network analysis.
+\newblock {\em PLoS genetics}, 5(3):e1000432, 2009.
+
+\bibitem{winham2012snp}
+Stacey~J Winham, Colin~L Colby, Robert~R Freimuth, Xin Wang, Mariza De~Andrade,
+  Marianne Huebner, and Joanna~M Biernacka.
+\newblock Snp interaction detection with random forests in high-dimensional
+  genetic data.
+\newblock {\em BMC bioinformatics}, 13(1):164, 2012.
+
 \bibitem{robnik03}
 Marko Robnik-{\v{S}}ikonja and Igor Kononenko.
 \newblock Theoretical and empirical analysis of relieff and rrelieff.

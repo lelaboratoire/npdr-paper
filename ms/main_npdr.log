@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  19 FEB 2019 16:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 FEB 2019 17:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -766,40 +766,40 @@ l.453
 <../figs/fig1.pdf, id=247, 505.89pt x 505.89pt>
 File: ../figs/fig1.pdf Graphic file (type pdf)
 <use ../figs/fig1.pdf>
-Package pdftex.def Info: ../figs/fig1.pdf  used on input line 495.
+Package pdftex.def Info: ../figs/fig1.pdf  used on input line 496.
 (pdftex.def)             Requested size: 379.4175pt x 379.42427pt.
  [10] [11 <../figs/fig1.pdf>]
 <../figs/mostafavi_npdrs_mdd.pdf, id=274, 433.62pt x 325.215pt>
 File: ../figs/mostafavi_npdrs_mdd.pdf Graphic file (type pdf)
 <use ../figs/mostafavi_npdrs_mdd.pdf>
 Package pdftex.def Info: ../figs/mostafavi_npdrs_mdd.pdf  used on input line 53
-6.
+0.
 (pdftex.def)             Requested size: 379.4175pt x 284.5773pt.
-<../figs/npdr_rf_mdd.pdf, id=276, 433.62pt x 289.08pt>
+<../figs/npdr_rf_mdd.pdf, id=278, 433.62pt x 289.08pt>
 File: ../figs/npdr_rf_mdd.pdf Graphic file (type pdf)
 <use ../figs/npdr_rf_mdd.pdf>
-Package pdftex.def Info: ../figs/npdr_rf_mdd.pdf  used on input line 560.
+Package pdftex.def Info: ../figs/npdr_rf_mdd.pdf  used on input line 555.
 (pdftex.def)             Requested size: 379.4175pt x 252.9576pt.
  [12] [13 <../figs/mostafavi_npdrs_mdd.pdf>] [14 <../figs/npdr_rf_mdd.pdf>] [15
 ] (./main_npdr.bbl [16] [17])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 630.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 625.
  [18]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 630.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 625.
 
 (./main_npdr.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 630.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 630.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 625.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 625.
 Package rerunfilecheck Info: File `main_npdr.out' has not changed.
-(rerunfilecheck)             Checksum: 5B8C3E92805880B9B0A629A48EA23AF4;1756.
+(rerunfilecheck)             Checksum: 3DFDC4795303A1D33B76214860D2A666;1753.
  ) 
 Here is how much of TeX's memory you used:
- 12818 strings out of 492649
- 192140 string characters out of 6129622
- 343511 words of memory out of 5000000
- 15957 multiletter control sequences out of 15000+600000
+ 12822 strings out of 492649
+ 192222 string characters out of 6129622
+ 344622 words of memory out of 5000000
+ 15959 multiletter control sequences out of 15000+600000
  79662 words of font info for 372 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,19n,38p,1454b,476s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,19n,38p,1433b,476s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></
@@ -824,10 +824,10 @@ fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2018/texmf-dist/f
 onts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2018/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2018/texmf-dist/font
 s/type1/urw/zapfding/uzdr.pfb>
-Output written on main_npdr.pdf (18 pages, 1421141 bytes).
+Output written on main_npdr.pdf (18 pages, 1420429 bytes).
 PDF statistics:
- 453 PDF objects out of 1000 (max. 8388607)
- 396 compressed objects within 4 object streams
- 99 named destinations out of 1000 (max. 500000)
+ 457 PDF objects out of 1000 (max. 8388607)
+ 400 compressed objects within 4 object streams
+ 101 named destinations out of 1000 (max. 500000)
  66228 words of extra memory for PDF output out of 74296 (max. 10000000)
 
