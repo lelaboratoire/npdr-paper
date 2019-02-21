@@ -21,7 +21,6 @@ cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
 ```
 
 
-
 ```{r}
 n_sims <- 100
 r2_vec <- vector(mode = 'numeric', length = n_sims)
@@ -102,19 +101,7 @@ pr_df$type <- factor(pr_df$type, levels = rev(levels(pr_df$type)))
 summary(r2_vec)
 pr_compare <- t.test(pr_npdr_vec, pr_relief_vec)
 print(pr_compare$p.value)
-
 pr_p <- round(pr_compare$p.value, 3)
-pr <- ggplot(pr_df, aes(x = type, y = aupr, fill = type, color = type)) + 
-  geom_boxplot(alpha = 0.3, color = 'grey30', outlier.size = -1, width = 0.5) +
-  labs(x = NULL, y = 'Area under the PR curve') + 
-  geom_jitter(height = 0, width = 0.1) +
-  scale_color_manual(values = cbbPalette[c(8,6)]) +
-  scale_fill_manual(values = cbbPalette[c(8,6)]) +
-  annotate("text", x = 1.5, y = 0.56, label = paste('p < 0.0001')) + 
-  theme_bw() + guides(fill = F, color = F) 
-pr
-ggsave(pr, filename = paste0('../figs/pr_compare_', n.variables, '.pdf'), height = 3, width = 5)
-pr_compare_cc <- pr
 
 save.image(file = '../results/npdr_100_cc.Rdata')
 ```

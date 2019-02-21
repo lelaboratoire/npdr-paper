@@ -86,8 +86,8 @@ ggsave(fig1, filename = '../figs/fig1.pdf', height = 7, width = 7)
 ```
 
 
-
 ## auROC for Supplement:
+
 ```{r}
 ss_df <- rbind(ss_df_cc, ss_df_qtrait) %>%
   mutate(sim = rep(c('Binary outcome', 'Continuous outcome'), each = nrow(ss_df_cc)))
@@ -139,5 +139,38 @@ p <- ggplot(npdr_stir, aes(x=stir.log10,y=npdr.log10)) +
   geom_hline(yintercept=pcutoff, linetype="dashed", alpha = 0.5)
 p
 ggsave(p, filename = paste0('../figs/npdr_stir_p_cc.pdf'), height = 4.5, width = 4.5 )
+```
+
+## Replications of auPRC for Supplement:
+
+```{r}
+load('../results/npdr_100_cc.Rdata')
+pr_cc_100 <- pr_df
+
+load('../results/npdr_100_qtrait.Rdata')
+pr_qtrait_100 <- pr_df
+
+# pr_df
+pr_df <- rbind(pr_cc_100, pr_qtrait_100) %>%
+  mutate(sim = rep(c('Binary outcome', 'Continuous outcome'), each = nrow(pr_qtrait_100)))
+
+p_text <- data.frame(
+  label = c('p < 0.0001', 'p < 0.0001'),
+  sim = c('Binary outcome', 'Continuous outcome'),
+  x = c(1.5, 1.5), y = c(0.56, 0.47), type = c('NPDR', 'Relief-F')
+)
+
+pr_100 <- ggplot(pr_df, aes(x = type, y = aupr, fill = type, color = type)) + 
+  geom_boxplot(alpha = 0.3, color = 'grey30', outlier.size = -1, width = 0.5) +
+  labs(x = NULL, y = 'Area under the PR curve') + facet_wrap(~ sim, scales = 'free') +
+  geom_jitter(height = 0, width = 0.1) +
+  scale_color_manual(values = cbbPalette[c(8,6)]) +
+  scale_fill_manual(values = cbbPalette[c(8,6)]) +
+  geom_text(p_text, mapping = aes(x = x, y = y, label = label), color = 'grey20') +
+  # annotate("text", x = 1.5, y = 0.5, label = paste('p < 0.0001')) + 
+  theme_bw() + guides(fill = F, color = F) 
+pr_100
+
+ggsave(pr_100, filename = paste0('../figs/pr_compare_100.pdf'), height = 3, width = 5)
 ```
 
