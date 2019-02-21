@@ -98,14 +98,14 @@ dim(filtered.mostafavi.df)
 class.idx <- length(colnames(filtered.mostafavi.df))
 colnames(filtered.mostafavi.df)[class.idx]
 
-gene_mdd <- univarRegress(
+gene_mdd <- uniReg(
   outcome = 'class', 
   dataset = filtered.mostafavi.df, 
   regression.type = 'glm') %>%
   clean_df_results('gene.mdd')
 
 # After adjusting for sex:
-gene_sex_mdd <- univarRegress(
+gene_sex_mdd <- uniReg(
   outcome = 'class', dataset = filtered.mostafavi.df, 
   regression.type = 'glm', covars = pheno.sex$sex) %>%
   clean_df_results('gene.sex.mdd')
@@ -114,7 +114,7 @@ gene_sex_mdd <- univarRegress(
 # check if the rows are the same order: 0 = good
 sum(pheno.sex$ids != rownames(filtered.mostafavi.df))
 
-gene_sex <- univarRegress(
+gene_sex <- uniReg(
   outcome = pheno.sex$sex-1,
   dataset = filtered.pred,
   regression.type='glm') %>%
@@ -124,6 +124,12 @@ gene_sex <- univarRegress(
 uni_w_wo_sex <- data.frame(gene_mdd) %>%
   merge(gene_sex_mdd, by = 'att') %>%
   merge(gene_sex, by = 'att')
+
+best_genes_uni <- uni_w_wo_sex %>%
+  filter(p.adj.gene.mdd < 0.05) %>%
+  arrange(p.adj.gene.mdd) 
+
+write_csv(best_genes_uni, '../results/mostafavi_best_0.05_uni_nosex_genes.csv')
 
 ```
 
