@@ -16,7 +16,11 @@ cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
                 "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
 ```
 
+## Generate figure 1:
+
 ```{r}
+# Continuous outcome:
+## NPDR vs Relief-F score:
 p_qtrait <- ggplot(test_df_qtrait, aes(x = rrelief, y = beta.Z.att)) + 
   geom_smooth(method = "lm", se = F, color = "grey") + 
   geom_point(aes(colour = functional), alpha = 0.7, size = 2) +
@@ -28,6 +32,7 @@ p_qtrait <- ggplot(test_df_qtrait, aes(x = rrelief, y = beta.Z.att)) +
   annotate("text", x = 0.23, y = 80, label = deparse(bquote(R^2 == .(r2_qtrait))), parse = T) +
   geom_hline(yintercept=npdr.beta.cutoff.qtrait, linetype="dashed", alpha = 0.5)
 
+## PR curve:
 q_qtrait <- prr_dat_qtrait %>%
   ggplot(aes(Recall, Precision, color = type)) +
   geom_path(size = 1) + theme_bw() +
@@ -38,7 +43,8 @@ q_qtrait <- prr_dat_qtrait %>%
   annotate('text', x = 0.23, y = 0.58, label = paste0('Relief-F \n AUC = ', auprc_relief_qtrait), color = cbbPalette[8]) +
   guides(color = FALSE)
 
-
+# Binary outcome:
+## NPDR vs Relief-F score:
 p_cc <- ggplot(test_df_cc, aes(x = rrelief, y = beta.Z.att)) + 
   geom_smooth(method = "lm", se = F, color = "grey") + 
   geom_point(aes(colour = functional), alpha = 0.7, size = 2) +
@@ -50,7 +56,7 @@ p_cc <- ggplot(test_df_cc, aes(x = rrelief, y = beta.Z.att)) +
   annotate("text", x = 0.055, y = 24, label = deparse(bquote(R^2 == .(r2_cc))), parse = T) +
   geom_hline(yintercept=npdr.beta.cutoff.cc, linetype="dashed", alpha = 0.5)
 
-
+## PR curve:
 q_cc <- prr_dat_cc %>%
   ggplot(aes(Recall, Precision, color = type)) +
   geom_path(size = 1) + theme_bw() +
@@ -77,5 +83,61 @@ ccp <- plot_grid(title_c, cc, ncol=1, rel_heights=c(0.1, 1))
 fig1 <- plot_grid(qp, ccp, nrow = 2)
 ggsave(fig1, filename = '../figs/fig1.svg', height = 7, width = 7)
 ggsave(fig1, filename = '../figs/fig1.pdf', height = 7, width = 7)
+```
+
+
+
+## auROC for Supplement:
+```{r}
+ss_df <- rbind(ss_df_cc, ss_df_qtrait) %>%
+  mutate(sim = rep(c('Binary outcome', 'Continuous outcome'), each = nrow(ss_df_cc)))
+
+npdr_text <- data.frame(
+  label = c(paste0('NPDR \n AUC = ', auroc_npdr_cc), 
+            paste0('NPDR \n AUC = ', auroc_npdr_qtrait)),
+  sim = c('Binary outcome', 'Continuous outcome'),
+  x = c(0.77, 0.865), y = c(0.9, 0.95), type = c('NPDR', 'NPDR')
+)
+
+relief_text <- data.frame(
+  label = c(paste0('Relief-F \n AUC = ', auroc_relief_cc), 
+            paste0('Relief-F \n AUC = ', auroc_relief_qtrait)),
+  sim = c('Binary outcome', 'Continuous outcome'),
+  x = c(0.77, 0.62), y = c(0.5, 0.5), type = c('Relief', 'Relief')
+)
+
+roc <- ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +   
+  geom_path(size = 1) + theme_bw() + facet_wrap(~ sim) +
+  scale_color_manual(values = cbbPalette[c(6,8)]) +
+  scale_x_reverse(breaks = seq(1, 0, -0.2), labels = scales::percent) + 
+  scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent) + 
+  geom_text(npdr_text, mapping = aes(x = x, y = y, label = label)) +
+  geom_text(relief_text, mapping = aes(x = x, y = y, label = label)) +
+  guides(color = FALSE)
+
+roc
+ggsave(roc, filename = '../figs/npdr_relief_auroc.pdf', height = 4 , width = 6)
+```
+
+## Compare NPDR and STIR:
+
+```{r}
+p <- ggplot(npdr_stir, aes(x=stir.log10,y=npdr.log10)) + 
+  geom_smooth(method = 'lm', se = F, color = 'grey') + 
+  geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
+  theme_bw() + theme(legend.position = c(0.78, 0.23)) +
+  labs(colour = NULL, 
+       x = bquote('STIR ('~-log[10]~'p'~')'), 
+       y = bquote('NPDR ('~-log[10]~'p'~')'),
+       title = NULL) + 
+  annotate("text", x = 130, y = 130, label = deparse(bquote(R^2 > 0.99)), parse = T) +
+  scale_color_manual(values = cbbPalette[c(1,2)],
+                     labels = c('Non-functional', 'Functional')) +
+  # viridis::scale_color_viridis(discrete = TRUE, 
+  #                              labels = c('Non-functional', 'Functional')) + 
+  geom_vline(xintercept=pcutoff, linetype="dashed", alpha = 0.5) +
+  geom_hline(yintercept=pcutoff, linetype="dashed", alpha = 0.5)
+p
+ggsave(p, filename = paste0('../figs/npdr_stir_p_cc.pdf'), height = 4.5, width = 4.5 )
 ```
 
