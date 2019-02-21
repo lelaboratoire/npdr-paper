@@ -58,13 +58,15 @@ functional.cc <- cc.3sets$signal.names # functional attributes
 
 ```{r}
 #####
-npdr.cc.results <- 
+system.time(
+  npdr.cc.results <- 
   npdr(label, cc.data, regression.type="glm", 
           attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
           nbd.metric = "manhattan", msurf.sd.frac = .5, 
           padj.method = "bonferroni", verbose = T) %>%
   # rownames_to_column('att') %>%
   mutate(npdr.log10 = -log10(pval.att))
+)
 
 # get functional attribute detection stats
 npdr.cc.positives <- npdr.cc.results %>%
@@ -78,13 +80,15 @@ cat(npdr.cc.detect.stats$report)
 ### Univariate regression:
 
 ```{r}
-gene_mdd <- uniReg(
+system.time(
+  gene_mdd <- uniReg(
   outcome = label, 
   dataset = cc.data, 
   regression.type = 'binomial') %>%
   data.frame() %>%
   rownames_to_column('att') %>%
   mutate(functional = grepl('sim', att))
+)
 ```
 
 ### Comparing univariate regression and NPDR:

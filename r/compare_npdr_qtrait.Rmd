@@ -57,12 +57,14 @@ functional.qtrait <- qtrait.3sets$signal.names # functional attributes
 
 ```{r}
 #####
-npdr.qtrait.results <- 
-  npdr("qtrait", qtrait.data, regression.type="lm", 
-          attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
-          nbd.metric = "manhattan", msurf.sd.frac = .5, 
-          padj.method = "bonferroni", verbose = T) %>%
-  mutate(npdr.log10 = -log10(pval.att))
+system.time(
+  npdr.qtrait.results <- 
+    npdr("qtrait", qtrait.data, regression.type="lm", 
+            attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
+            nbd.metric = "manhattan", msurf.sd.frac = .5, 
+            padj.method = "bonferroni", verbose = T) %>%
+    mutate(npdr.log10 = -log10(pval.att))
+)
 
 # get functional attribute detection stats
 npdr.qtrait.positives <- npdr.qtrait.results %>%
@@ -76,6 +78,7 @@ cat(npdr.qtrait.detect.stats$report)
 ### Univariate regression:
 
 ```{r}
+system.time(
 gene_mdd <- uniReg(
   outcome = label, 
   dataset = qtrait.data, 
@@ -83,6 +86,7 @@ gene_mdd <- uniReg(
   data.frame() %>%
   rownames_to_column('att') %>%
   mutate(functional = grepl('sim', att))
+)
 ```
 
 ### Comparing univariate regression and NPDR:
