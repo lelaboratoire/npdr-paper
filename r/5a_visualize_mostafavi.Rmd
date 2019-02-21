@@ -11,7 +11,7 @@ cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
                 "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
 
 load('../results/0_mostafavi_mdd_results.Rdata')
-# load('../results/rf_0_mostafavi_mdd_results.Rdata')
+load('../results/rf_0_mostafavi_mdd_results.Rdata')
 ```
 
 
@@ -55,33 +55,41 @@ ggsave(pboth, filename = '../figs/mostafavi_npdrs_mdd.pdf', width = 6, height = 
 ```{r}
 rf_imp_sorted[rf_imp_sorted$att=='sex',]
 npdr_rf_df <- npdr_w_wo_sex %>%
-  select(att, beta.npdr.sex, nlog10.sex.genes, sig.genes, p.adj.npdr.sex) %>%
+  select(att, beta.npdr.sex, nlog10.sex.genes, sig.genes, p.adj.npdr.sex, p.adj.gene.sex) %>%
   merge(rf_imp_sorted, by = 'att') %>%
-  mutate(imp.genes = ifelse(# (MeanDecreaseGini > 0.2) |
-                            (p.adj.npdr.sex < 0.05), att, NA)) 
+  mutate(hili = (p.adj.gene.sex < 0.001)) %>%
+  mutate(imp.genes = ifelse(hili, att, NA)) 
+
+npdr_rf_df_nohili <- npdr_rf_df %>% filter(!hili)
+npdr_rf_df_hili <- npdr_rf_df %>% filter(hili)
 # x = importance
-p_npdr_rf <- ggplot(npdr_rf_df, aes(x = MeanDecreaseGini, y = beta.npdr.sex)) + 
-  geom_point(alpha = 0.7, shape = 21, size = 1.5, aes(fill = nlog10.sex.genes)) + 
+p_npdr_rf <- ggplot(npdr_rf_df_hili, aes(x = MeanDecreaseGini, y = beta.npdr.sex)) + 
   geom_hline(yintercept = 0, linetype = 2, color = cbbPalette[1]) + 
-  scale_x_continuous(breaks = seq(0,0.5,0.02), limits = c(0.1, 0.2)) +
+  geom_point(npdr_rf_df_nohili, mapping = aes(x = MeanDecreaseGini, y = beta.npdr.sex),
+             shape = 21, size = 1.5, fill = alpha("grey", 0.5), color = alpha("grey", 0.3)) +
+  geom_point(shape = 21, size = 1.5,
+             mapping = aes(fill = nlog10.sex.genes)) +
+  scale_x_continuous(breaks = seq(0,0.5,0.02), limits = c(0.1, 0.26)) +
   scale_y_continuous(breaks = seq(-8,8,2)) +
   labs(x = bquote('Random forest Gini importance'),
        y = bquote('Sex-adjusted NPDR'~beta),
        fill = bquote(''~-log[10]~'p'['sex'])) +
-  ggrepel::geom_text_repel(aes(label = imp.genes), #check_overlap = TRUE, 
-            hjust=-0.12, vjust=1.5, fontface = "italic",
+  geom_text(aes(label = imp.genes), check_overlap = TRUE, 
+            hjust=-0.1, vjust=1., fontface = "italic",
             size = 2.5, segment.alpha = 0.3) +
   viridis::scale_fill_viridis(option = 'B', direction = -1) + 
   theme_bw() + 
-  theme(legend.position = c(0.85, 0.25), 
+  theme(legend.position = c(0.89, 0.22), 
         legend.key.width = unit(0.8, "line"),
         legend.key.height = unit(1, "line"),
         legend.text = element_text(size = 8),
-        legend.title = element_text(size = 8))
+        legend.title = element_text(size = 8)) 
+
 p_npdr_rf
 ggsave(p_npdr_rf, filename = '../figs/mostafavi_npdr_rf_mdd.pdf', width = 6, height = 4)
 
 ```
+
 
 Random forest importance vs. nlog10.sex.genes:
 ```{r}
