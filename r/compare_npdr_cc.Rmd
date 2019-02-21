@@ -32,6 +32,7 @@ type <- "interactionErdos" # or mainEffect
 # type <-"mainEffect"
 bias <- 0.4          # moderate effect size
 pct.signals <- 0.1   # pct functional features
+alpha <- 0.05
 verbose <- FALSE
 cc.3sets <- createSimulation(num.samples = n.samples,
                               num.variables = n.variables,
@@ -67,7 +68,7 @@ npdr.cc.results <-
 
 # get functional attribute detection stats
 npdr.cc.positives <- npdr.cc.results %>%
-  filter(pval.adj < .05) %>%
+  filter(pval.adj < alpha) %>%
   pull(att)
 npdr.cc.detect.stats <- detectionStats(functional.cc, npdr.cc.positives)
 cat(npdr.cc.detect.stats$report)
@@ -90,10 +91,10 @@ gene_mdd <- uniReg(
 
 ```{r}
 n.pos <- gene_mdd %>%
-  filter(p.adj < 0.05) %>%
+  filter(p.adj < alpha) %>%
   nrow()
 true.pos <- gene_mdd %>%
-  filter((p.adj < 0.05) & functional) %>%
+  filter((p.adj < alpha) & functional) %>%
   nrow()
 (uni.recall <- true.pos/(n.variables*pct.signals))
 (uni.precis <- true.pos/n.pos)
@@ -101,10 +102,10 @@ true.pos <- gene_mdd %>%
 test.df <- npdr.cc.results %>%
   mutate(functional = att %in% functional.cc) 
 true.pos <- test.df %>%
-  filter((pval.adj < 0.05) & functional) %>%
+  filter((pval.adj < alpha) & functional) %>%
   nrow()
 n.pos <- test.df %>%
-  filter((pval.adj < 0.05)) %>%
+  filter((pval.adj < alpha)) %>%
   nrow()
 (npdr.recall <- true.pos/(n.variables*pct.signals))
 (npdr.precis <- true.pos/n.pos)
@@ -148,39 +149,21 @@ multisurf_softed_imp <- stir.results$STIR_T %>%
 # functional attribute detection stats
 tstat_stir.detect.stats <- detectionStats(
   functional.cc, multisurf_softed_imp %>%
-    filter(t.pval.adj < .05) %>%
+    filter(t.pval.adj < alpha) %>%
     pull(att))
 cat(tstat_stir.detect.stats$report)
 ```
 
 ### Compare NPDR and STIR
 ```{r}
-pcutoff <- -log10(0.05/n.variables) # bonferoni adjustment
+pcutoff <- -log10(alpha/n.variables) # bonferoni adjustment
 test.df <- merge(multisurf_softed_imp, npdr.cc.results) %>% 
   mutate(functional = att %in% functional.cc)
-r2_cc <- round(cor(test.df$stir.log10, test.df$npdr.log10), digits = 3)
+r2_stir_cc <- round(cor(test.df$stir.log10, test.df$npdr.log10), digits = 3)
 
-p <- ggplot(test.df, aes(x=stir.log10,y=npdr.log10)) + 
-  geom_smooth(method = 'lm', se = F, color = 'grey') + 
-  geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
-  theme_bw() + theme(legend.position = c(0.78, 0.23)) +
-  labs(colour = NULL, 
-       x = bquote('STIR ('~-log[10]~'p'~')'), 
-       y = bquote('NPDR ('~-log[10]~'p'~')'),
-       title = NULL) + 
-  annotate("text", x = 130, y = 130, label = deparse(bquote(R^2 > 0.99)), parse = T) +
-  scale_color_manual(values = cbbPalette[c(1,2)],
-                     labels = c('Non-functional', 'Functional')) +
-  # viridis::scale_color_viridis(discrete = TRUE, 
-  #                              labels = c('Non-functional', 'Functional')) + 
-  geom_vline(xintercept=pcutoff, linetype="dashed", alpha = 0.5) +
-  geom_hline(yintercept=pcutoff, linetype="dashed", alpha = 0.5)
-p
-ggsave(p, filename = paste0('../figs/npdr_stir_p_cc_', n.variables, '.pdf'), height = 4.5, width = 4.5 )
 npdr_stir_p_cc <- p
 npdr_stir <- test.df
 ```
-
 
 
 ### Compute Relief-F score with the `CORElearn` package 
@@ -194,10 +177,8 @@ core.learn.cc <- CORElearn::attrEval(label, data = cc.data,
                                       kNearestEqual = knnSURF(n.samples.cc,.5))
 # core.learn.cc.order <- order(core.learn.cc, decreasing = T)
 corelearn.df <- data.frame(att=names(core.learn.cc), rrelief=core.learn.cc)
-last.imp.att <- which(npdr.cc.results$pval.adj>.05)[1]-1
+last.imp.att <- which(npdr.cc.results$pval.adj>alpha)[1]-1
 npdr.beta.cutoff.cc <- npdr.cc.results[last.imp.att, 'beta.Z.att']
-
-
 ```
 
 For later ploting:
@@ -237,7 +218,6 @@ auprc_relief_cc <- round(pr_relief$auc.integral, 3)
 
 prr.dat <- rbind(x, y) %>% 
   mutate(type = rep(c('NPDR', 'Relief-F'), each = nrow(x)))
-
 ```
 
 
@@ -246,25 +226,12 @@ What about auROC?
 ```{r}
 ss_npdr <- pROC::roc(test.df$functional, test.df$beta.Z.att)
 ss_relief <- pROC::roc(test.df$functional, test.df$rrelief)
-auroc_npdr <- round(ss_npdr$auc, 3)
-auroc_relief <- round( ss_relief$auc, 3)
+auroc_npdr_cc <- round(ss_npdr$auc, 3)
+auroc_relief_cc <- round( ss_relief$auc, 3)
 
-ss_df <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities), 
+ss_df_cc <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities), 
                     Specificity = c(ss_npdr$specificities, ss_relief$specificities)) %>%
   mutate(type = rep(c('NPDR', 'Relief'), each = length(ss_npdr$sensitivities)))
-
-roc <- ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +   
-  geom_path(size = 1) + theme_bw() +
-  scale_color_manual(values = cbbPalette[c(6,8)]) +
-  scale_x_reverse(breaks = seq(1, 0, -0.2), labels = scales::percent) + 
-  scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent) + 
-  annotate('text', x = 0.85, y = 0.9, label = paste0('NPDR \n AUC = ', auroc_npdr), color = cbbPalette[6]) +
-  annotate('text', x = 0.83, y = 0.5, label = paste0('Relief-F \n AUC = ', auroc_relief), color = cbbPalette[8]) +
-  guides(color = FALSE) +  
-  labs(title = "ROC curve for detecting important attributes")
-ggsave(roc, filename = '../figs/npdr_relief_auroc_cc.pdf', height = 4, width = 5 )
-
-npdr_relief_auroc_cc <- roc
 ```
 
 
@@ -277,9 +244,10 @@ prr_dat_cc <- prr.dat
 
 save(npdr_stir, ss_df_cc, test_df_cc, prr_dat_cc,
      auprc_npdr_cc, auprc_relief_cc, r2_cc,
-     npdr.beta.cutoff.cc,
+     npdr.beta.cutoff.cc, ss_df_cc,
+     auroc_npdr_cc, auroc_relief_cc,
+     pcutoff,
      file = '../results/df_cc.Rdata')
-
 ```
 
 

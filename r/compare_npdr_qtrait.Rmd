@@ -178,37 +178,25 @@ ss_relief <- pROC::roc(test.df$functional, test.df$rrelief)
 auroc_npdr_qtrait <- round(ss_npdr$auc, 3)
 auroc_relief_qtrait <- round( ss_relief$auc, 3)
 
-ss_df <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities),
+ss_df_qtrait <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities),
                     Specificity = c(ss_npdr$specificities, ss_relief$specificities)) %>%
   mutate(type = rep(c('NPDR', 'Relief'), each = length(ss_npdr$sensitivities)))
-
-roc <- ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +
-  geom_path(size = 1) + theme_bw() +
-  scale_color_manual(values = cbbPalette[c(6,8)]) +
-  scale_x_reverse(breaks = seq(1, 0, -0.2), labels = scales::percent) +
-  scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent) +
-  annotate('text', x = 0.89, y = 0.9,  color = cbbPalette[6],
-           label = paste0('NPDR \n AUC = ', auroc_npdr_qtrait)) +
-  annotate('text', x = 0.7, y = 0.5, color = cbbPalette[8],
-           label = paste0('Relief-F \n AUC = ', auroc_relief_qtrait)) +
-  guides(color = FALSE) +
-  labs(title = "ROC curve for detecting important attributes")
-ggsave(roc, filename = '../figs/npdr_relief_auroc_qtrait.pdf', height = 4, width = 5 )
-npdr_relief_auroc_qtrait <- roc
 ```
 
 
 How much better is NPDR? Is this just by chance? 100 replications result show the same thing (npdr_100_quant.Rmd).
 
 ```{r}
-ss_df_qtrait <- ss_df
+# ss_df_qtrait <- ss_df
 test_df_qtrait <- test.df
 prr_dat_qtrait <- prr.dat
 
 save(ss_df_qtrait, test_df_qtrait, prr_dat_qtrait,
      auprc_npdr_qtrait, auprc_relief_qtrait, r2_qtrait,
-     npdr.beta.cutoff.qtrait,
+     npdr.beta.cutoff.qtrait, ss_df_qtrait,
+     auroc_npdr_qtrait, auroc_relief_qtrait,
      file = '../results/df_qtrait.Rdata')
+
 ```
 
 
