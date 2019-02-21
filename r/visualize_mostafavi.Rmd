@@ -95,6 +95,13 @@ best_genes <- npdr_rf_df %>%
   arrange(p.adj.npdr.sex) %>%
   select(-c(HC, MDD))
 
+best_genes_nosex <- npdr_w_wo_sex %>%
+  filter(p.adj.npdr.nosex < 0.05) %>%
+  arrange(p.adj.npdr.nosex) %>%
+  select(att, p.adj.npdr.nosex, pval.npdr.nosex, 
+         beta.npdr.nosex, beta.raw.att.x,
+         pval.gene.sex, p.adj.gene.sex)
+
 sex_genes <- npdr_w_wo_sex %>%
   mutate(p.bon.gene.sex = p.adjust(pval.gene.sex, method = 'bonferroni')) %>%
   select(att, beta.gene.sex, pval.gene.sex, p.bon.gene.sex) %>%
@@ -103,5 +110,7 @@ sex_genes <- npdr_w_wo_sex %>%
 
 write_csv(sex_genes, '../results/mostafavi_sex_genes.csv')
 write_csv(best_genes, '../results/mostafavi_best_0.05_npdr_genes.csv')
+write_csv(best_genes_nosex, '../results/mostafavi_best_0.05_npdr_genes_nosex.csv')
+
 ```
 
