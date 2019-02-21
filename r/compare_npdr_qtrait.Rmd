@@ -48,7 +48,6 @@ qtrait.3sets <- createSimulation(num.samples = n.samples,
   # combine train and holdout into 200 samples x 100 attributes
   # ignore validation set for now; qtrait = quantitative outcome
 qtrait.data <- rbind(qtrait.3sets$train,qtrait.3sets$holdout)
-#validation.data <- data.sets$validation
 n.samples.qtrait <- dim(qtrait.data)[1]
 pheno.qtrait <- as.factor(qtrait.data[,label])
 functional.qtrait <- qtrait.3sets$signal.names # functional attributes
@@ -63,7 +62,6 @@ npdr.qtrait.results <-
           attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
           nbd.metric = "manhattan", msurf.sd.frac = .5, 
           padj.method = "bonferroni", verbose = T) %>%
-  # rownames_to_column('att') %>%
   mutate(npdr.log10 = -log10(pval.att))
 
 # get functional attribute detection stats
@@ -75,9 +73,62 @@ cat(npdr.qtrait.detect.stats$report)
 
 ```
 
+### Univariate regression:
+
+```{r}
+gene_mdd <- uniReg(
+  outcome = label, 
+  dataset = qtrait.data, 
+  regression.type = 'lm') %>%
+  data.frame() %>%
+  rownames_to_column('att') %>%
+  mutate(functional = grepl('sim', att))
+```
+
+### Comparing univariate regression and NPDR:
+
+```{r}
+n.pos <- gene_mdd %>%
+  filter(p.adj < 0.05) %>%
+  nrow()
+true.pos <- gene_mdd %>%
+  filter((p.adj < 0.05) & functional) %>%
+  nrow()
+(uni.recall <- true.pos/(n.variables*pct.signals))
+(uni.precis <- true.pos/n.pos)
+
+test.df <- npdr.qtrait.results %>%
+  mutate(functional = att %in% functional.qtrait) 
+true.pos <- test.df %>%
+  filter((pval.adj < 0.05) & functional) %>%
+  nrow()
+n.pos <- test.df %>%
+  filter((pval.adj < 0.05)) %>%
+  nrow()
+(npdr.recall <- true.pos/(n.variables*pct.signals))
+(npdr.precis <- true.pos/n.pos)
+
+pr_uni <- PRROC::pr.curve(scores.class0 = gene_mdd %>%
+                        filter(functional == T) %>%
+                        pull(beta.Z.att) %>% abs(),
+                      scores.class1 = gene_mdd %>%
+                        filter(functional == F) %>%
+                        pull(beta.Z.att) %>% abs(),
+                      curve = T)
+
+pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>%
+                        filter(functional == T) %>%
+                        pull(beta.Z.att),
+                      scores.class1 = test.df %>%
+                        filter(functional == F) %>%
+                        pull(beta.Z.att),
+                      curve = T)
+pr_uni$auc.integral
+pr_npdr$auc.integral
+```
 
 
-### Compute Relief-F score with the `CORElearn` package 
+### Compute Relief-F score with the `CORElearn` package
 (fixed $k$ with theoretical surf value)
 
 ```{r}
@@ -90,69 +141,31 @@ corelearn.df <- data.frame(att=names(core.learn.qtrait), rrelief=core.learn.qtra
 last.imp.att <- which(npdr.qtrait.results$pval.adj>.05)[1]-1
 npdr.beta.cutoff.qtrait <- npdr.qtrait.results[last.imp.att, 'beta.Z.att']
 
-test.df <- merge(corelearn.df, npdr.qtrait.results) %>% 
+test.df <- merge(corelearn.df, npdr.qtrait.results) %>%
   mutate(functional = att %in% functional.qtrait)
 r2_qtrait <- round(cor(test.df$rrelief, test.df$beta.Z.att), digits = 3)
-
-p <- ggplot(test.df, aes(x = rrelief, y = beta.Z.att)) + 
-  geom_smooth(method = "lm", se = F, color = "grey") + 
-  geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
-  theme_bw() + theme(legend.position = c(0.78, 0.17)) +
-  labs(colour = NULL, x = "Relief-F score", y = "NPDR coefficient",
-       title = NULL) +
-  scale_color_manual(values = cbbPalette[c(1,2)],
-                     labels = c('Non-functional', 'Functional')) +
-  annotate("text", x = 0.2, y = 70, label = deparse(bquote(R^2 == .(r2_qtrait))), parse = T) +
-  geom_hline(yintercept=npdr.beta.cutoff.qtrait, linetype="dashed", alpha = 0.5)
-p
 ```
 
 
-Draw the Precision-Recall curve:
+### Draw the Precision-Recall curve:
 
 ```{r}
-pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>% 
-                        filter(functional == T) %>% 
-                        pull(beta.Z.att),
-                      scores.class1 = test.df %>% 
-                        filter(functional == F) %>% 
-                        pull(beta.Z.att), 
+pr_relief <- PRROC::pr.curve(scores.class0 = test.df %>%
+                        filter(functional == T) %>%
+                        pull(rrelief),
+                      scores.class1 = test.df %>%
+                        filter(functional == F) %>%
+                        pull(rrelief),
                       curve = T)
 
-pr_relief <- PRROC::pr.curve(scores.class0 = test.df %>% 
-                        filter(functional == T) %>% 
-                        pull(rrelief), 
-                      scores.class1 = test.df %>% 
-                        filter(functional == F) %>% 
-                        pull(rrelief), 
-                      curve = T)
-
-x <- as.data.frame(pr_npdr$curve) 
+x <- as.data.frame(pr_npdr$curve)
 colnames(x) <- paste0(c('Recall', 'Precision', 'w'))
-y <- as.data.frame(pr_relief$curve) 
+y <- as.data.frame(pr_relief$curve)
 colnames(y) <- paste0(c('Recall', 'Precision', 'w'))
 auprc_npdr_qtrait <- round(pr_npdr$auc.integral, 3)
 auprc_relief_qtrait <- round(pr_relief$auc.integral, 3)
-prr.dat <- rbind(x, y) %>% 
+prr.dat <- rbind(x, y) %>%
   mutate(type = rep(c('NPDR', 'Relief-F'), each = nrow(x)))
-
-q <- prr.dat %>%
-  ggplot(aes(Recall, Precision, color = type)) +
-  geom_path(size = 1) + theme_bw() +
-  scale_color_manual(values = cbbPalette[c(6,8)]) + 
-  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) + 
-  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) + 
-  annotate('text', x = 0.7, y = 0.9 , label = paste0('NPDR \n AUC = ', auprc_npdr_qtrait), color = cbbPalette[6]) +
-  annotate('text', x = 0.28, y = 0.58, label = paste0('Relief-F \n AUC = ', auprc_relief_qtrait), color = cbbPalette[8]) +
-  guides(color = FALSE) #+ 
-  # labs(title = "PR curve for detecting important attributes")
-q  
-
-pq <- cowplot::plot_grid(p, q, labels = 'AUTO')
-ggsave(pq, filename = '../figs/npdr_relief_qtrait.pdf', height = 4, width = 8.5)
-npdr_relief_qtrait <- pq
-npdr_relief_p_qtrait <- p
-npdr_relief_q_qtrait <- q
 ```
 
 
@@ -165,18 +178,20 @@ ss_relief <- pROC::roc(test.df$functional, test.df$rrelief)
 auroc_npdr_qtrait <- round(ss_npdr$auc, 3)
 auroc_relief_qtrait <- round( ss_relief$auc, 3)
 
-ss_df <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities), 
+ss_df <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities),
                     Specificity = c(ss_npdr$specificities, ss_relief$specificities)) %>%
   mutate(type = rep(c('NPDR', 'Relief'), each = length(ss_npdr$sensitivities)))
 
-roc <- ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +   
+roc <- ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +
   geom_path(size = 1) + theme_bw() +
   scale_color_manual(values = cbbPalette[c(6,8)]) +
-  scale_x_reverse(breaks = seq(1, 0, -0.2), labels = scales::percent) + 
-  scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent) + 
-  annotate('text', x = 0.89, y = 0.9, label = paste0('NPDR \n AUC = ', auroc_npdr_qtrait), color = cbbPalette[6]) +
-  annotate('text', x = 0.7, y = 0.5, label = paste0('Relief-F \n AUC = ', auroc_relief_qtrait), color = cbbPalette[8]) +
-  guides(color = FALSE) + 
+  scale_x_reverse(breaks = seq(1, 0, -0.2), labels = scales::percent) +
+  scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent) +
+  annotate('text', x = 0.89, y = 0.9,  color = cbbPalette[6],
+           label = paste0('NPDR \n AUC = ', auroc_npdr_qtrait)) +
+  annotate('text', x = 0.7, y = 0.5, color = cbbPalette[8],
+           label = paste0('Relief-F \n AUC = ', auroc_relief_qtrait)) +
+  guides(color = FALSE) +
   labs(title = "ROC curve for detecting important attributes")
 ggsave(roc, filename = '../figs/npdr_relief_auroc_qtrait.pdf', height = 4, width = 5 )
 npdr_relief_auroc_qtrait <- roc
@@ -186,20 +201,14 @@ npdr_relief_auroc_qtrait <- roc
 How much better is NPDR? Is this just by chance? 100 replications result show the same thing (npdr_100_quant.Rmd).
 
 ```{r}
-
 ss_df_qtrait <- ss_df
 test_df_qtrait <- test.df
 prr_dat_qtrait <- prr.dat
-
-save(npdr_relief_auroc_qtrait, npdr_relief_qtrait, 
-     npdr_relief_p_qtrait, npdr_relief_q_qtrait, 
-     file = '../results/plots_qtrait.Rdata')
 
 save(ss_df_qtrait, test_df_qtrait, prr_dat_qtrait,
      auprc_npdr_qtrait, auprc_relief_qtrait, r2_qtrait,
      npdr.beta.cutoff.qtrait,
      file = '../results/df_qtrait.Rdata')
-
 ```
 
 
