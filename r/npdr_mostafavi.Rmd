@@ -101,13 +101,15 @@ colnames(filtered.mostafavi.df)[class.idx]
 gene_mdd <- uniReg(
   outcome = 'class', 
   dataset = filtered.mostafavi.df, 
-  regression.type = 'glm') %>%
+  regression.type = 'glm',
+  padj.method = 'bonferroni') %>%
   clean_df_results('gene.mdd')
 
 # After adjusting for sex:
 gene_sex_mdd <- uniReg(
   outcome = 'class', dataset = filtered.mostafavi.df, 
-  regression.type = 'glm', covars = pheno.sex$sex) %>%
+  regression.type = 'glm', covars = pheno.sex$sex,
+  padj.method = 'bonferroni') %>%
   clean_df_results('gene.sex.mdd')
 
 # Univariate with sex as outcome:
@@ -117,7 +119,8 @@ sum(pheno.sex$ids != rownames(filtered.mostafavi.df))
 gene_sex <- uniReg(
   outcome = pheno.sex$sex-1,
   dataset = filtered.pred,
-  regression.type='glm') %>%
+  regression.type='glm',
+  padj.method = 'bonferroni') %>%
   clean_df_results('gene.sex')
 
 # Summarize all univariate analyses:
@@ -182,7 +185,8 @@ npdr_w_wo_sex <- data.frame(gene_sex) %>%
   mutate(sig.genes = ifelse((p.adj.npdr.nosex < 0.01) | p.adj.npdr.sex < 0.01, att, NA)) %>%
   mutate(nlog10.sex.genes = -log10(p.adj.gene.sex))
 
-save(npdr_w_wo_sex, uni_w_wo_sex, file = paste0('../results/', pct, '_mostafavi_mdd_results.Rdata'))
+save(gene_sex, gene_mdd, gene_sex_mdd, npdr_mdd_nosex, npdr_mdd_sex,
+     npdr_w_wo_sex, uni_w_wo_sex, file = paste0('../results/', pct, '_mostafavi_mdd_results.Rdata'))
 ```
 
 
@@ -193,19 +197,18 @@ rnaseq_sex <- filtered.mostafavi.df %>%
   merge(select(pheno.sex, ids, sex), by = 'ids') %>%
   column_to_rownames('ids')
 
-# weights <-c(rep(0.01, ncol(rnaseq_sex) - 2), 1)
-mostafavi_forest <- ranger::ranger(formula = class ~ ., data = rnaseq_sex,
-                                   always.split.variables = 'sex', importance = 'permutation')
-mostafavi_forest
-rf.importance <- ranger::importance(mostafavi_forest)  # variable 3 best
-rf_imp_sorted <- data.frame(importance = rf.importance) %>%
-  rownames_to_column('att') %>%
-  arrange(desc(importance))
+# mostafavi_forest <- ranger::ranger(formula = class ~ ., data = rnaseq_sex,
+#                                    always.split.variables = 'sex', importance = 'permutation')
+# mostafavi_forest
+# rf.importance <- ranger::importance(mostafavi_forest)  # variable 3 best
+# rf_imp_sorted <- data.frame(importance = rf.importance) %>%
+#   rownames_to_column('att') %>%
+#   arrange(desc(importance))
 
-# mostafavi_forest <- randomForest::randomForest(as.factor(class) ~ ., data = filtered.mostafavi.df, importance = T)
-# rf.importance <- randomForest::importance(mostafavi_forest)  # variable 3 best
-# rf_imp_sorted <- data.frame(rf.importance) %>%
-#   rownames_to_column('att') 
+mostafavi_forest <- randomForest::randomForest(as.factor(class) ~ ., data = filtered.mostafavi.df, importance = T)
+rf.importance <- randomForest::importance(mostafavi_forest)  # variable 3 best
+rf_imp_sorted <- data.frame(rf.importance) %>%
+  rownames_to_column('att')
 
 save(rf_imp_sorted, mostafavi_forest, file = paste0('../results/rf_', pct, '_mostafavi_mdd_results.Rdata'))
 ```
