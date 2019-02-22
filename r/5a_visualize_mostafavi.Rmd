@@ -54,20 +54,28 @@ ggsave(pboth, filename = '../figs/mostafavi_npdrs_mdd.pdf', width = 6, height = 
 
 ```{r}
 rf_imp_sorted[rf_imp_sorted$att=='sex',]
+npdr_rf_df_sorted <- npdr_rf_df %>% arrange(desc(beta.npdr.sex))
+last.imp.att <- which(npdr_rf_df_sorted$p.adj.npdr.sex > 0.05)[1]-1
+npdr.beta.cutoff.cc <- npdr_rf_df_sorted[last.imp.att, 'beta.npdr.sex']
+
 npdr_rf_df <- npdr_w_wo_sex %>%
   select(att, beta.npdr.sex, nlog10.sex.genes, sig.genes, p.adj.npdr.sex, p.adj.gene.sex) %>%
   merge(rf_imp_sorted, by = 'att') %>%
   mutate(hili = (p.adj.gene.sex < 0.001)) %>%
-  mutate(imp.genes = ifelse(hili, att, NA)) 
+  mutate(imp.genes = ifelse(hili, att, NA))
+
+npdr_rf_df %>% filter(MeanDecreaseGini > 0.1) %>% tally()
 
 npdr_rf_df_nohili <- npdr_rf_df %>% filter(!hili)
 npdr_rf_df_hili <- npdr_rf_df %>% filter(hili)
 # x = importance
 p_npdr_rf <- ggplot(npdr_rf_df_hili, aes(x = MeanDecreaseGini, y = beta.npdr.sex)) + 
-  geom_hline(yintercept = 0, linetype = 2, color = cbbPalette[1]) + 
+  geom_hline(yintercept = npdr.beta.cutoff.cc, linetype = 2, color = cbbPalette[1]) + 
+  annotate("text", 0.22, npdr.beta.cutoff.cc + 0.4, label = "NPDR cutoff", 
+           size = 4, color = cbbPalette[1]) +
   geom_point(npdr_rf_df_nohili, mapping = aes(x = MeanDecreaseGini, y = beta.npdr.sex),
-             shape = 21, size = 2, fill = alpha("grey", 0.5), color = alpha("grey", 0.3)) +
-  geom_point(shape = 21, size = 2,
+             shape = 21, size = 2.5, fill = alpha("grey", 0.5), color = alpha("grey", 0.3)) +
+  geom_point(shape = 21, size = 2.5,
              mapping = aes(fill = nlog10.sex.genes)) +
   scale_x_continuous(breaks = seq(0,0.5,0.02), limits = c(0.1, 0.26)) +
   scale_y_continuous(breaks = seq(-8,8,2)) +
@@ -75,11 +83,11 @@ p_npdr_rf <- ggplot(npdr_rf_df_hili, aes(x = MeanDecreaseGini, y = beta.npdr.sex
        y = bquote('Sex-adjusted NPDR'~beta),
        fill = bquote(''~-log[10]~'p'['sex'])) +
   geom_text(aes(label = imp.genes), check_overlap = TRUE, 
-            hjust=-0.1, vjust=1., fontface = "italic",
+            hjust=-0.15, vjust=1.15, fontface = "italic",
             size = 2.5, segment.alpha = 0.3) +
   viridis::scale_fill_viridis(option = 'B', direction = -1) + 
   theme_bw() + 
-  theme(legend.position = c(0.89, 0.22), 
+  theme(legend.position = c(0.89, 0.25), 
         legend.key.width = unit(0.8, "line"),
         legend.key.height = unit(1, "line"),
         legend.text = element_text(size = 8),
