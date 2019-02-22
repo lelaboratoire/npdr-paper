@@ -139,9 +139,12 @@ We use RNA-Seq data from a study of major depressive disorder to show that NPDR 
 
 \section{Introduction}
 
-Relief-based algorithms are efficient nearest-neighbor feature selection methods that are able to detect epistasis or statistical interaction effects in high-dimensional data without resorting to pairwise modeling of attributes \cite{urbanowicz17b,kononenko97, mckinney09, rendell92}. Epistasis is a measure of the effect of mutations on a phenotype beyond what would be expected by their independent effects. There is evidence that these non-independent effects are pervasive~\cite{breen12} and that higher-order interactions also play an important role in genetics~\cite{weinreich13}. 
+Relief-based algorithms are efficient nearest-neighbor feature selection methods that are able to detect epistasis or statistical interaction effects in high-dimensional data without resorting to pairwise modeling of attributes \cite{urbanowicz17b,kononenko97, mckinney09, rendell92}.
+Epistasis is a measure of the effect of mutations on a phenotype beyond what would be expected by their independent effects. There is evidence that these non-independent effects are pervasive~\cite{breen12} and that higher-order interactions also play an important role in genetics~\cite{weinreich13}. 
 
-A similar effect can be observed in differential co-expression, where the phenotypic effect of one gene is modified depending on the expression of another gene \cite{lareau15,diffcoexp10}. The embedding of these interactions in a regulatory network may lead to, not only pairwise interactions, but also higher-order epistasis network effects. Attempting to model these higher order interactions combinatorially would be computationally and statistically intractable~\cite{riesselman18}. Thus, computationally scalable feature selection methods, like Relief, are needed to capture these higher-order effects in high-dimensional data such as genome-wide association~\cite{titv} and gene expression studies~\cite{stir}.
+A similar effect can be observed in differential co-expression, where the phenotypic effect of one gene is modified depending on the expression of another gene \cite{lareau15,diffcoexp10}.
+The embedding of these interactions in a regulatory network may lead to, not only pairwise interactions, but also higher-order epistasis network effects. Attempting to model these higher order interactions combinatorially would be computationally and statistically intractable~\cite{riesselman18}.
+Thus, computationally scalable feature selection methods, like Relief, are needed to capture these higher-order effects in high-dimensional data such as genome-wide association~\cite{titv} and gene expression studies~\cite{stir}.
 
 We recently introduced the STatistical Inference Relief (STIR) formalism~\cite{stir} to address Relief-based methods' lack of a statistical distribution for hypothesis testing and the challenge of assessing the false positive rate of Relief-based scores.
 STIR extended Relief-based methods to compute statistical significance of attributes in binary outcome data (e.g. case-control) by reformulating the Relief weight~\cite{mckinney13} as a pseudo t-test for the difference of means between neighbors with the same and opposite phenotype (hits and misses).
@@ -154,17 +157,20 @@ This new Nearest-neighbors Projected-Distance Regression (NPDR) approach opens u
 The projected difference function between two instances for a given attribute may be simply an arithmetic difference for numeric attributes or may be tailored to the specific data type, such as genetic variants~\cite{titv}.
 The NPDR formalism encompasses binary outcome (classification) problems (Eq.~\ref{eq:too_logit}), leads to a new and seamless way of solving numeric outcome (regression) problems (Eq.~\ref{eq:lin_reg}) and adjusts for covariates (Eq.~\ref{eq:lin_reg_cov}) while detecting main effects and interactions. 
 
-Covariate adjustment is important throughout biomedical research to avoid confounding by demographic variables, like age~\cite{le18_brainagesim} or population stratification~\cite{popstrat16}, but adjusting for covariates is often neglected in machine learning. Relief-based methods also suffer from confounding, but this limitation has not been addressed previously. Some proposed methods for correcting machine learning algorithms include restricted permutation~\cite{rao2017}, inverse probability weighting of training samples~\cite{linn2016} and penalized support vector machines~\cite{li2011ccsvm}. Our NPDR framework leads to a natural way to control for covariates by including additional terms for the between-neighbor projected differences for each covariate within the GLM. We demonstrate the effectiveness of NPDR to correct for confounding on an RNA-Seq study of major depressive disorder in which there is a strong signal in the expression data due to the sex of study participants. 
+Covariate adjustment is important throughout biomedical research to avoid confounding by demographic variables, like age~\cite{le18_brainagesim} or population stratification~\cite{popstrat16}, but adjusting for covariates is often neglected in machine learning.
+Relief-based methods also suffer from confounding, but this limitation has not been addressed previously. Some proposed methods for correcting machine learning algorithms include restricted permutation~\cite{rao2017}, inverse probability weighting of training samples~\cite{linn2016} and penalized support vector machines~\cite{li2011ccsvm}.
+Our NPDR framework leads to a natural way to control for covariates by including additional terms for the between-neighbor projected differences for each covariate within the GLM.
+We demonstrate the effectiveness of NPDR to correct for confounding on an RNA-Seq study of major depressive disorder in which there is a strong signal in the expression data due to the sex of study participants. 
 
 For each attribute, the NPDR model fits a GLM of projected-distance differences (onto the attribute) between all pairs of nearest-instance neighbors.
 For the outcome variable in the model, the projected distances between instances are binary match/mismatches for binary outcome data and arithmetic differences for quantitative outcomes.
 The model is linear for regression problems and logistic for binary outcome problems, and either model may include terms for covariates.
-The importance of an attribute is given by its [standardized] regression coefficient and the statistical significance by its P value.
+The importance of an attribute is given by its standardized regression coefficient and the statistical significance by its P value.
 The model gives the appearance of being univariate but implicitly accounts for interactions with all other attributes via the neighborhood calculation in the space of all attributes (omnigenic).
 NPDR is applicable to any predictor data types such as SNPs in GWAS or expression in RNA-Seq analyses.
 It allows for hypothesis testing and multiple testing adjustment.
 Further, we implement a penalized version of NPDR with the elasticnet penalty.
-[We also derive the theoretical constant-$k$ approximation to the expected number of neighbors for SURF and multiSURF radial neighborhoods.]
+We also derive the theoretical constant-$k$ approximation to the expected number of neighbors for SURF and multiSURF radial neighborhoods.
 
 %The NPDR attribute-score regression coefficient is the covariance between the attribute and outcome diffs divided by the variance of the outcome diff, which is analogous to the original RRelief score.
 
@@ -174,11 +180,11 @@ For data with continuous outcome, we use linear regression, which has theoretica
 For binary outcome data, we employ a logistic model in the GLM along with possible covariate terms.
 We use the projected-distance regression formalism to implement a penalized version of NPDR based on elasticnet, and we derive the theoretical expected constant-$k$ approximation to radius-based neighborhood methods SURF and multiSURF. 
 In the Results, we use realistic simulations with main effects and network interactions to demonstrate the similarities and differences in power and false discoveries between NPDR, STIR and Relief methods.
-[We demonstrate the feature selection similarities between NPDR and penalized NPDR for simulated data.]
-We apply NPDR with covariate correction to a real RNA-Seq dataset from a study of major depressive disorder, showing that NPDR removes spurious associations due to confounding by sex.
+% [We demonstrate the feature selection similarities between NPDR and penalized NPDR for simulated data.]
+We apply NPDR with covariate correction to two real RNA-Seq datasets from studies of major depressive disorder (MDD), including binary outcome (MDD diagnosis status) and continuous outcome (Pittsburgh Sleep Quality Index, PSQI).
+We showed that NPDR removes spurious associations due to confounding by sex and reveals genes important to the disorder.
 
 %Residualize? r=glm(trait~1, offset=c*t, family=binomial(link=probit))\$residuals;fit=lm(r~genotypes) 
-
 %plink --bfile data --linear --covar covars.txt --adjust --out data
 
 
@@ -319,11 +325,12 @@ The $\text{d}^{\text{num}}_{ij}(y)$ term on the left is the projected distances 
     & H_1: \beta_a \ge 0.
 \end{aligned}
 \end{equation}
-The $\beta_a$ can be interpreted as the predicted amount the quantitative outcome changes between a pair of subjects when the projected difference of the attribute value $a$ changes by one unit. {\it Should we pre-center the diffs and set $\beta_o=0$??} The attribute weights in the original RRelief algorithm can be described as a weighted covariance between the attribute neighbor diffs, $\text{d}_{ij}(a)$, and the outcome neighbor diffs, $\text{d}^{\text{num}}_{ij}(y)$. The extra weighting in RRelief is an exponentially decaying function of the rank of the distance between neighbors. Because the NPDR attribute weight, $\beta_a$, is a regression coefficient, it can also be described as a weighted covariance between attribute and outcome neighbor diffs:
+The $\beta_a$ can be interpreted as the predicted amount the quantitative outcome changes between a pair of subjects when the projected difference of the attribute value $a$ changes by one unit. {\it Should we pre-center the diffs and set $\beta_o=0$??} The attribute weights in the original RRelief algorithm can be described as a weighted covariance between the attribute neighbor diffs, $\text{d}_{ij}(a)$, and the outcome neighbor diffs, $\text{d}^{\text{num}}_{ij}(y)$. The extra weighting in RRelief is an exponentially decaying function of the rank of the distance between neighbors. Because the NPDR attribute weight, $\beta'_a$, is a standardized regression coefficient, when the regression contains no covariate term, it can also be described as the correlation between attribute and outcome neighbor diffs:
 \begin{equation}
-\beta_a = \frac{\text{Cov}\left( \bf{\text{d}}(\bf{y}), \bf{\text{d}}(\bf{a}) \right)} {\text{Var}\left( \bf{\text{d}}(\bf{a}) \right)}.
+% \beta_a = \frac{\text{Cov}\left( \bf{\text{d}}(\bf{y}), \bf{\text{d}}(\bf{a}) \right)} {\text{Var}\left( \bf{\text{d}}(\bf{a}) \right)}.
+\beta'_a = \text{corr}\left( \bf{\text{d}}(\bf{y}), \bf{\text{d}}(\bf{a}) \right).
 \end{equation}
-But unlike RRelief, the NPDR covariance is divided by the variance of the outcome diffs. [\emph{Discuss standardizing beta here.}] Thus, there is a similarity between NPDR and RRelief for regression, but, as we show shortly, NPDR provides an improved attribute estimation in a flexible framework for correcting for additional sources of variation (i.e., confounding covariates) as well handling binary outcomes.   
+Therefore, [unlike RRelief], the NPDR covariance is divided by the variance of the outcome diffs. Thus, there is a similarity between NPDR and RRelief for regression, but, as we show shortly, NPDR provides an improved attribute estimation in a flexible framework for correcting for additional sources of variation (i.e., confounding covariates) as well handling binary outcomes.   
 
 %Could also write in terms of min of -LL. 
 
@@ -426,14 +433,15 @@ The elastic-net parameter $\alpha$ mixes the amount of lasso ($\alpha$=1) and ri
 \subsubsection{Comparing NPDR to existing Relief-based methods}
 We examine the slight differences between the importance scores computed from NPDR, STIR and traditional Relief-based methods.
 Roughly speaking, the formulas for importance scores become more generalized over time (Table \ref{tab:compare_npdr}).
-Specifically, for binary outcome, STIR incorporates sample variance of the nearest neighbor distances to enable the calculation of statistical significance with the assumptions of a t-test, while NPDR assumes intra- and inter-class differences are randomly sampled from one distribution and computes the importance score from a logistic regression. This generalization enables NPDR to have desirable properties and be applicable to a wider range of problems.
+Specifically, for binary outcome, STIR incorporates sample variance of the nearest neighbor distances to enable the calculation of statistical significance with the assumptions of a t-test, while NPDR assumes intra- and inter-class differences are randomly sampled from one distribution and computes the importance score from a logistic regression.
+This generalization enables NPDR to have desirable properties and be applicable to a wider range of problems.
 
 \begin{table}[h]
 
 \begin{tabular}{p{4.5cm}C{2cm}C{3.2cm}C{2.7cm}}
                            & Traditional methods & STIR    & NPDR \\
 \hline
-Importance score $W$\tablefootnote{Considering a binary outcome problem.}        & $\bar{M}_a - \bar{H}_a    $                      & $\dfrac{\bar{M}_a - \bar{H}_a }{S_p[M,H]\sqrt{\frac{1}{|M|}+\frac{1}{|H|}}}$ &   $\dfrac{\text{Cov}\left( \text{p}_y ,\text{d}_a  \right)}{\text{Var}\left( \text{d}_a  \right)}$\tablefootnote{where $\text{d}_a = [M_a, H_a]$ and $\text{logit}(\text{p}_y) =  [M_y, H_y]$.} \\
+Importance score $W$\tablefootnote{Considering a binary outcome problem.}        & $\bar{M}_a - \bar{H}_a    $                      & $\dfrac{\bar{M}_a - \bar{H}_a }{S_p[M,H]\sqrt{\frac{1}{|M|}+\frac{1}{|H|}}}$ &   $\text{corr}\left(\text{p}_y ,\text{d}_a  \right)$\tablefootnote{where $\text{d}_a = [M_a, H_a]$ and $\text{logit}(\text{p}_y) =  [M_y, H_y]$.} \\
 $W$ has a distribution       & \ding{55}                               & \ding{51}     & \ding{51}  \\
 Supports continuous outcome & \ding{51}                              & \ding{55}      & \ding{51}  \\
 Supports covariates         & \ding{55}                               & \ding{55}      & \ding{51} \\
@@ -449,7 +457,7 @@ Supports covariates         & \ding{55}                               & \ding{55
 \subsubsection{Simulation methods}
 To compare power and false positive performance for multiple feature selection methods, we use the simulation tool from our private Evaporative Cooling (privateEC) software \cite{le17} that was designed to simulate realistic main effects, correlations, and interactions found in gene expression or resting-state fMRI correlation data. In the current study, we first simulate main effect data with $m=200$ subjects ($100$ cases and $100$ controls) and $p=1000$ real-valued attributes with 10\% functional (true positive association with outcome).
 We chose a sample size consistent with real gene expression data but on the smaller end to demonstrate a more challenging scenario.
-Likewise, an [effect size] bias of $b=0.8$ was selected to be sufficiently challenging with power approximately 40\%. 
+Likewise, an [effect size] parameter of $b=0.8$ was selected to be sufficiently challenging with power approximately 40\%. 
 
 For interactions, we use the differential co-expression network-based simulation tool in privateEC, which is described in Refs.~\cite{le17, lareau15}. 
 We first create a co-expression network on an Erd\H{o}s-R\'enyi random graph with $0.1$ attachment probability, which is near the critical value for a giant component.
@@ -498,7 +506,7 @@ In summary, as the effect size varies, NPDR produces importance score at least a
 \label{fig:npdr_relief}
 \end{figure}
 
-For a dataset of the size simulated in our study ($m=200$ samples and $p=1000$ attributes), on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM, NPDR has a 24-second and 3-second runtime for binary outcome and continuous outcome data, respectively.
+For a dataset of the size simulated in our study ($m=200$ samples and $p=1000$ attributes), on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM, NPDR has a 24-second and 3-second runtime for binary and continuous outcome data, respectively.
 
 % Old: The increasing Recall with $k$ is expected for main effects because ReliefF becomes more myopic (more like a univariate t-test) as $k$ increases \cite{robnik03,mckinney13}. The increase in Recall is limited in part by the maximum number of neighbors being $\bar{k}_{\max{}} =\lfloor (m-1)/2\rfloor=49$. 
 
@@ -536,9 +544,9 @@ Gene scatter plot of $-\log_{10}$ adjusted significance for association with maj
 Sensitivity to confounders extends beyond nearest-neighbors feature selection algorithms.
 When covariates are not accounted for, even powerful methods are expected to produce biased attribute importance scores.
 On the other hand, it is not trivial to include covariates in most widely used machine learning models including random forest.
-Specifically, in random forest, only with the `ranger` `R` package do we have the option of always including the covariates (e.g., sex) in addition to a set number of random variables selected prior to node splitting.
+Specifically, in random forest, only with the \texttt{ranger} \texttt{R} package do we have the option of always including the covariates (e.g., sex) in addition to a set number of random variables selected prior to node splitting.
 However, this forced inclusion squashes the importance of other variables.
-In the case of the current real RNASeq data analysis of MDD, when we utilized this option in `ranger`, the covariate ``sex" is more than 20 times more important than the next most important attriute (ZNF845).
+In the case of the current real RNASeq data analysis of MDD, when we utilized this option in \texttt{ranger}, the covariate ``sex" is more than 20 times more important than the next most important attriute (ZNF845).
 The effect of forced inclusion of a particular covariate at node splitting on the entire algorithm is unclear.
 More specific studies with simulations of covariates will prove useful in determining the effect of this implementation on the final result.
 
@@ -554,7 +562,7 @@ Furthermore, we recall that, when the data contain many non-functional attribute
 \begin{figure}[!tpb]%figure2
 \centerline{\includegraphics[]{../figs/mostafavi_npdr_rf_mdd.pdf}}
 \caption{{\bf NPDR vs random forest feature importance.}
-Gene scatter plot of importance score for association with major depressive disorder using random forest and NPDR with correction for sex. Many genes with high random forest importance score also have high association with sex. Genes are labeled if they are NPDR significance or have Gini importance $>0.4$.}
+Gene scatter plot of importance score for association with major depressive disorder using random forest and NPDR with correction for sex. Many genes with high random forest importance score also have high association with sex. Genes are labeled if they are strongly associated with sex (Bonferroni P value < 0.001).}
 \label{fig:npdr_rf_mdd}
 \end{figure}
 
