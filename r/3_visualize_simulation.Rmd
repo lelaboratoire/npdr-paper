@@ -125,7 +125,7 @@ ggsave(roc, filename = '../figs/npdr_relief_auroc.pdf', height = 4 , width = 6)
 
 
 ## Compare NPDR and STIR:
-Require run `1_npdr_cc.Rmd`, `2_npdr_qtrait.Rmd`.
+Require run `1_npdr_cc.Rmd`.
 ```{r}
 p <- ggplot(npdr_stir, aes(x=stir.log10,y=npdr.log10)) + 
   geom_smooth(method = 'lm', se = F, color = 'grey') + 
