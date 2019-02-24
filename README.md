@@ -5,10 +5,16 @@
 This repository provides simulation and analysis code to reproduce the results in our NPDR paper.
 The repository is structured as followed:
 
-- The `r` directory contains the `.Rmd` files to perform the analysis and produce the figures. Each file can be run separately in arbitrary order.
+- The `r` directory contains the `.Rmd` files to perform the analysis and produce the figures. 
+Each file can be run separately in the order indicated in the file name.
+`*_visualize_*.Rmd` files will have notes on which files need to be run prior to executing chunks.
+`2_*_100_*.Rmd` files produces results from 100 replications.
 - The `data` directory contains real and simulated data from running said `.Rmd` files.
 - The `results` directory contains `.Rdata` results from running code in the `r` directory.
-- The `figs` directory contains generated figures from running code in the `r` directory.
+`*.Rdata` result files can be loaded in to `R` using the `load()` function.
+`*.csv` result files should be straightforward.
+- The `figs` directory contains generated figures from running the `*_visualize_*.Rmd` code in the `r` directory.
+These figures are included in the main text `ms/main_npdr.pdf` or supplement `ms/sup_npdr.pdf`.
 - The `ms` directory contains the text files to generate the manuscript and supplement (with `Sweave`).
 
 ## Abstract
