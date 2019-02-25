@@ -11,7 +11,7 @@ cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
                 "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
 
 load('../results/0_jerzy_psqi_mdd_results.Rdata')
-load('../results/rf_0_jerzy_psqi_mdd_results.Rdata')
+# load('../results/rf_0_jerzy_psqi_mdd_results.Rdata')
 ```
 
 
@@ -50,11 +50,12 @@ ggsave(pboth, filename = '../figs/jerzy_psqi_npdrs_mdd.pdf', width = 4, height =
 Summarize results:
 
 ```{r}
-best_genes <- npdr_rf_df %>%
+best_genes <- npdr_w_wo_sex %>%
   filter(p.adj.npdr.sex < 0.05) %>%
   arrange(p.adj.npdr.sex) %>%
-  select(-c(HC, MDD))
-
+  select(att, beta.npdr.sex, pval.npdr.sex, p.adj.npdr.sex, 
+         nlog10.sex, p.adj.gene.sex, nlog10.sex.genes)
+# colnames(npdr_w_wo_sex)
 sex_genes <- npdr_w_wo_sex %>%
   mutate(p.bon.gene.sex = p.adjust(pval.gene.sex, method = 'bonferroni')) %>%
   select(att, beta.gene.sex, pval.gene.sex, p.bon.gene.sex) %>%
