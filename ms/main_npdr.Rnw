@@ -478,15 +478,20 @@ Of the 915 subjects, 641 are female and 274 are male.
 The chi-square between MDD and sex is $25.746$ ($p=3.89e-7$).
 We applied NPDR with multiSURF neighborhood and computed importance scores of all genes with and without sex as a covariate. 
 We applied univariate logistic regression with and without sex as a covariate to these genes, and we directly tested each gene for association with sex.
+We also employed NPDR to analyze sleep quality on another RNA-Seq expression dataset of 78 individuals with major depressive disorder (MDD) and 79 healthy controls (HC) from Ref. \cite{le18}.
+Gene expression levels were quantified from reads of 19,968 annotated protein-coding genes and preprocessed with low read-count removal, technical adjustment, and coefficient of variation filtering.
+Consequently, 5,912 RNA-Seq measures were obtained and are now used as input in the NPDR model to predict sleep quality measured by the Pittsburgh Sleep Quality Index (PSQI) \cite{psqi}.
 All P values were adjusted with the Bonferroni procedure.
 
 % \end{methods}
 
 \section{Results}
-For binary outcome data, we compare the performance of NPDR using logistic model (Eq.~\ref{eq:too_logit}) with the original STIR (which is based on a t-test).
+[For binary outcome data, we compare the performance of NPDR using logistic model (Eq.~\ref{eq:too_logit}) with the original STIR (which is based on a t-test).
 We simulate main effect and interaction effect data sets, and compare based on adjusted P values.
 We also compared NPDR regression coefficients with standard Relief scores because the latter does not have an associated P value. We use the multiSURF neighborhood $\mathcal{N}_{\alpha=1/2}$ for these methods.
-Similarly, for continuous outcome simulations, we compare NPDR regression coefficients with standard RRelief scores. We use the fixed-$k$ neighborhood that approximates multiSURF. Compare Glmnet cross-validated hyperparameters with glmnet-NPDR? Interactions have correlation built in; it would be interesting to do main effect simulations with and without correlation (maybe another paper to test the effect of correlation). Compare with random forest importance (fairly common in the machine learning field). Implement the new Cholesky correlation -- maybe later. Include a Random Forest importance score comparison. I wouldn't mind showing Random Forest can't find interactions again (although it could because of the small number of background attributes). 
+Similarly, for continuous outcome simulations, we compare NPDR regression coefficients with standard RRelief scores using the fixed-$k$ neighborhood that approximates multiSURF.
+We also compare with widely used importance from random forest.]
+
 
 \subsection{Simulation comparison for binary outcome data} 
 In simulations with $m = 200$ samples and $p = 1000$ attributes, while the logistic regression and t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yielded very similar results ($R_P^2$ ranges from 0.9827 to 0.9994 in 100 replications, see example in Supplementary Fig. S1).
@@ -498,16 +503,13 @@ The precision-recall curve clearly demonstrates NPDR outperforms Relief-F in thi
 Across 100 simulations of moderate effect size, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S2).
 Expectedly, when the effect size increases, the auPRC values of both methods approach 100\% and become closer together.
 In summary, as the effect size varies, NPDR produces importance score at least as good as, if not better than, Relief-F.
-
 \begin{figure}[!tbp]
 \centerline{\includegraphics[trim = 0 0 0 0]{../figs/fig1.pdf}}
 \caption{{\bf Comparison of NPDR and Relief-F results} for continuous outcome data with main effect (A-B) and binary outcome data with interaction effect (C-D). Importance score computed from the Relief-F and NPDR algorithm (standardized $\beta$ coefficient, Table \ref{tab:compare_npdr}) from one replicate of simulation with $m = 200$ samples and $p = 1000$ attributes (A, C). Area under the precision-recall curve used to assess algorithm performance (B, D).}
 \label{fig:npdr_relief}
 \end{figure}
-
 For a dataset of the size simulated in our study ($m=200$ samples and $p=1000$ attributes), on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM, NPDR has a 24-second and 3-second runtime for binary and continuous outcome data, respectively.
 
-% Old: The increasing Recall with $k$ is expected for main effects because ReliefF becomes more myopic (more like a univariate t-test) as $k$ increases \cite{robnik03,mckinney13}. The increase in Recall is limited in part by the maximum number of neighbors being $\bar{k}_{\max{}} =\lfloor (m-1)/2\rfloor=49$. 
 
 \subsection{Simulation comparison for continuous outcome data} 
 For simulated data with continuous outcomes, we compare NPDR using a linear model (Eq.~\ref{eq:lin_reg}) with standard RReliefF from CORElearn, [and univariate linear regression].
@@ -518,19 +520,18 @@ Therefore, we aim to simulate similar correlation between NPDR and Relief-F impo
 The auPRC of both methods in the simulation of main effect are less than interaction effect data, which is likely due to differences in the simulated effect size as well as underlying structure of the data.
 Nevertheless, across 100 simulations with specified effect size, NPDR still yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S3).
 
-\subsection{Real-world RNA-Seq data with a confounding factor}
 
-TODO:
-- Also show univariate analysis with and without adjustment in supplement? 
-
-
+\subsection{Real-world RNA-Seq data on diagnosis phenotype with a confounding factor}
 With multiSURF neighborhood $\mathcal{N}_{\alpha=1/2}$, we apply NPDR with and without adjusting for the sex covariate.
 [Several] genes including PRKY, UTY, and USP9Y are removed from the list of MDD-associated genes when you adjust for the sex covariate, which indicates suprious associations between these genes and diagnostic phenotype due to confounding by sex.
 Many of these genes are Y-linked (i.e., Y chromosome (male)) genes and mainly expressed in testis.
 For example, the RPS4Y2 ribosomal protein S4 Y-linked 2 has been shown by tissue specific studies to mainly express in prostate and testis \cite{lopes2010human}.
 Meanwhile, highly expressed in the brain as well as testis, the gene C2orf55 (KIAA1211L) is associated with sex but remains in the adjusted NPDR list ($p_\textrm{adj} < 0.05$) and may be relevant to MDD pathophysiology.
 [other genes here]
+[XIST might be good because it is more expressed in females than males. https://www.ncbi.nlm.nih.gov/gene/7503 (see bottom of link for organ specificity).
+And RPS4X https://www.ncbi.nlm.nih.gov/gene/6191.]
 In summary, this comparison suggests the NPDR with covariate adjustment effectively removes sex-related confounding variables.
+Without adjusting for sex, univariate analysis found four genes that are associated with the diagnostic phenotype: TRAT1, MCOLN3, BLCAP and ATG13, and only BLCAP is not highly associated with sex.
 A list of 485 genes with expression most associated with sex (Bonferroni-adjusted P value $<0.0001$) and their statistical significance are included in the Supplementary Table S1.
 
 \begin{figure}[!tpb]%figure2
@@ -540,21 +541,14 @@ Gene scatter plot of $-\log_{10}$ adjusted significance for association with maj
 \label{fig:npdrs_mdd}
 \end{figure}
 
-Without adjusting for sex, univariate analysis found four genes that are associated with the diagnostic phenotype: TRAT1, MCOLN3, BLCAP and ATG13, and only BLCAP is not highly associated with sex.
-
-
 Sensitivity to confounders extends beyond nearest-neighbors feature selection algorithms.
 When covariates are not accounted for, even powerful methods are expected to produce biased attribute importance scores.
 On the other hand, it is not trivial to include covariates in most widely used machine learning models including random forest.
 Specifically, in random forest, only with the \texttt{ranger} \texttt{R} package do we have the option of always including the covariates (e.g., sex) in addition to a set number of random variables selected prior to node splitting.
 However, this forced inclusion squashes the importance of other variables.
 In the case of the current real RNASeq data analysis of MDD, when we utilized this option in \texttt{ranger}, the covariate ``sex" is more than 20 times more important than the next most important attriute (ZNF845).
-The effect of forced inclusion of a particular covariate at node splitting on the entire algorithm is unclear.
-More specific studies with simulations of covariates will prove useful in determining the effect of this implementation on the final result.
-
-
 Moreover, like previous feature selection methods before STIR, importance scores produced by random forest does not follow a distribution.
-Hence, instead of P values, we compare NPDR standardized $\beta$ coefficient and random forest Gini-based importance score (Fig. \ref{fig:npdr_rf_mdd}).
+Hence, instead of P values, we compare NPDR standardized $\beta$ coefficient and random forest Gini-based importance score (Fig. \ref{fig:mostafavi_npdr_rf_mdd}).
 Most genes with high random forest importance score but low NPDR coefficient are highly associated with sex (dark pink - purple).
 However, there is a consensus between the two methods in giving high scores for genes such as [].
 
@@ -565,21 +559,55 @@ Furthermore, we recall that, when the data contain many non-functional attribute
 \centerline{\includegraphics[]{../figs/mostafavi_npdr_rf_mdd.pdf}}
 \caption{{\bf NPDR vs random forest feature importance.}
 Gene scatter plot of importance score for association with major depressive disorder using random forest and NPDR with correction for sex. Many genes with high random forest importance score also have high association with sex. Genes are labeled if they are strongly associated with sex (Bonferroni P value < 0.001).}
-\label{fig:npdr_rf_mdd}
+\label{fig:mostafavi_npdr_rf_mdd}
 \end{figure}
+The NPDR runtime for the RNA-Seq data ($m=915$ samples and $p=15,231$ attributes) was approximately 2.3 hours on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM.
+% For this RNA-Seq dataset of MDD , NPDR has a 2.3-hour runtime on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. 
 
-For this RNA-Seq dataset of MDD ($m=915$ samples and $p=15,231$ attributes), NPDR has a 2.3-hour runtime on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. 
-
-%\textcolor{red}{Using STIR with fixed $k=m/6$, we identified 41 FDR-adjusted significant genes (not plotted). These 41 STIR $k=m/6$ genes include 31 of the 32 STIR-multiSURF genes. Thus, as we found in the simulation studies, these two versions of STIR perform similarly, with multiSURF being more conservative. Future studies will address the replication of the statistically significant STIR effects, the characterization of STIR interactions and the mathematical connection between neighbor-finding methods in STIR. The STIR runtime for the RNA-Seq data was approximately 19 seconds on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. }
 % Reproducing associations from the original study is not feasible because we focused on female subjects to avoid confounding (using 360 MDD and 282 controls) and Relief-based methods are currently not adept at correcting for covariates. However, we note that the top STIR association, Mitochondrial Pyruvate Carrier I (MPC1), also known as Brain Protein 44-Like (BRP44L), forms heterocomplex with MPC2 to mediate uptake of pyruvate into mitochondria (\cite{herzig12}). This interaction is noteworthy because MPC2 contains a variant that is associated with Schizophrenia in GWAS of East Asians (\cite{xiao16}). While an association with Schizophrenia seems indirect to MDD, symptom complexes such as anhedonia and psychosis can be shared across psychiatric disorders (\cite{lee13}).
-% DSTYK, MIR324, HECW2, FBXL2, MDS2, RBPMS, PHKB, NHLH1, MED29, DMWD, PIBF1, APOBEC3C, NIPSNAP3A, MED19, OSBP2, PRG2, ADAMDEC1, ROR2, B4GALT7, GDPD3, BRP44L, LOC220594 and NELF.
 
 
- 
+\subsection{Real-world RNA-Seq data analysis on sleep quality}
+The Pittburg Sleep Quality Index (PSQI) effectively measures the quality and patterns of sleep over a one-month interval, and low PSQI indicates high sleep quality.
+Patients with MDD on average has significantly higher PSQI (9.7) compared to healthy participants (5.0) (P < 0.0001).
+NPDR identifies 23 genes significantly associated with PSQI (Table \ref{tab:psqi}).
+Among these genes, CACNA1C has been found to be associated with narcolepsy \cite{shimada2010}, and its genetic variation has been linked to increase risk for sleep latency in infants \cite{kantojarvi2017} and psychiatric disorders, including bipolar disorder \cite{franke2010}, schizophrenia, recurrent major depression \cite{green2009} and across psychiatric disorders \cite{crossdisorder2013, lotan2014}.
+Further characterization of the interactions among these genes will prove useful in establishing an sleep-associated expression-epistasis network \cite{lareau15, mckinney2009capturing}.
+Notably, when depression status instead of sleep quality is considered, NPDR with and without sex adjustment produced results that were consistent with previously published results using the STIR algorithm (Supplementary Fig. S4) \cite{stir}.
+We expected that this consistency is the result of a thorough preprocessing procedure as well as balance in sex across batches of the RNA-Seq expression data.
 
-%\citealp{Boffelli03} might want to know about  text text\break
-
-
+\begin{table}[]
+% \begin{tabular}{lllll}
+\begin{tabular}{p{1.8cm}p{6.8cm}C{1cm}C{1.3cm}C{1.7cm}}
+Gene     & Description                                                & Beta & P value & P adjusted \\
+\hline
+ARHGEF4  & Rho guanine nucleotide exchange factor 4                   & 6.39          & 8.78e-11      & 5.19e-7        \\
+C11orf21 & Chromosome 11 open reading frame 21                        & 5.59          & 1.17e-8       & 6.89e-5        \\
+STX4     & Syntaxin 4                                                 & 5.25          & 7.9e-8        & 4.67e-4        \\
+PTPRE    & Protein tyrosine phosphatase, receptor type e              & 5.22          & 9.43e-8       & 5.58e-4        \\
+UHRF1    & Ubiquitin like with PHD and ring finger domains 1          & 5.19          & 1.06e-7       & 6.28e-4        \\
+AGAP2    & Arfgap with gtpase domain, ankyrin repeat and PH domain 2  & 4.96          & 3.68e-7       & 0.002          \\
+C16orf45 & Chromosome 16 open reading frame 45                        & 4.95          & 3.71e-7       & 0.002          \\
+ACP5     & Acid phosphatase 5, tartrate resistant                     & 4.72          & 1.23e-6       & 0.007          \\
+DPH3P1   & Diphthamide biosynthesis 3 pseudogene 1                    & 4.73          & 1.15e-6       & 0.007          \\
+CBLL1    & Cbl proto-oncogene like 1                                  & 4.6           & 2.15e-6       & 0.013          \\
+QRICH1   & Glutamine rich 1                                           & 4.53          & 3.04e-6       & 0.018          \\
+CACNA1C  & Calcium voltage-gated channel subunit alpha1 C             & 4.46          & 4.13e-6       & 0.024          \\
+CBY1     & Chibby family member 1, beta catenin antagonist            & 4.45          & 4.27e-6       & 0.025          \\
+PSMD5    & Proteasome 26s subunit, non-atpase 5                       & 4.45          & 4.34e-6       & 0.026          \\
+WNT8B    & Wnt family member 8b                                       & 4.45          & 4.41e-6       & 0.026          \\
+RAB7A    & Rab7a, member ras oncogene family                          & 4.44          & 4.58e-6       & 0.027          \\
+EFR3B    & Efr3 homolog b                                             & 4.4           & 5.42e-6       & 0.032          \\
+PMEL     & Premelanosome protein                                      & 4.38          & 6.09e-6       & 0.036          \\
+ADAMTSL4-AS1 & ADAMTSL4 Antisense RNA 1 & 4.35 & 6.80e-6 &	0.04 \\
+TUBA4B   & Tubulin alpha 4b                                           & 4.34          & 7.18e-6       & 0.042          \\
+MYLPF    & Myosin light chain, phosphorylatable, fast skeletal muscle & 4.33          & 7.53e-6       & 0.045          \\
+PROZ     & Protein z, vitamin k dependent plasma glycoprotein         & 4.32          & 7.85e-6       & 0.046          \\ 
+\hline
+\end{tabular}
+\caption{PSQI-associated genes.}
+\label{tab:psqi}
+\end{table}
 
 \section{Discussion}
 NPDR is the first method to our knowledge to combine projected distances and nearest-neighbors into a generalized linear model regression framework to perform feature selection. The use of nearest neighbors allows it to detect interacting attributes, an ability it shares with Relief-based methods, but NPDR is a departure from Relief in four ways. (1) For feature selection with a continuous outcome, it does not rely on the idea of a hit/miss group like current RRelief approaches~\cite{urbanowicz17}. Rather, NPDR simply does a regression between the outcome and attribute projected distances. (2) For feature selection with binary outcomes, NPDR uses a logistic model to fit pairwise projected distance regressors of hit and miss group. (3) This distance-based regression formalism provides a simple mechanism for NPDR to correct for covariates, which is often neglected in machine learning and has been a limitation of Relief-based methods. (4) For any outcome data type (binary or continuous) and predictor data type, NPDR computes the statistical significance of attribute importance scores, which allows for statistically based thresholds that can adjust for multiple hypothesis testing. (5) We introduced a regularized NPDR that adds another layer of multivariate modeling to an already multi-dimensional nearest-neighbor method to shrink correlated projected attribute differences.  
@@ -589,6 +617,9 @@ The regression formalism of NPDR is a novel way to perform RRelief by defining t
 The original formulation of Relief was for binary outcome data, which lends itself naturally to nearest hit (same class) and miss (opposite class) neighbors. As discussed above, for regression problems, the original regression Relief (RRelief) score was cast as a weighted correlation between outcome and the attribute diff~\cite{robnik03}. In a different approach, Ref.~\cite{urbanowicz17} uses a standard deviation of the continuous outcome diffs to discretize the numeric outcome and make the RRelief algorithm compatible with the idea of hits and misses. However, discretization puts constraints on the variation in numeric data and has the risk of losing power. NPDR uses the full variation in the continuous outcome variable, and the regression coefficient provides an interpretation in terms of variation explained while again providing flexibility for modeling additional effects. 
 
 We assessed NPDR's power and ability to control false positives using realistic simulations with main effects and network interactions. We showed that the statistical performance using NPDR p-values is the same as the original STIR, which is specific to binary outcome data. This indicates that NPDR, which models hit/miss differences between neighbors with a logit link, can be safely used instead of STIR with the added benefit of covariance correction and the analysis of quantitative traits. Comparison of NPDR for quantitative outcomes... 
+
+[Reiterate covariate issues in ML... The effect of forced inclusion of a particular covariate at node splitting on the entire algorithm is unclear.
+More specific studies with simulations of covariates will prove useful in determining the effect of this implementation on the final result.]
 
 We applied NPDR to a real RNA-Seq dataset for MDD to demonstrate the identification of biologically relevant genes and the removal of spurious associations by covariate correction. NPDR with sex as a covariate adjustment successfully removed X and Y linked genes and genes highly expressed in sex organs. It is important to note that some genes removed due to a shared association with sex may be important for the pathophysiology of MDD (C2orf55 (KIAA1211L)) or for classifiers.  Thus, covariate adjustment in NPDR is a useful option to inform a holistic analysis of a given dataset. Further improvements in the NPDR covariate adjustment may be achieved by correcting the distance matrix calculation. Adding a covariate term may not be sufficient in some cases because the neighborhood could be strongly influenced by confounding genes due to the curse of dimensionality. The curse of dimensionality can also affect confounding in distance matrix calculation.
 

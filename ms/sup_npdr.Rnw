@@ -45,6 +45,11 @@ University of Pennsylvania, Philadelphia, PA 19104}
 \label{fig:jerzy_npdrs_mdd}
 \end{figure}
 
+\begin{figure}[h]%figure4
+\centerline{\includegraphics[]{../figs/psqi_plots.pdf}}
+\caption{\emph{The distribution of the PSQI scores among individuals with and without MDD}.}
+\label{fig:psqi_plots}
+\end{figure}
 
 
 \bibliographystyle{unsrt}

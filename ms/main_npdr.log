@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  22 FEB 2019 13:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  25 FEB 2019 14:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -763,19 +763,19 @@ LaTeX Warning: `h' float specifier changed to `ht'.
                                                   \fi \fi 
 l.461 
       ] [9]
-<../figs/fig1.pdf, id=247, 505.89pt x 505.89pt>
+<../figs/fig1.pdf, id=253, 505.89pt x 505.89pt>
 File: ../figs/fig1.pdf Graphic file (type pdf)
 <use ../figs/fig1.pdf>
-Package pdftex.def Info: ../figs/fig1.pdf  used on input line 504.
+Package pdftex.def Info: ../figs/fig1.pdf  used on input line 508.
 (pdftex.def)             Requested size: 379.4175pt x 379.42427pt.
  [10] [11 <../figs/fig1.pdf>]
-<../figs/mostafavi_npdrs_mdd.pdf, id=274, 433.62pt x 325.215pt>
+<../figs/mostafavi_npdrs_mdd.pdf, id=282, 433.62pt x 325.215pt>
 File: ../figs/mostafavi_npdrs_mdd.pdf Graphic file (type pdf)
 <use ../figs/mostafavi_npdrs_mdd.pdf>
 Package pdftex.def Info: ../figs/mostafavi_npdrs_mdd.pdf  used on input line 53
-8.
+9.
 (pdftex.def)             Requested size: 379.4175pt x 284.5773pt.
-LaTeX Font Info:    Try loading font information for T1+aett on input line 547.
+LaTeX Font Info:    Try loading font information for T1+aett on input line 548.
 
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/ae/t1aett.fd
@@ -785,30 +785,44 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `aett' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-<../figs/mostafavi_npdr_rf_mdd.pdf, id=278, 433.62pt x 289.08pt>
+<../figs/mostafavi_npdr_rf_mdd.pdf, id=286, 433.62pt x 289.08pt>
 File: ../figs/mostafavi_npdr_rf_mdd.pdf Graphic file (type pdf)
 <use ../figs/mostafavi_npdr_rf_mdd.pdf>
 Package pdftex.def Info: ../figs/mostafavi_npdr_rf_mdd.pdf  used on input line 
-563.
+560.
 (pdftex.def)             Requested size: 379.4175pt x 252.9576pt.
- [12] [13 <../figs/mostafavi_npdrs_mdd.pdf>] [14 <../figs/mostafavi_npdr_rf_mdd
-.pdf>] [15]
-(./main_npdr.bbl [16] [17])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 633.
- [18]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 633.
+ [12] [13 <../figs/mostafavi_npdrs_mdd.pdf>]
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 580.
+
+
+Overfull \hbox (4.81187pt too wide) in paragraph at lines 603--603
+[]|\T1/aer/m/n/10 (-20) ADAMTSL4-
+ []
+
+
+Overfull \hbox (39.08736pt too wide) in paragraph at lines 582--609
+[][] 
+ []
+
+[14 <../figs/mostafavi_npdr_rf_mdd.pdf>] [15] [16] [17] (./main_npdr.bbl
+[18] [19] [20])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 667.
+ [21]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 667.
  (./main_npdr.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 633.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 633.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 667.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 667.
 Package rerunfilecheck Info: File `main_npdr.out' has not changed.
-(rerunfilecheck)             Checksum: 3DFDC4795303A1D33B76214860D2A666;1753.
+(rerunfilecheck)             Checksum: 68827807EA66D1AF85E002560A069082;1875.
  ) 
 Here is how much of TeX's memory you used:
- 12849 strings out of 492649
- 192721 string characters out of 6129622
- 343631 words of memory out of 5000000
- 15980 multiletter control sequences out of 15000+600000
- 80151 words of font info for 374 fonts, out of 8000000 for 9000
+ 12884 strings out of 492649
+ 193121 string characters out of 6129622
+ 349948 words of memory out of 5000000
+ 15990 multiletter control sequences out of 15000+600000
+ 81137 words of font info for 385 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,18n,38p,1433b,476s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
@@ -836,10 +850,10 @@ onts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2018/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2018/texmf-dist/font
 s/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2018/texmf-dist/fonts
 /type1/urw/zapfding/uzdr.pfb>
-Output written on main_npdr.pdf (18 pages, 559160 bytes).
+Output written on main_npdr.pdf (21 pages, 567699 bytes).
 PDF statistics:
- 462 PDF objects out of 1000 (max. 8388607)
- 403 compressed objects within 5 object streams
- 101 named destinations out of 1000 (max. 500000)
- 66740 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 503 PDF objects out of 1000 (max. 8388607)
+ 441 compressed objects within 5 object streams
+ 114 named destinations out of 1000 (max. 500000)
+ 66748 words of extra memory for PDF output out of 74296 (max. 10000000)
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 FEB 2019 13:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  25 FEB 2019 13:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -387,31 +387,39 @@ Package pdftex.def Info: ../figs/jerzy_npdrs_mdd.pdf  used on input line 44.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+<../figs/psqi_plots.pdf, id=15, 505.89pt x 216.81pt>
+File: ../figs/psqi_plots.pdf Graphic file (type pdf)
+<use ../figs/psqi_plots.pdf>
+Package pdftex.def Info: ../figs/psqi_plots.pdf  used on input line 50.
+(pdftex.def)             Requested size: 345.0pt x 147.85892pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 (./sup_npdr.bbl) [2 <../figs/npdr_stir_p_cc.pdf>] [3 <../figs/npdr_relief_auroc
-.pdf> <../figs/pr_compare_100.pdf>] [4 <../figs/jerzy_npdrs_mdd.pdf>]
-(./sup_npdr.aux) ) 
+.pdf> <../figs/pr_compare_100.pdf>] [4 <../figs/jerzy_npdrs_mdd.pdf>] [5 <../fi
+gs/psqi_plots.pdf>] (./sup_npdr.aux) ) 
 Here is how much of TeX's memory you used:
- 2787 strings out of 492649
- 39780 string characters out of 6129622
- 95427 words of memory out of 5000000
- 6604 multiletter control sequences out of 15000+600000
+ 2793 strings out of 492649
+ 39941 string characters out of 6129622
+ 96436 words of memory out of 5000000
+ 6609 multiletter control sequences out of 15000+600000
  24083 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,5n,25p,435b,259s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmbx12.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmmi10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmmi7.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmr10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmr12.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-r17.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7
-.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pf
-b></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
->
-Output written on sup_npdr.pdf (4 pages, 214001 bytes).
+</usr/local/texlive/2018/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2018/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2018/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2018/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr17.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmr7.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr8.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmti10.pfb>
+Output written on sup_npdr.pdf (5 pages, 227890 bytes).
 PDF statistics:
- 95 PDF objects out of 1000 (max. 8388607)
- 69 compressed objects within 1 object stream
+ 109 PDF objects out of 1000 (max. 8388607)
+ 80 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 25 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 30 words of extra memory for PDF output out of 10000 (max. 10000000)
 
