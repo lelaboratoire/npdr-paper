@@ -63,6 +63,7 @@ mdd.pheno <- data.frame(class = phenos) %>%
 ```
 
 
+
 ### Assocation between MDD and sex:
 
 ```{r}
@@ -98,6 +99,32 @@ filtered.jerzy.df <- data.frame(filter$fdata) %>%
   column_to_rownames('ids')
 filtered.pred <- filtered.jerzy.df %>% select(-psqi_score)
 dim(filtered.jerzy.df)
+```
+
+
+```{r}
+psqi_box <- ggplot(covs.short, aes(x = Diag, y = psqi_score, fill = Diag)) + 
+  geom_boxplot(width = 0.5, alpha = 0.8, outlier.shape = NA) + 
+  geom_jitter(height = 0, width = 0.1, alpha = 0.5) +
+  scale_y_continuous(limits = c(0, 20)) +
+  theme_bw() + labs(x = NULL, y = 'PSQI') +
+  guides(fill = F) +
+  viridis::scale_fill_viridis(discrete = T) 
+
+psqi_hist <- ggplot(covs.short, aes(x = psqi_score, color = Diag, fill = Diag)) + 
+  geom_histogram(binwidth = 1, alpha = 0.8, position="identity") +
+  viridis::scale_color_viridis(discrete = T) +
+  viridis::scale_fill_viridis(discrete = T) +
+  scale_y_continuous(limits = c(0, 20)) +
+  theme_bw() + labs(x = NULL, y = NULL, fill = NULL, color = NULL) +
+  theme(legend.position = c(0.8, 0.8))
+psqi_hist
+
+psqi_plots <- cowplot::plot_grid(psqi_box, psqi_hist, ncol = 2)
+ggsave(psqi_plots, filename = 'figs/psqi_plots.pdf', width = 7, height = 3)
+
+t.test(covs.short %>% filter(Diag == 'HC') %>% select(psqi_score),
+       covs.short %>% filter(Diag == 'MDD') %>% select(psqi_score))
 ```
 
 
