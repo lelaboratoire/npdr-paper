@@ -103,7 +103,7 @@ pr_compare <- t.test(pr_npdr_vec, pr_relief_vec)
 print(pr_compare$p.value)
 pr_p <- round(pr_compare$p.value, 3)
 
-save.image(file = '../results/npdr_100_cc.Rdata')
+save.image(file = 'results/npdr_100_cc.Rdata')
 ```
 
 

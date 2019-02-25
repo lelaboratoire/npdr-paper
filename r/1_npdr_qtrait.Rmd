@@ -199,7 +199,7 @@ save(ss_df_qtrait, test_df_qtrait, prr_dat_qtrait,
      auprc_npdr_qtrait, auprc_relief_qtrait, r2_qtrait,
      npdr.beta.cutoff.qtrait, ss_df_qtrait,
      auroc_npdr_qtrait, auroc_relief_qtrait,
-     file = '../results/df_qtrait.Rdata')
+     file = 'results/df_qtrait.Rdata')
 
 ```
 

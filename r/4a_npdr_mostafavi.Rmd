@@ -48,14 +48,14 @@ clean_df_results <- function(input_df, ana_name){
 Load data:
 
 ```{r}
-load('../data/unfilteredMostafavi.Rdata') ### RNA-Seq data
+load('data/unfilteredMostafavi.Rdata') ### RNA-Seq data
 dim(unfiltered.mostafavi)  # 915 subjects x (15230 genes + 1 class)
 mdd.pheno <- unfiltered.mostafavi %>% 
   select(class) %>% rownames_to_column('ids') 
 # 463 MDD, 452 HC
 
 # Read in sex data.frame:
-fam.data <- read_table('../data/MDD_LD.fam', col_names = 
+fam.data <- read_table('data/MDD_LD.fam', col_names = 
     c('pedigree', 'member', 'father', 'mother', 'sex', 'affected')) %>% 
   rowwise() %>% mutate(ids = unlist(strsplit(pedigree, "[_ ]+"))[3])
 # 274 male, 641 female
@@ -132,7 +132,7 @@ best_genes_uni <- uni_w_wo_sex %>%
   filter(p.adj.gene.mdd < 0.05) %>%
   arrange(p.adj.gene.mdd) 
 
-write_csv(best_genes_uni, '../results/mostafavi_best_0.05_uni_nosex_genes.csv')
+write_csv(best_genes_uni, 'results/mostafavi_best_0.05_uni_nosex_genes.csv')
 
 ```
 
@@ -186,7 +186,7 @@ npdr_w_wo_sex <- data.frame(gene_sex) %>%
   mutate(nlog10.sex.genes = -log10(p.adj.gene.sex))
 
 save(gene_sex, gene_mdd, gene_sex_mdd, npdr_mdd_nosex, npdr_mdd_sex,
-     npdr_w_wo_sex, uni_w_wo_sex, file = paste0('../results/', pct, '_mostafavi_mdd_results.Rdata'))
+     npdr_w_wo_sex, uni_w_wo_sex, file = paste0('results/', pct, '_mostafavi_mdd_results.Rdata'))
 ```
 
 
@@ -210,11 +210,11 @@ rf.importance <- randomForest::importance(mostafavi_forest)  # variable 3 best
 rf_imp_sorted <- data.frame(rf.importance) %>%
   rownames_to_column('att')
 
-save(rf_imp_sorted, mostafavi_forest, file = paste0('../results/rf_', pct, '_mostafavi_mdd_results.Rdata'))
+save(rf_imp_sorted, mostafavi_forest, file = paste0('results/rf_', pct, '_mostafavi_mdd_results.Rdata'))
 ```
 
 ```{r}
-# load(paste0('../results/rf_', 0, '_mostafavi_mdd_results.Rdata'))
+# load(paste0('results/rf_', 0, '_mostafavi_mdd_results.Rdata'))
 split_vars <- vector(mode = 'character')
 split_roots <- vector(mode = 'character')
 # all_trees <- data.frame()

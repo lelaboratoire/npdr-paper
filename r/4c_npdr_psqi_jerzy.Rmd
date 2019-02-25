@@ -48,7 +48,7 @@ clean_df_results <- function(input_df, ana_name){
 Load data:
 
 ```{r}
-load('../data/0.8genes.filtered.corrected.Rdata') ### RNA-Seq data
+load('data/0.8genes.filtered.corrected.Rdata') ### RNA-Seq data
 dim(rnaSeq)  # 915 subjects x (15230 genes + 1 class)
 mdd.pheno <- data.frame(class = phenos) %>% 
    rownames_to_column('ids')
@@ -56,7 +56,7 @@ mdd.pheno <- data.frame(class = phenos) %>%
 # 463 MDD, 452 HC
 
 # Read in sex data.frame:
-# fam.data <- read_table('../data/MDD_LD.fam', col_names = 
+# fam.data <- read_table('data/MDD_LD.fam', col_names = 
 #     c('pedigree', 'member', 'father', 'mother', 'sex', 'affected')) %>% 
 #   rowwise() %>% mutate(ids = unlist(strsplit(pedigree, "[_ ]+"))[3])
 # 274 male, 641 female
@@ -192,7 +192,7 @@ npdr_w_wo_sex <- data.frame(gene_sex) %>%
   mutate(sig.genes = ifelse((p.adj.npdr.nosex < 0.05) | p.adj.npdr.sex < 0.05, att, NA)) %>%
   mutate(nlog10.sex.genes = -log10(p.adj.gene.sex))
 
-save(npdr_w_wo_sex, uni_w_wo_sex, file = paste0('../results/', pct, '_jerzy_psqi_mdd_results.Rdata'))
+save(npdr_w_wo_sex, uni_w_wo_sex, file = paste0('results/', pct, '_jerzy_psqi_mdd_results.Rdata'))
 ```
 
 
@@ -204,7 +204,7 @@ best_genes <- npdr_w_wo_sex %>%
   arrange(p.adj.npdr.sex) %>%
   select(att, p.adj.npdr.sex, pval.npdr.sex, beta.npdr.sex, nlog10.sex)
 
-write_csv(best_genes, '../results/jerzy_psqi_best_0.05_npdr_genes.csv')
+write_csv(best_genes, 'results/jerzy_psqi_best_0.05_npdr_genes.csv')
 ```
 
 

@@ -110,6 +110,6 @@ print(pr_compare$p.value)
 pr_p <- round(pr_compare$p.value, 3)
 pr_compare_qtrait <- pr
 
-save.image(file = '../results/npdr_100_qtrait.Rdata')
+save.image(file = 'results/npdr_100_qtrait.Rdata')
 
 ```

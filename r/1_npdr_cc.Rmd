@@ -251,7 +251,7 @@ save(npdr_stir, ss_df_cc, test_df_cc, prr_dat_cc,
      npdr.beta.cutoff.cc, ss_df_cc,
      auroc_npdr_cc, auroc_relief_cc,
      pcutoff,
-     file = '../results/df_cc.Rdata')
+     file = 'results/df_cc.Rdata')
 ```
 
 

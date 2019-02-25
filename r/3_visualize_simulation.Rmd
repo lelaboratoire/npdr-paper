@@ -7,8 +7,8 @@ Combine plots together:
 
 ```{r}
 rm(list = ls())
-load('../results/df_cc.Rdata')
-load('../results/df_qtrait.Rdata')
+load('results/df_cc.Rdata')
+load('results/df_qtrait.Rdata')
 
 library(ggplot2)
 library(cowplot)
@@ -85,8 +85,8 @@ title_c <- ggdraw() + draw_label('Binary outcome data with interaction effect')
 ccp <- plot_grid(title_c, cc, ncol=1, rel_heights=c(0.1, 1)) 
  
 fig1 <- plot_grid(qp, ccp, nrow = 2)
-ggsave(fig1, filename = '../figs/fig1.svg', height = 7, width = 7)
-ggsave(fig1, filename = '../figs/fig1.pdf', height = 7, width = 7)
+ggsave(fig1, filename = 'figs/fig1.svg', height = 7, width = 7)
+ggsave(fig1, filename = 'figs/fig1.pdf', height = 7, width = 7)
 ```
 
 
@@ -120,7 +120,7 @@ roc <- ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +
   guides(color = FALSE)
 
 roc
-ggsave(roc, filename = '../figs/npdr_relief_auroc.pdf', height = 4 , width = 6)
+ggsave(roc, filename = 'figs/npdr_relief_auroc.pdf', height = 4 , width = 6)
 ```
 
 
@@ -143,17 +143,17 @@ p <- ggplot(npdr_stir, aes(x=stir.log10,y=npdr.log10)) +
   geom_vline(xintercept=pcutoff, linetype="dashed", alpha = 0.5) +
   geom_hline(yintercept=pcutoff, linetype="dashed", alpha = 0.5)
 p
-ggsave(p, filename = paste0('../figs/npdr_stir_p_cc.pdf'), height = 4.5, width = 4.5 )
+ggsave(p, filename = paste0('figs/npdr_stir_p_cc.pdf'), height = 4.5, width = 4.5 )
 ```
 
 # Replications of auPRC for Supplement:
 Require run `2_npdr_relief_100_cc.Rmd`, `2_npdr_relief_100_qtrait.Rmd`.
 
 ```{r}
-load('../results/npdr_100_cc.Rdata')
+load('results/npdr_100_cc.Rdata')
 pr_cc_100 <- pr_df
 
-load('../results/npdr_100_qtrait.Rdata')
+load('results/npdr_100_qtrait.Rdata')
 pr_qtrait_100 <- pr_df
 
 # pr_df
@@ -177,6 +177,6 @@ pr_100 <- ggplot(pr_df, aes(x = type, y = aupr, fill = type, color = type)) +
   theme_bw() + guides(fill = F, color = F) 
 pr_100
 
-ggsave(pr_100, filename = paste0('../figs/pr_compare_100.pdf'), height = 3, width = 5)
+ggsave(pr_100, filename = paste0('figs/pr_compare_100.pdf'), height = 3, width = 5)
 ```
 

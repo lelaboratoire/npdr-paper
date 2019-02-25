@@ -48,7 +48,7 @@ clean_df_results <- function(input_df, ana_name){
 Load data:
 
 ```{r}
-load('../data/0.8genes.filtered.corrected.Rdata') ### RNA-Seq data
+load('data/0.8genes.filtered.corrected.Rdata') ### RNA-Seq data
 dim(rnaSeq)  # 915 subjects x (15230 genes + 1 class)
 mdd.pheno <- data.frame(class = phenos) %>% 
    rownames_to_column('ids')
@@ -176,7 +176,7 @@ npdr_w_wo_sex <- data.frame(gene_sex) %>%
   mutate(sig.genes = ifelse((p.adj.npdr.nosex < 0.01) | p.adj.npdr.sex < 0.01, att, NA)) %>%
   mutate(nlog10.sex.genes = -log10(p.adj.gene.sex))
 
-save(npdr_w_wo_sex, uni_w_wo_sex, file = paste0('../results/', pct, '_jerzy_mdd_results.Rdata'))
+save(npdr_w_wo_sex, uni_w_wo_sex, file = paste0('results/', pct, '_jerzy_mdd_results.Rdata'))
 ```
 
 
@@ -188,7 +188,7 @@ rf_imp_sorted <- rf.importance %>%
   data.frame() %>%
   rownames_to_column('att') 
 
-save(rf_imp_sorted, file = paste0('../results/rf_', pct, '_jerzy_mdd_results.Rdata'))
+save(rf_imp_sorted, file = paste0('results/rf_', pct, '_jerzy_mdd_results.Rdata'))
 ```
 
 

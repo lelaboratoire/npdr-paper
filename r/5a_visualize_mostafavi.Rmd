@@ -10,8 +10,8 @@ set.seed(1618)
 cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
                 "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
 
-load('../results/0_mostafavi_mdd_results.Rdata')
-load('../results/rf_0_mostafavi_mdd_results.Rdata')
+load('results/0_mostafavi_mdd_results.Rdata')
+load('results/rf_0_mostafavi_mdd_results.Rdata')
 ```
 
 
@@ -48,7 +48,7 @@ pboth <- ggplot(npdr_w_wo_sex, aes(x = nlog10.nosex, y = nlog10.sex)) +
       legend.title = element_text(size = 8)) +
   coord_fixed(ratio = 1) 
 pboth
-ggsave(pboth, filename = '../figs/mostafavi_npdrs_mdd.pdf', width = 6, height = 4.5)
+ggsave(pboth, filename = 'figs/mostafavi_npdrs_mdd.pdf', width = 6, height = 4.5)
 ```
 
 
@@ -94,7 +94,7 @@ p_npdr_rf <- ggplot(npdr_rf_df_hili, aes(x = MeanDecreaseGini, y = beta.npdr.sex
         legend.title = element_text(size = 8)) 
 
 p_npdr_rf
-ggsave(p_npdr_rf, filename = '../figs/mostafavi_npdr_rf_mdd.pdf', width = 6, height = 4)
+ggsave(p_npdr_rf, filename = 'figs/mostafavi_npdr_rf_mdd.pdf', width = 6, height = 4)
 
 ```
 
@@ -140,9 +140,9 @@ sex_genes <- npdr_w_wo_sex %>%
   filter(p.bon.gene.sex < 0.05) %>%
   arrange(p.bon.gene.sex)
 
-write_csv(sex_genes, '../results/mostafavi_sex_genes.csv')
-write_csv(best_genes, '../results/mostafavi_best_0.05_npdr_genes.csv')
-write_csv(best_genes_nosex, '../results/mostafavi_best_0.05_npdr_genes_nosex.csv')
+write_csv(sex_genes, 'results/mostafavi_sex_genes.csv')
+write_csv(best_genes, 'results/mostafavi_best_0.05_npdr_genes.csv')
+write_csv(best_genes_nosex, 'results/mostafavi_best_0.05_npdr_genes_nosex.csv')
 
 ```
 
