@@ -1,0 +1,15 @@
+---
+title: "Summarize PSQI results"
+output: html_document
+---
+
+```{r}
+gene_stat <- read_csv('results/jerzy_psqi_best_0.05_npdr_genes.csv')
+gene_desc <- read_csv('results/psqi_genes_desc.csv')
+gene_sum <- merge(gene_stat, gene_desc, by = 'att') %>%
+  mutate(description = tolower(Description)) %>%
+  select(att, description, beta.npdr.sex, pval.npdr.sex, p.adj.npdr.sex) %>%
+  arrange(p.adj.npdr.sex)
+write_csv(gene_sum, 'results/psqi_gene_tab.csv')
+```
+

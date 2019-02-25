@@ -1,0 +1,22 @@
+att,description,beta.npdr.sex,pval.npdr.sex,p.adj.npdr.sex
+ARHGEF4,rho guanine nucleotide exchange factor 4,6.39,8.78e-11,5.19e-7
+C11orf21,chromosome 11 open reading frame 21,5.59,1.17e-8,6.89e-5
+STX4,syntaxin 4,5.25,7.9e-8,4.67e-4
+PTPRE,"protein tyrosine phosphatase, receptor type e",5.22,9.43e-8,5.58e-4
+UHRF1,ubiquitin like with phd and ring finger domains 1,5.19,1.06e-7,6.28e-4
+AGAP2,"arfgap with gtpase domain, ankyrin repeat and ph domain 2",4.96,3.68e-7,0.002
+C16orf45,chromosome 16 open reading frame 45,4.95,3.71e-7,0.002
+ACP5,"acid phosphatase 5, tartrate resistant",4.72,1.23e-6,0.007
+DPH3P1,diphthamide biosynthesis 3 pseudogene 1,4.73,1.15e-6,0.007
+CBLL1,cbl proto-oncogene like 1,4.6,2.15e-6,0.013
+QRICH1,glutamine rich 1,4.53,3.04e-6,0.018
+CACNA1C,calcium voltage-gated channel subunit alpha1 c,4.46,4.13e-6,0.024
+CBY1,"chibby family member 1, beta catenin antagonist",4.45,4.27e-6,0.025
+PSMD5,"proteasome 26s subunit, non-atpase 5",4.45,4.34e-6,0.026
+WNT8B,wnt family member 8b,4.45,4.41e-6,0.026
+RAB7A,"rab7a, member ras oncogene family",4.44,4.58e-6,0.027
+EFR3B,efr3 homolog b,4.4,5.42e-6,0.032
+PMEL,premelanosome protein,4.38,6.09e-6,0.036
+TUBA4B,tubulin alpha 4b,4.34,7.18e-6,0.042
+MYLPF,"myosin light chain, phosphorylatable, fast skeletal muscle",4.33,7.53e-6,0.045
+PROZ,"protein z, vitamin k dependent plasma glycoprotein",4.32,7.85e-6,0.046
