@@ -577,7 +577,7 @@ Further characterization of the interactions among these genes will prove useful
 
 Notably, when depression status instead of sleep quality is considered, NPDR with and without sex adjustment produced results that were consistent with previously published results using the STIR algorithm (Supplementary Fig. S4) \cite{stir}.
 We expected that this consistency is the result of a thorough preprocessing procedure as well as balance in sex across batches of the RNA-Seq expression data.
-Proper preprocessing of the dataset retains genes with low sex association (Supplementary Fig. S4) and leads to an NPDR runtime of 99 seconds (on the same desktop with an Intel Xeon W-2104 CPU and 32GB of RAM).
+Proper preprocessing of the dataset retains genes with low sex association (Supplementary Fig. S4), ameliorates the curse of dimensionality and thus leads to a fast NPDR computation of 99 seconds (on the same desktop with an Intel Xeon W-2104 CPU and 32GB of RAM).
 
 \begin{table}[]
 % \begin{tabular}{lllll}
