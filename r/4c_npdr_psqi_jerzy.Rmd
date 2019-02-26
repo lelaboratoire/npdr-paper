@@ -140,14 +140,14 @@ rnaSeq_mdd <- rnaSeq %>%
   merge(mdd.pheno, by = 'ids') %>%
   column_to_rownames('ids')
 
-gene_mdd <- univarRegress(
+gene_mdd <- uniReg(
   outcome = 'class', 
   dataset = rnaSeq_mdd, 
   regression.type = 'glm') %>%
   clean_df_results('gene.mdd')
 
 # After adjusting for sex:
-gene_sex_mdd <- univarRegress(
+gene_sex_mdd <- uniReg(
   outcome = 'class', dataset = rnaSeq_mdd, 
   regression.type = 'glm', covars = pheno.sex$sex) %>%
   clean_df_results('gene.sex.mdd')
@@ -156,7 +156,7 @@ gene_sex_mdd <- univarRegress(
 # check if the rows are the same order: 0 = good
 sum(pheno.sex$ids != rownames(filtered.jerzy.df))
 
-gene_sex <- univarRegress(
+gene_sex <- uniReg(
   outcome = pheno.sex$sex,
   dataset = filtered.pred,
   regression.type='glm') %>%
@@ -192,15 +192,18 @@ npdr_mdd_nosex <- npdr.mdd.rnaseq.results %>%
 
 ```{r}
 # sex-associated by npdr
-start_time <- Sys.time()
-npdr.mdd.sexassoc.results <- npdr('psqi_score', filtered.jerzy.df, 
+# start_time <- Sys.time()
+system.time(
+  npdr.mdd.sexassoc.results <- npdr('psqi_score', filtered.jerzy.df, 
                                       regression.type='glm', attr.diff.type='numeric-abs',
                                       nbd.method='multisurf', nbd.metric = 'manhattan',
                                       covars=pheno.sex$sex,  # works with sex.covar.mat as well
                                       covar.diff.type='match-mismatch', # for categorical covar like sex
                                       msurf.sd.frac=0.5, padj.method='bonferroni')
-end_time <- Sys.time()
-end_time - start_time  # about 5 min for pct=.98, 306vars
+)
+
+# end_time <- Sys.time()
+# end_time - start_time  # about 5 min for pct=.98, 306vars
 
 npdr_mdd_sex <- npdr.mdd.sexassoc.results %>%
   rename(beta.npdr.sex = beta.Z.att,
