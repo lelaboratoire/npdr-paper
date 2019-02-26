@@ -562,6 +562,7 @@ Gene scatter plot of importance score for association with major depressive diso
 \label{fig:mostafavi_npdr_rf_mdd}
 \end{figure}
 The NPDR runtime for the RNA-Seq data ($m=915$ samples and $p=15,231$ attributes) was approximately 2.3 hours on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM.
+As demonstrated in the subsequent section, when proper filtering on the attributes is applied, the runtime will be greatly reduce.
 % For this RNA-Seq dataset of MDD , NPDR has a 2.3-hour runtime on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM. 
 
 % Reproducing associations from the original study is not feasible because we focused on female subjects to avoid confounding (using 360 MDD and 282 controls) and Relief-based methods are currently not adept at correcting for covariates. However, we note that the top STIR association, Mitochondrial Pyruvate Carrier I (MPC1), also known as Brain Protein 44-Like (BRP44L), forms heterocomplex with MPC2 to mediate uptake of pyruvate into mitochondria (\cite{herzig12}). This interaction is noteworthy because MPC2 contains a variant that is associated with Schizophrenia in GWAS of East Asians (\cite{xiao16}). While an association with Schizophrenia seems indirect to MDD, symptom complexes such as anhedonia and psychosis can be shared across psychiatric disorders (\cite{lee13}).
@@ -573,8 +574,10 @@ Patients with MDD on average has significantly higher PSQI (9.7) compared to hea
 NPDR identifies 23 genes significantly associated with PSQI (Table \ref{tab:psqi}).
 Among these genes, CACNA1C has been found to be associated with narcolepsy \cite{shimada2010}, and its genetic variation has been linked to increase risk for sleep latency in infants \cite{kantojarvi2017} and psychiatric disorders, including bipolar disorder \cite{franke2010}, schizophrenia, recurrent major depression \cite{green2009} and across psychiatric disorders \cite{crossdisorder2013, lotan2014}.
 Further characterization of the interactions among these genes will prove useful in establishing an sleep-associated expression-epistasis network \cite{lareau15, mckinney2009capturing}.
+
 Notably, when depression status instead of sleep quality is considered, NPDR with and without sex adjustment produced results that were consistent with previously published results using the STIR algorithm (Supplementary Fig. S4) \cite{stir}.
 We expected that this consistency is the result of a thorough preprocessing procedure as well as balance in sex across batches of the RNA-Seq expression data.
+Proper preprocessing of the dataset retains genes with low sex association (Supplementary Fig. S4) and leads to an NPDR runtime of 99 seconds (on the same desktop with an Intel Xeon W-2104 CPU and 32GB of RAM).
 
 \begin{table}[]
 % \begin{tabular}{lllll}
@@ -584,9 +587,9 @@ Gene     & Description                                                & Beta & P
 ARHGEF4  & Rho guanine nucleotide exchange factor 4                   & 6.39          & 8.78e-11      & 5.19e-7        \\
 C11orf21 & Chromosome 11 open reading frame 21                        & 5.59          & 1.17e-8       & 6.89e-5        \\
 STX4     & Syntaxin 4                                                 & 5.25          & 7.9e-8        & 4.67e-4        \\
-PTPRE    & Protein tyrosine phosphatase, receptor type e              & 5.22          & 9.43e-8       & 5.58e-4        \\
+PTPRE    & Protein tyrosine phosphatase, receptor type E              & 5.22          & 9.43e-8       & 5.58e-4        \\
 UHRF1    & Ubiquitin like with PHD and ring finger domains 1          & 5.19          & 1.06e-7       & 6.28e-4        \\
-AGAP2    & Arfgap with gtpase domain, ankyrin repeat and PH domain 2  & 4.96          & 3.68e-7       & 0.002          \\
+AGAP2    & ArfGAP with GTPase domain, ankyrin repeat and PH domain 2  & 4.96          & 3.68e-7       & 0.002          \\
 C16orf45 & Chromosome 16 open reading frame 45                        & 4.95          & 3.71e-7       & 0.002          \\
 ACP5     & Acid phosphatase 5, tartrate resistant                     & 4.72          & 1.23e-6       & 0.007          \\
 DPH3P1   & Diphthamide biosynthesis 3 pseudogene 1                    & 4.73          & 1.15e-6       & 0.007          \\
@@ -594,15 +597,15 @@ CBLL1    & Cbl proto-oncogene like 1                                  & 4.6     
 QRICH1   & Glutamine rich 1                                           & 4.53          & 3.04e-6       & 0.018          \\
 CACNA1C  & Calcium voltage-gated channel subunit alpha1 C             & 4.46          & 4.13e-6       & 0.024          \\
 CBY1     & Chibby family member 1, beta catenin antagonist            & 4.45          & 4.27e-6       & 0.025          \\
-PSMD5    & Proteasome 26s subunit, non-atpase 5                       & 4.45          & 4.34e-6       & 0.026          \\
-WNT8B    & Wnt family member 8b                                       & 4.45          & 4.41e-6       & 0.026          \\
-RAB7A    & Rab7a, member ras oncogene family                          & 4.44          & 4.58e-6       & 0.027          \\
-EFR3B    & Efr3 homolog b                                             & 4.4           & 5.42e-6       & 0.032          \\
+PSMD5    & Proteasome 26s subunit, non-ATPase 5                       & 4.45          & 4.34e-6       & 0.026          \\
+WNT8B    & Wnt family member 8B                                       & 4.45          & 4.41e-6       & 0.026          \\
+RAB7A    & Rab7a, member RAS oncogene family                          & 4.44          & 4.58e-6       & 0.027          \\
+EFR3B    & Efr3 homolog B                                             & 4.4           & 5.42e-6       & 0.032          \\
 PMEL     & Premelanosome protein                                      & 4.38          & 6.09e-6       & 0.036          \\
 ADAMTSL4-AS1 & ADAMTSL4 Antisense RNA 1 & 4.35 & 6.80e-6 &	0.04 \\
-TUBA4B   & Tubulin alpha 4b                                           & 4.34          & 7.18e-6       & 0.042          \\
+TUBA4B   & Tubulin alpha 4B                                           & 4.34          & 7.18e-6       & 0.042          \\
 MYLPF    & Myosin light chain, phosphorylatable, fast skeletal muscle & 4.33          & 7.53e-6       & 0.045          \\
-PROZ     & Protein z, vitamin k dependent plasma glycoprotein         & 4.32          & 7.85e-6       & 0.046          \\ 
+PROZ     & Protein Z, vitamin K dependent plasma glycoprotein         & 4.32          & 7.85e-6       & 0.046          \\ 
 \hline
 \end{tabular}
 \caption{PSQI-associated genes.}

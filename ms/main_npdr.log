@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  25 FEB 2019 14:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  26 FEB 2019 13:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -794,35 +794,35 @@ Package pdftex.def Info: ../figs/mostafavi_npdr_rf_mdd.pdf  used on input line
  [12] [13 <../figs/mostafavi_npdrs_mdd.pdf>]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 580.
+               Default added (so using `tbp') on input line 583.
 
 
-Overfull \hbox (4.81187pt too wide) in paragraph at lines 603--603
+Overfull \hbox (4.81187pt too wide) in paragraph at lines 606--606
 []|\T1/aer/m/n/10 (-20) ADAMTSL4-
  []
 
 
-Overfull \hbox (39.08736pt too wide) in paragraph at lines 582--609
+Overfull \hbox (39.08736pt too wide) in paragraph at lines 585--612
 [][] 
  []
 
 [14 <../figs/mostafavi_npdr_rf_mdd.pdf>] [15] [16] [17] (./main_npdr.bbl
 [18] [19] [20])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 667.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 670.
  [21]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 667.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 670.
  (./main_npdr.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 667.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 667.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 670.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 670.
 Package rerunfilecheck Info: File `main_npdr.out' has not changed.
 (rerunfilecheck)             Checksum: 68827807EA66D1AF85E002560A069082;1875.
  ) 
 Here is how much of TeX's memory you used:
- 12884 strings out of 492649
- 193121 string characters out of 6129622
- 349948 words of memory out of 5000000
+ 12898 strings out of 492649
+ 193232 string characters out of 6129622
+ 348948 words of memory out of 5000000
  15990 multiletter control sequences out of 15000+600000
- 81137 words of font info for 385 fonts, out of 8000000 for 9000
+ 82187 words of font info for 397 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,18n,38p,1433b,476s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
@@ -850,7 +850,7 @@ onts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2018/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2018/texmf-dist/font
 s/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2018/texmf-dist/fonts
 /type1/urw/zapfding/uzdr.pfb>
-Output written on main_npdr.pdf (21 pages, 567699 bytes).
+Output written on main_npdr.pdf (21 pages, 568020 bytes).
 PDF statistics:
  503 PDF objects out of 1000 (max. 8388607)
  441 compressed objects within 5 object streams
