@@ -1,0 +1,67 @@
+---
+title: "Visualize results"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+# rm(list = ls())
+set.seed(1618)
+cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
+
+load('results/0_jerzy_psqi_mdd_results.Rdata')
+# load('results/rf_0_jerzy_psqi_mdd_results.Rdata')
+```
+
+
+```{r}
+pboth <- ggplot(npdr_w_wo_age, aes(x = nlog10.noage, y = nlog10.age)) + 
+  geom_point(alpha = 0.7, shape = 21, size = 2, aes(fill = nlog10.age.genes)) + 
+  geom_hline(yintercept = -log10(0.05), linetype = 2, color = cbbPalette[1]) + 
+  geom_vline(xintercept = -log10(0.05), linetype = 2, color = cbbPalette[1]) + 
+  geom_abline(slope = 1, intercept = 0, alpha = 0.5, linetype = 3) +
+  annotate("text", 5.5, -log10(0.05) - 0.2, label = "0.05 Bonferroni", 
+           size = 3, color = cbbPalette[1]) +
+  annotate("text", -log10(0.05) - 0.2, 5.5, label = "0.05 Bonferroni", 
+           size = 3, color = cbbPalette[1], angle = 90) +
+  labs(x = bquote('Vanilla NPDR ('~-log[10]~'p'[adj]~')'),
+       y = bquote('age-adjusted NPDR ('~-log[10]~'p'[adj]~')'),
+       fill = bquote(''~-log[10]~'p'['age'])) +
+  ggrepel::geom_text_repel(aes(label = sig.genes), #check_overlap = TRUE, 
+            hjust=-0.12, vjust=1.5, fontface = "italic",
+            seed = 1618, #angle = 45,
+            # nudge_x = 0.5,
+            # nudge_y = 0.5,
+            size = 2, segment.alpha = 0.3) +
+  viridis::scale_fill_viridis(option = 'B', direction = -1) + 
+  theme_bw() + #theme(legend.position = c(0.9, 0.75)) +
+  theme(legend.position = c(0.9, 0.45), 
+      legend.key.height = unit(0.7, "line"),
+      legend.key.width = unit(0.4, "line"),
+      legend.text = element_text(size = 6),
+      legend.title = element_text(size = 6)) +
+  coord_fixed(ratio = 1) 
+pboth
+ggsave(pboth, filename = 'figs/jerzy_psqi_npdrs_mdd.pdf', width = 4, height = 3.8 )
+```
+
+
+Summarize results:
+
+```{r}
+best_genes <- npdr_w_wo_age %>%
+  filter(p.adj.npdr.age < 0.05) %>%
+  arrange(p.adj.npdr.age) %>%
+  select(att, beta.npdr.age, pval.npdr.age, p.adj.npdr.age, 
+         nlog10.age, p.adj.gene.age, nlog10.age.genes)
+# colnames(npdr_w_wo_age)
+age_genes <- npdr_w_wo_age %>%
+  mutate(p.bon.gene.age = p.adjust(pval.gene.age, method = 'bonferroni')) %>%
+  select(att, beta.gene.age, pval.gene.age, p.bon.gene.age) %>%
+  filter(p.bon.gene.age < 0.05) %>%
+  arrange(p.bon.gene.age)
+
+write_csv(best_genes, 'results/jerzy_psqi_best_0.05_npdr_genes.csv')
+```
+
