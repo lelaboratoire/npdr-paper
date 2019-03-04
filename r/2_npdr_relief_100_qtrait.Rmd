@@ -40,8 +40,10 @@ verbose <- FALSE
 ```{r}
 n_sims <- 100
 r2_vec <- vector(mode = 'numeric', length = n_sims)
+r2_rf_vec <- vector(mode = 'numeric', length = n_sims)
 pr_npdr_vec <- vector(mode = 'numeric', length = n_sims)
 pr_relief_vec <- vector(mode = 'numeric', length = n_sims)
+pr_rf_vec <- vector(mode = 'numeric', length = n_sims)
 
 set.seed(16183)
 for (i in 1:n_sims){
@@ -76,6 +78,15 @@ for (i in 1:n_sims){
   
   test.df <- merge(corelearn.df, npdr.qtrait.results) %>% 
     mutate(functional = att %in% functional.qtrait)
+  qtrait_forest <- randomForest::randomForest(qtrait ~ ., data = qtrait.data, importance = T)
+  rf_imp_qtrait <- randomForest::importance(qtrait_forest) %>%
+    data.frame() %>%
+    rownames_to_column('att') %>%
+    mutate(functional = att %in% functional.qtrait)
+  rf_npdr_qtrait <- merge(rf_imp_qtrait, npdr.qtrait.results, by = 'att') 
+  
+  r2_rf_vec[i] <- round(cor(rf_npdr_qtrait$X.IncMSE, rf_npdr_qtrait$beta.Z.att), 3)
+
   r2_vec[i] <- round(cor(test.df$rrelief, test.df$beta.Z.att), digits = 3)
   
   # compute area under the precision-recall curve
@@ -93,23 +104,36 @@ for (i in 1:n_sims){
                         filter(functional == F) %>% 
                         pull(rrelief), 
                       curve = T)
+  pr_rf <- PRROC::pr.curve(scores.class0 = rf_imp_qtrait %>% 
+                        filter(functional == T) %>% 
+                        pull(X.IncMSE), 
+                      scores.class1 = rf_imp_qtrait %>% 
+                        filter(functional == F) %>% 
+                        pull(X.IncMSE), 
+                      curve = T)
+  
   pr_npdr_vec[i] <- pr_npdr$auc.integral
   pr_relief_vec[i] <- pr_relief$auc.integral
+  pr_rf_vec[i] <- pr_rf$auc.integral
+
 }
 
 ```
 
 
 ```{r}
-pr_df <- data.frame(aupr = c(pr_relief_vec, pr_npdr_vec),
-                    type = rep(c('Relief-F', 'NPDR'), each = n_sims))
+pr_df <- data.frame(aupr = c(pr_relief_vec, pr_npdr_vec, pr_rf_vec),
+                    type = rep(c('RRelief', 'NPDR', 'Random forest'), each = n_sims))
 pr_df$type <- factor(pr_df$type, levels = rev(levels(pr_df$type)))
 summary(r2_vec)
-pr_compare <- t.test(pr_npdr_vec, pr_relief_vec)
-print(pr_compare$p.value)
-pr_p <- round(pr_compare$p.value, 3)
-pr_compare_qtrait <- pr
-
+summary(r2_rf_vec)
+pr_compare_relief <- t.test(pr_npdr_vec, pr_relief_vec)
+pr_compare_rf <- t.test(pr_npdr_vec, pr_rf_vec)
+print(pr_compare_relief$p.value)
+pr_p <- round(pr_compare_relief$p.value, 3)
+# pr_compare_qtrait <- pr
+print(pr_compare_rf$p.value)
+pr_p <- round(pr_compare_rf$p.value, 3)
 save.image(file = 'results/npdr_100_qtrait.Rdata')
 
 ```
