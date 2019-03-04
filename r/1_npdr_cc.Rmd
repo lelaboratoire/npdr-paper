@@ -242,7 +242,6 @@ ss_df_cc <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitiv
 How much better is NPDR? Is this just by chance? 100 replications result show the same thing (npdr_100_cc.Rmd).
 
 ```{r}
-ss_df_cc <- ss_df
 test_df_cc <- test.df
 prr_dat_cc <- prr.dat
 
@@ -255,4 +254,38 @@ save(npdr_stir, ss_df_cc, test_df_cc, prr_dat_cc,
 ```
 
 
+Compare with random forest:
+
+```{r}
+cc_forest <- randomForest::randomForest(class ~ ., data = cc.data, importance = T)
+rf_imp_cc <- randomForest::importance(cc_forest) %>%
+  data.frame() %>%
+  rownames_to_column('att') %>%
+  mutate(functional = att %in% functional.cc)
+rf_npdr_cc <- merge(rf_imp_cc, npdr.cc.results, by = 'att') %>%
+  mutate(functional = att %in% functional.cc)
+r2_rf_cc <- round(cor(rf_npdr_cc$MeanDecreaseAccuracy, rf_npdr_cc$beta.Z.att), 3)
+```
+
+Draw the Precision-Recall curve:
+
+```{r}
+pr_rf_cc <- PRROC::pr.curve(scores.class0 = rf_imp_cc %>% 
+                        filter(functional == T) %>% 
+                        pull(MeanDecreaseAccuracy), 
+                      scores.class1 = rf_imp_cc %>% 
+                        filter(functional == F) %>% 
+                        pull(MeanDecreaseAccuracy), 
+                      curve = T)
+
+z <- as.data.frame(pr_rf_cc$curve) 
+colnames(z) <- paste0(c('Recall', 'Precision', 'w'))
+auprc_rf_cc <- round(pr_rf_cc$auc.integral, 3)
+
+prr_rf_cc <- rbind(x, z) %>% 
+  mutate(type = c(rep('NPDR', nrow(x)), rep('Random forest', nrow(z))))
+
+save(rf_imp_cc, auprc_rf_cc, pr_rf_cc, prr_rf_cc, rf_npdr_cc, r2_rf_cc,
+     file = 'results/rf_cc.Rdata')
+```
 

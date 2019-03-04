@@ -205,3 +205,40 @@ save(ss_df_qtrait, test_df_qtrait, prr_dat_qtrait,
 
 
 
+Compare with random forest:
+
+```{r}
+qtrait_forest <- randomForest::randomForest(qtrait ~ ., data = qtrait.data, importance = T)
+rf_imp_qtrait <- randomForest::importance(qtrait_forest) %>%
+  data.frame() %>%
+  rownames_to_column('att') %>%
+  mutate(functional = att %in% functional.qtrait)
+rf_npdr_qtrait <- merge(rf_imp_qtrait, npdr.qtrait.results, by = 'att') %>%
+  mutate(functional = att %in% functional.qtrait)
+r2_rf_qtrait <- round(cor(rf_npdr_qtrait$X.IncMSE, rf_npdr_qtrait$beta.Z.att), 3)
+
+```
+
+Draw the Precision-Recall curve:
+
+```{r}
+pr_rf_qtrait <- PRROC::pr.curve(scores.class0 = rf_imp_qtrait %>% 
+                        filter(functional == T) %>% 
+                        pull(X.IncMSE), 
+                      scores.class1 = rf_imp_qtrait %>% 
+                        filter(functional == F) %>% 
+                        pull(X.IncMSE), 
+                      curve = T)
+
+z <- as.data.frame(pr_rf_qtrait$curve) 
+colnames(z) <- paste0(c('Recall', 'Precision', 'w'))
+auprc_rf_qtrait <- round(pr_rf_qtrait$auc.integral, 3)
+
+prr_rf_qtrait <- rbind(x, z) %>% 
+  mutate(type = c(rep('NPDR', nrow(x)), rep('Random forest', nrow(z))))
+
+save(rf_imp_qtrait, auprc_rf_qtrait, pr_rf_qtrait, prr_rf_qtrait, rf_npdr_qtrait, r2_rf_qtrait, 
+     file = 'results/rf_qtrait.Rdata')
+```
+
+
