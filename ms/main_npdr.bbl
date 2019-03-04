@@ -1,31 +1,6 @@
  \newcommand{\noop}[1]{}
 \begin{thebibliography}{10}
 
-\bibitem{urbanowicz17b}
-Ryan~J. Urbanowicz, Melissa Meeker, William~La Cava, Randal~S. Olson, and
-  Jason~H. Moore.
-\newblock Relief-based feature selection: Introduction and review.
-\newblock {\em Journal of Biomedical Informatics}, 2018.
-
-\bibitem{kononenko97}
-Igor Kononenko, Edvard {\v{S}}imec, and Marko Robnik-{\v{S}}ikonja.
-\newblock Overcoming the {Myopia} of {Inductive} {Learning} {Algorithms} with
-  {RELIEFF}.
-\newblock {\em Applied Intelligence}, 7(1):39--55, January 1997.
-
-\bibitem{mckinney09}
-Brett~A. McKinney, James~E. Crowe, Jingyu Guo, and Dehua Tian.
-\newblock Capturing the spectrum of interaction effects in genetic association
-  studies by simulated evaporative cooling network analysis.
-\newblock {\em PLoS genetics}, 5(3):e1000432, March 2009.
-
-\bibitem{rendell92}
-Kenji Kira and Larry~A. Rendell.
-\newblock The feature selection problem: Traditional methods and a new
-  algorithm.
-\newblock In {\em Proceedings Tenth National Conference on Artificial
-  Intelligence}, pages 129--134. AAAI Press/The MIT Press, 1992.
-
 \bibitem{breen12}
 MS~Breen, C~Kemena, PK~Vlasov, C~Notredame, and Kondrashov FA.
 \newblock Epistasis as the primary factor in molecular evolution.
@@ -45,8 +20,8 @@ Caleb~A Lareau, Bill~C White, Ann~L Oberg, and Brett~A McKinney.
 
 \bibitem{diffcoexp10}
 Alberto De~la Fuente.
-\newblock From ?differential expression?to ?differential
-  networking?--identification of dysfunctional regulatory networks in diseases.
+\newblock From differential expression to differential
+  networking--identification of dysfunctional regulatory networks in diseases.
 \newblock {\em Trends in genetics}, 26(7):326--333, 2010.
 
 \bibitem{riesselman18}
@@ -66,6 +41,29 @@ Marziyeh Arabnejad, BD~Dawkins, WS~Bush, BC~White, AR~Harkness, and Brett~A
 Trang~T Le, Ryan~J Urbanowicz, Jason~H Moore, and Brett~A McKinney.
 \newblock Statistical inference relief (stir) feature selection.
 \newblock {\em Bioinformatics}, page bty788, 2018.
+
+\bibitem{urbanowicz17b}
+Ryan~J. Urbanowicz, Melissa Meeker, William~La Cava, Randal~S. Olson, and
+  Jason~H. Moore.
+\newblock Relief-based feature selection: Introduction and review.
+\newblock {\em Journal of Biomedical Informatics}, 2018.
+
+\bibitem{kononenko97}
+Igor Kononenko, Edvard {\v{S}}imec, and Marko Robnik-{\v{S}}ikonja.
+\newblock Overcoming the {Myopia} of {Inductive} {Learning} {Algorithms} with
+  {RELIEFF}.
+\newblock {\em Applied Intelligence}, 7(1):39--55, January 1997.
+
+\bibitem{mckinney09}
+Brett~A. McKinney, James~E. Crowe, Jingyu Guo, and Dehua Tian.
+\newblock Capturing the spectrum of interaction effects in genetic association
+  studies by simulated evaporative cooling network analysis.
+\newblock {\em PLoS genetics}, 5(3):e1000432, March 2009.
+
+\bibitem{robnik2003theoretical}
+Marko Robnik-{\v{S}}ikonja and Igor Kononenko.
+\newblock Theoretical and empirical analysis of relieff and rrelieff.
+\newblock {\em Machine learning}, 53(1-2):23--69, 2003.
 
 \bibitem{mckinney13}
 Brett~A McKinney, Bill~C White, Diane~E Grill, Peter~W Li, Richard~B Kennedy,
@@ -122,6 +120,12 @@ Ryan~J. Urbanowicz, Randal~S. Olson, Peter Schmitt, Melissa Meeker, and
   bioinformatics data mining.
 \newblock {\em Journal of Biomedical Informatics}, 85:168--188, 2018.
 
+\bibitem{bod}
+Bryan~A Dawkins, Trang~T Le, and Brett~A McKinney.
+\newblock Blessings of dimensionality: Theoretical analysis of nearest-neighbor
+  projected-distance methods for detecting interactions in high dimension.
+\newblock {\em Under Construction}, 2019.
+
 \bibitem{msurf13}
 Delaney Granizo-Mackenzie and Jason~H Moore.
 \newblock Multiple threshold spatially uniform relieff for the genetic analysis
@@ -141,11 +145,6 @@ Trang~T Le, W~Kyle Simmons, Masaya Misaki, Jerzy Bodurka, Bill~C White,
 \newblock Differential privacy-based evaporative cooling feature selection and
   classification with relief-f and random forests.
 \newblock {\em Bioinformatics}, 33(18):2906--2913, 2017.
-
-\bibitem{benjamini01}
-Yoav Benjamini, Dan Drai, Greg Elmer, Neri Kafkafi, and Ilan Golani.
-\newblock Controlling the false discovery rate in behavior genetics research.
-\newblock {\em Behavioural brain research}, 125(1-2):279--284, 2001.
 
 \bibitem{mostafavi14}
 Sara Mostafavi, Alexis Battle, Xiaowei Zhu, James~B Potash, Myrna~M Weissman,
@@ -242,11 +241,6 @@ Marko Robnik-{\v{S}}ikonja and Igor Kononenko.
 \newblock Theoretical and empirical analysis of relieff and rrelieff.
 \newblock {\em Machine learning}, 53(1-2):23--69, 2003.
 
-\bibitem{mckinney_pajewski}
-Brett McKinney and Nicholas Pajewski.
-\newblock Six degrees of epistasis: statistical network models for gwas.
-\newblock {\em Frontiers in genetics}, 2:109, 2012.
-
 \bibitem{schork12}
 Nicholas~J Schork and Matthew~A Zapala.
 \newblock Statistical properties of multivariate distance matrix regression for
@@ -257,5 +251,10 @@ Nicholas~J Schork and Matthew~A Zapala.
 {Naomi S.} Altman and Martin Krzywinski.
 \newblock The curse(s) of dimensionality this-month.
 \newblock {\em Nature Methods}, 15(6):399--400, 6 2018.
+
+\bibitem{mckinney_pajewski}
+Brett McKinney and Nicholas Pajewski.
+\newblock Six degrees of epistasis: statistical network models for gwas.
+\newblock {\em Frontiers in genetics}, 2:109, 2012.
 
 \end{thebibliography}
