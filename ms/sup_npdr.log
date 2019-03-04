@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  4 MAR 2019 11:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  4 MAR 2019 17:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -251,11 +251,7 @@ LaTeX Font Info:    Try loading font information for T1+aer on input line 105.
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/ae/t1aer.fd
 File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
-)))) (./sup_npdr.aux
-
-LaTeX Warning: Label `fig:auPRC' multiply defined.
-
-)
+)))) (./sup_npdr.aux)
 \openout1 = `sup_npdr.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
@@ -272,7 +268,8 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 16.
- (/usr/local/texlive/2018/texmf-dist/tex/latex/base/ts1cmr.fd
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 16.
@@ -382,18 +379,16 @@ Package pdftex.def Info: ../figs/pr_compare_100.pdf  used on input line 36.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../figs/npdr_rf.pdf, id=14, 505.89pt x 505.89pt>
-File: ../figs/npdr_rf.pdf Graphic file (type pdf)
-<use ../figs/npdr_rf.pdf>
-Package pdftex.def Info: ../figs/npdr_rf.pdf  used on input line 42.
-(pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
+<../figs/mostafavi_npdr_rf_mdd.pdf, id=14, 433.62pt x 289.08pt>
+File: ../figs/mostafavi_npdr_rf_mdd.pdf Graphic file (type pdf)
+<use ../figs/mostafavi_npdr_rf_mdd.pdf>
+Package pdftex.def Info: ../figs/mostafavi_npdr_rf_mdd.pdf  used on input line 
+49.
+(pdftex.def)             Requested size: 345.0pt x 230.01158pt.
 <../figs/jerzy_npdrs_mdd.pdf, id=15, 289.08pt x 274.02374pt>
 File: ../figs/jerzy_npdrs_mdd.pdf Graphic file (type pdf)
 <use ../figs/jerzy_npdrs_mdd.pdf>
-Package pdftex.def Info: ../figs/jerzy_npdrs_mdd.pdf  used on input line 50.
+Package pdftex.def Info: ../figs/jerzy_npdrs_mdd.pdf  used on input line 56.
 (pdftex.def)             Requested size: 345.0pt x 327.0498pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -401,26 +396,23 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <../figs/psqi_plots.pdf, id=16, 505.89pt x 216.81pt>
 File: ../figs/psqi_plots.pdf Graphic file (type pdf)
 <use ../figs/psqi_plots.pdf>
-Package pdftex.def Info: ../figs/psqi_plots.pdf  used on input line 56.
+Package pdftex.def Info: ../figs/psqi_plots.pdf  used on input line 62.
 (pdftex.def)             Requested size: 345.0pt x 147.85892pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 (./sup_npdr.bbl) [2 <../figs/npdr_stir_p_cc.pdf>] [3 <../figs/npdr_relief_auroc
-.pdf>] [4 <../figs/pr_compare_100.pdf>] [5 <../figs/npdr_rf.pdf>] [6 <../figs/j
-erzy_npdrs_mdd.pdf>] [7 <../figs/psqi_plots.pdf>] (./sup_npdr.aux)
-
-LaTeX Warning: There were multiply-defined labels.
-
+.pdf>] [4 <../figs/pr_compare_100.pdf>] [5 <../figs/mostafavi_npdr_rf_mdd.pdf>]
+[6 <../figs/jerzy_npdrs_mdd.pdf>] [7 <../figs/psqi_plots.pdf>] (./sup_npdr.aux)
  ) 
 Here is how much of TeX's memory you used:
- 2806 strings out of 492649
- 40132 string characters out of 6129622
- 99478 words of memory out of 5000000
- 6615 multiletter control sequences out of 15000+600000
+ 2807 strings out of 492649
+ 40229 string characters out of 6129622
+ 98448 words of memory out of 5000000
+ 6616 multiletter control sequences out of 15000+600000
  27227 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,5n,25p,1005b,259s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,5n,25p,916b,259s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
@@ -430,10 +422,10 @@ sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
 ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/loca
 l/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/t
 exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on sup_npdr.pdf (7 pages, 365613 bytes).
+Output written on sup_npdr.pdf (7 pages, 228257 bytes).
 PDF statistics:
- 130 PDF objects out of 1000 (max. 8388607)
- 97 compressed objects within 1 object stream
+ 132 PDF objects out of 1000 (max. 8388607)
+ 98 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  35 words of extra memory for PDF output out of 10000 (max. 10000000)
 
