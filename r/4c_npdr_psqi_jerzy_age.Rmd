@@ -1,0 +1,232 @@
+---
+title: "NPDR analysis of PSQI on an RNA-Seq dataset of MDD"
+output: html_document
+---
+
+### Load packages:
+
+```{r echo=FALSE}
+library(privateEC)
+library(broom)
+library(tidyverse)
+# library(devtools)
+# install_github('insilico/npdr') # npdr install
+library(npdr)
+
+rm(list = ls())
+set.seed(1618)
+
+cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
+```
+
+
+Utility functions:
+
+```{r}
+geneLowVarianceFilter <- function(dataMatrix, percentile=0.5) {
+  variances <- apply(as.matrix(dataMatrix), 2, var)
+  threshold <- quantile(variances, c(percentile))
+  # remove variable columns with lowest percentile variance:
+  mask <- apply(dataMatrix, 2, function(x) var(x) > threshold)
+  fdata <- dataMatrix[, mask]
+  # return the row mask and filtered data:
+  list(mask=mask, fdata=fdata)
+}
+
+clean_df_results <- function(input_df, ana_name){
+  input_df %>%
+  data.frame() %>%
+  rownames_to_column('att') %>%
+  rename(!!sym(paste0('beta.', ana_name)) := beta,
+         !!sym(paste0('pval.', ana_name)) := pval,
+         !!sym(paste0('p.adj.', ana_name)) := p.adj)
+}
+
+# Read in age data.frame:
+# fam.data <- read_table('data/MDD_LD.fam', col_names = 
+#     c('pedigree', 'member', 'father', 'mother', 'age', 'affected')) %>% 
+#   rowwise() %>% mutate(ids = unlist(strsplit(pedigree, "[_ ]+"))[3])
+# 274 male, 641 female
+```
+
+
+
+### Assocation between MDD and age:
+
+```{r}
+pheno.age <- covs.short %>%
+  select(age, psqi_score) %>%
+  rownames_to_column('ids') %>%
+  merge(mdd.pheno, by = 'ids')
+# chisq.test(fam.data$affected, fam.data$age)
+# table(fam.data$affected, fam.data$age)
+# table(pheno.age$class, pheno.age$age)
+psqi.df <- covs.short %>% 
+  select(psqi_score) %>%
+  rownames_to_column('ids') 
+# 1: HC; 2: MDD
+# table(fam.data$affected, pheno.age$class)
+
+# table(pheno.age$class, pheno.age$affected)
+# pheno.age$class== pheno.age$affected
+```
+
+
+### Filter RNA-Seq:
+
+```{r}
+unfiltered.predictors.mat <- rnaSeq
+# strict filter so it finishes in a couple minutes
+# use .5 in real analysis, but it will take a while (a day?)
+pct <- 0 # .5, 2957 genes 
+filter <- geneLowVarianceFilter(unfiltered.predictors.mat, pct)
+filtered.jerzy.df <- data.frame(filter$fdata) %>%
+  rownames_to_column('ids') %>%
+  merge(psqi.df, by = 'ids') %>%
+  column_to_rownames('ids')
+filtered.pred <- filtered.jerzy.df %>% select(-psqi_score)
+dim(filtered.jerzy.df)
+```
+
+
+```{r}
+psqi_box <- ggplot(covs.short, aes(x = Diag, y = psqi_score, fill = Diag)) + 
+  geom_boxplot(width = 0.5, alpha = 0.8, outlier.shape = NA) + 
+  geom_jitter(height = 0, width = 0.1, alpha = 0.5) +
+  scale_y_continuous(limits = c(0, 20)) +
+  theme_bw() + labs(x = NULL, y = 'PSQI') +
+  guides(fill = F) +
+  viridis::scale_fill_viridis(discrete = T) 
+
+psqi_hist <- ggplot(covs.short, aes(x = psqi_score, color = Diag, fill = Diag)) + 
+  geom_histogram(binwidth = 1, alpha = 0.8, position="identity") +
+  viridis::scale_color_viridis(discrete = T) +
+  viridis::scale_fill_viridis(discrete = T) +
+  scale_y_continuous(limits = c(0, 20)) +
+  theme_bw() + labs(x = NULL, y = NULL, fill = NULL, color = NULL) +
+  theme(legend.position = c(0.8, 0.8))
+psqi_hist
+
+psqi_plots <- cowplot::plot_grid(psqi_box, psqi_hist, ncol = 2)
+ggsave(psqi_plots, filename = 'figs/psqi_plots.pdf', width = 7, height = 3)
+
+t.test(covs.short %>% filter(Diag == 'HC') %>% select(psqi_score),
+       covs.short %>% filter(Diag == 'MDD') %>% select(psqi_score))
+```
+
+
+### Univariate analysis:
+
+```{r}
+# Simple analysis with no age adjustment:
+# class.idx <- length(colnames(filtered.jerzy.df))
+# colnames(filtered.jerzy.df)[class.idx]
+rnaSeq_mdd <- rnaSeq %>%
+  data.frame() %>%
+  rownames_to_column('ids') %>%
+  merge(mdd.pheno, by = 'ids') %>%
+  column_to_rownames('ids')
+
+gene_mdd <- uniReg(
+  outcome = 'class', 
+  dataset = rnaSeq_mdd, 
+  regression.type = 'glm') %>%
+  clean_df_results('gene.mdd')
+
+# After adjusting for age:
+gene_age_mdd <- uniReg(
+  outcome = 'class', dataset = rnaSeq_mdd, 
+  regression.type = 'glm', covars = pheno.age$age) %>%
+  clean_df_results('gene.age.mdd')
+
+# Univariate with age as outcome:
+# check if the rows are the same order: 0 = good
+sum(pheno.age$ids != rownames(filtered.jerzy.df))
+sum(pheno.age$ids != rownames(filtered.jerzy.df))
+gene_age <- uniReg(
+  outcome = pheno.age$age,
+  dataset = filtered.pred,
+  regression.type='lm') %>%
+  clean_df_results('gene.age')
+
+# Summarize all univariate analyses:
+uni_w_wo_age <- data.frame(gene_mdd) %>%
+  merge(gene_age_mdd, by = 'att') %>%
+  merge(gene_age, by = 'att')
+
+```
+
+```{r}
+tidy(lm(pheno.age$psqi_score ~ pheno.age$age))
+```
+
+
+### Run NPDR, no covariate adjustment:
+
+```{r}
+################################### 
+start_time <- Sys.time()
+npdr.mdd.rnaseq.results <- npdr('psqi_score', filtered.jerzy.df, regression.type='glm',
+                                attr.diff.type='numeric-abs', nbd.method='multisurf', 
+                                nbd.metric = 'manhattan', msurf.sd.frac=0.5,
+                                padj.method='bonferroni')
+end_time <- Sys.time()
+end_time - start_time  # about 5 min for pct=.98, 306vars, 18min for pct=.9 and 1524 vars
+
+npdr_mdd_noage <- npdr.mdd.rnaseq.results %>%
+  rename(beta.npdr.noage = beta.Z.att,
+         pval.npdr.noage  = pval.att,
+         p.adj.npdr.noage = pval.adj)
+```
+
+### Run NPDR, adjusting for age:
+
+```{r}
+# age-associated by npdr
+# start_time <- Sys.time()
+system.time(
+  npdr.mdd.ageassoc.results <- npdr('psqi_score', filtered.jerzy.df, 
+                                      regression.type='glm', attr.diff.type='numeric-abs',
+                                      nbd.method='multisurf', nbd.metric = 'manhattan',
+                                      covars=pheno.age$age,  # works with age.covar.mat as well
+                                      covar.diff.type='numeric-abs', # for categorical covar like age
+                                      msurf.sd.frac=0.5, padj.method='bonferroni')
+)
+
+# end_time <- Sys.time()
+# end_time - start_time  # about 5 min for pct=.98, 306vars
+
+npdr_mdd_age <- npdr.mdd.ageassoc.results %>%
+  rename(beta.npdr.age = beta.Z.att,
+         pval.npdr.age  = pval.att,
+         p.adj.npdr.age = pval.adj)
+```
+
+
+```{r}
+npdr_w_wo_age <- data.frame(gene_age) %>%
+  merge(npdr_mdd_noage, by = 'att') %>%
+  merge(npdr_mdd_age, by = 'att') %>%
+  mutate(nlog10.noage = -log10(p.adj.npdr.noage)) %>%
+  mutate(nlog10.age = -log10(p.adj.npdr.age)) %>%
+  mutate(significant = as.factor((p.adj.npdr.noage < 0.05) + (p.adj.npdr.age < 0.05))) %>%
+  mutate(sig.genes = ifelse((p.adj.npdr.noage < 0.05) | p.adj.npdr.age < 0.05, att, NA)) %>%
+  mutate(nlog10.age.genes = -log10(p.adj.gene.age))
+
+save(npdr_w_wo_age, uni_w_wo_age, file = paste0('results/', pct, '_jerzy_psqi_mdd_results.Rdata'))
+```
+
+
+Summarize results:
+
+```{r}
+best_genes <- npdr_w_wo_age %>%
+  filter(p.adj.npdr.age < 0.05) %>%
+  arrange(p.adj.npdr.age) %>%
+  select(att, p.adj.npdr.age, pval.npdr.age, beta.npdr.age, nlog10.age)
+
+write_csv(best_genes, 'results/jerzy_psqi_best_0.05_npdr_genes.csv')
+```
+
+
