@@ -32,8 +32,8 @@ pboth <- ggplot(npdr_w_wo_sex, aes(x = nlog10.nosex, y = nlog10.sex)) +
            size = 3, color = cbbPalette[1]) +
   annotate("text", -log10(0.05) - 0.2, 9.7, label = "0.05 Bonferroni", 
            size = 3, color = cbbPalette[1], angle = 90) +
-  labs(x = bquote('Vanilla NPDR ('~-log[10]~'p'[adj]~')'),
-       y = bquote('Sex-adjusted NPDR ('~-log[10]~'p'[adj]~')'),
+  labs(x = bquote('No-covariate NPDR ('~-log[10]~'p'[mdd]~')'),
+       y = bquote('Sex-adjusted NPDR ('~-log[10]~'p'[mdd]~')'),
        fill = bquote(''~-log[10]~'p'['sex'])) +
   ggrepel::geom_text_repel(aes(label = sig.genes), #check_overlap = TRUE, 
             hjust=-0.12, vjust=1.7, fontface = "italic",
