@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  4 MAR 2019 10:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  4 MAR 2019 18:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -764,68 +764,81 @@ Overfull \hbox (21.39647pt too wide) in paragraph at lines 422--431
 [][] 
  []
 
-[8] [9]
-<../figs/fig1.pdf, id=254, 505.89pt x 505.89pt>
+[8]
+<../figs/fig1.pdf, id=237, 505.89pt x 505.89pt>
 File: ../figs/fig1.pdf Graphic file (type pdf)
 <use ../figs/fig1.pdf>
-Package pdftex.def Info: ../figs/fig1.pdf  used on input line 503.
+Package pdftex.def Info: ../figs/fig1.pdf  used on input line 485.
 (pdftex.def)             Requested size: 379.4175pt x 379.42427pt.
-<../figs/mostafavi_npdrs_mdd.pdf, id=259, 433.62pt x 325.215pt>
+<../figs/fig2_pr_plots.pdf, id=238, 447.6725pt x 216.81pt>
+File: ../figs/fig2_pr_plots.pdf Graphic file (type pdf)
+<use ../figs/fig2_pr_plots.pdf>
+Package pdftex.def Info: ../figs/fig2_pr_plots.pdf  used on input line 491.
+(pdftex.def)             Requested size: 379.4175pt x 183.75673pt.
+ [9] [10 <../figs/fig1.pdf>] [11 <../figs/fig2_pr_plots.pdf>]
+<../figs/mostafavi_npdrs_mdd.pdf, id=289, 433.62pt x 325.215pt>
 File: ../figs/mostafavi_npdrs_mdd.pdf Graphic file (type pdf)
 <use ../figs/mostafavi_npdrs_mdd.pdf>
-Package pdftex.def Info: ../figs/mostafavi_npdrs_mdd.pdf  used on input line 52
-4.
+Package pdftex.def Info: ../figs/mostafavi_npdrs_mdd.pdf  used on input line 53
+9.
 (pdftex.def)             Requested size: 379.4175pt x 284.5773pt.
-LaTeX Font Info:    Try loading font information for T1+aett on input line 534.
+LaTeX Font Info:    Try loading font information for T1+aett on input line 549.
 
- (/usr/local/texlive/2018/texmf-dist/tex/latex/ae/t1aett.fd
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/ae/t1aett.fd
 File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
 )
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `aett' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- [10]
-[11 <../figs/fig1.pdf>] [12 <../figs/mostafavi_npdrs_mdd.pdf>]
-<../figs/mostafavi_npdr_rf_mdd.pdf, id=306, 433.62pt x 289.08pt>
-File: ../figs/mostafavi_npdr_rf_mdd.pdf Graphic file (type pdf)
-<use ../figs/mostafavi_npdr_rf_mdd.pdf>
-Package pdftex.def Info: ../figs/mostafavi_npdr_rf_mdd.pdf  used on input line 
-546.
-(pdftex.def)             Requested size: 379.4175pt x 252.9576pt.
- [13 <../figs/mostafavi_npdr_rf_mdd.pdf>]
+
+
+LaTeX Warning: Reference `fig:mostafavi_npdr_rf_mdd' on page 12 undefined on in
+put line 553.
+
+[12 <../figs/mostafavi_npdrs_mdd.pdf>]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 569.
+               Default added (so using `tbp') on input line 578.
 
 
-Overfull \hbox (4.81187pt too wide) in paragraph at lines 592--592
-[]|\T1/aer/m/n/10 (-20) ADAMTSL4-
+Overfull \hbox (4.87025pt too wide) in paragraph at lines 583--583
+[]|\T1/aer/m/n/10 (-20) ARHGEF4| 
  []
 
 
-Overfull \hbox (39.08736pt too wide) in paragraph at lines 571--598
+Overfull \hbox (5.2277pt too wide) in paragraph at lines 597--597
+[]|\T1/aer/m/n/10 (-20) CACNA1C| 
+ []
+
+
+Overfull \hbox (64.69466pt too wide) in paragraph at lines 580--629
 [][] 
  []
 
-[14] [15] (./main_npdr.bbl [16] [17] [18])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 656.
+[13] [14] [15] (./main_npdr.bbl [16] [17] [18])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 687.
  [19]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 656.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 687.
  (./main_npdr.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 656.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 656.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 687.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 687.
 Package rerunfilecheck Info: File `main_npdr.out' has not changed.
 (rerunfilecheck)             Checksum: 3DA83FE17BBE6B9A59B4B4D63D778B8B;1747.
+
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 12852 strings out of 492649
- 192612 string characters out of 6129622
- 347869 words of memory out of 5000000
- 15965 multiletter control sequences out of 15000+600000
- 76004 words of font info for 382 fonts, out of 8000000 for 9000
+ 12844 strings out of 492649
+ 192505 string characters out of 6129622
+ 353783 words of memory out of 5000000
+ 15966 multiletter control sequences out of 15000+600000
+ 75425 words of font info for 375 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,17n,38p,1952b,476s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,17n,38p,1950b,476s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></
@@ -845,10 +858,10 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2018/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2018/texmf-
 dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2018/texmf-d
 ist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main_npdr.pdf (19 pages, 518190 bytes).
+Output written on main_npdr.pdf (19 pages, 621730 bytes).
 PDF statistics:
- 473 PDF objects out of 1000 (max. 8388607)
- 419 compressed objects within 5 object streams
+ 465 PDF objects out of 1000 (max. 8388607)
+ 412 compressed objects within 5 object streams
  107 named destinations out of 1000 (max. 500000)
  65204 words of extra memory for PDF output out of 74296 (max. 10000000)
 
