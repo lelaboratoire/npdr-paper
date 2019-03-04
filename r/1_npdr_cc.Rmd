@@ -129,8 +129,8 @@ pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>%
                         filter(functional == F) %>%
                         pull(beta.Z.att),
                       curve = T)
-pr_uni$auc.integral
-pr_npdr$auc.integral
+pr_uni$c.integral
+pr_npdr$c.integral
 
 ```
 
