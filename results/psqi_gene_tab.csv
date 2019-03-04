@@ -1,23 +1,23 @@
-att,description,beta.npdr.sex,pval.npdr.sex,p.adj.npdr.sex
-ARHGEF4,rho guanine nucleotide exchange factor 4,6.39,8.78e-11,5.19e-7
-C11orf21,chromosome 11 open reading frame 21,5.59,1.17e-8,6.89e-5
-STX4,syntaxin 4,5.25,7.9e-8,4.67e-4
-PTPRE,"protein tyrosine phosphatase, receptor type e",5.22,9.43e-8,5.58e-4
-UHRF1,ubiquitin like with phd and ring finger domains 1,5.19,1.06e-7,6.28e-4
-AGAP2,"arfgap with gtpase domain, ankyrin repeat and ph domain 2",4.96,3.68e-7,0.002
-C16orf45,chromosome 16 open reading frame 45,4.95,3.71e-7,0.002
-ACP5,"acid phosphatase 5, tartrate resistant",4.72,1.23e-6,0.007
-DPH3P1,diphthamide biosynthesis 3 pseudogene 1,4.73,1.15e-6,0.007
-CBLL1,cbl proto-oncogene like 1,4.6,2.15e-6,0.013
-QRICH1,glutamine rich 1,4.53,3.04e-6,0.018
-CACNA1C,calcium voltage-gated channel subunit alpha1 c,4.46,4.13e-6,0.024
-CBY1,"chibby family member 1, beta catenin antagonist",4.45,4.27e-6,0.025
-PSMD5,"proteasome 26s subunit, non-atpase 5",4.45,4.34e-6,0.026
-WNT8B,wnt family member 8b,4.45,4.41e-6,0.026
-RAB7A,"rab7a, member ras oncogene family",4.44,4.58e-6,0.027
-EFR3B,efr3 homolog b,4.4,5.42e-6,0.032
-PMEL,premelanosome protein,4.38,6.09e-6,0.036
-ADAMTSL4.AS1,adamtsl4 antisense rna 1,4.35,6.8e-6,0.04
-TUBA4B,tubulin alpha 4b,4.34,7.18e-6,0.042
-MYLPF,"myosin light chain, phosphorylatable, fast skeletal muscle",4.33,7.53e-6,0.045
-PROZ,"protein z, vitamin k dependent plasma glycoprotein",4.32,7.85e-6,0.046
+att,description,beta.npdr.age,pval.npdr.age,p.adj.npdr.age
+ARHGEF4,rho guanine nucleotide exchange factor 4,6.18,3.39E-10,2.01E-06
+C11orf21,chromosome 11 open reading frame 21,5.31,5.58E-08,3.30E-04
+STX4,syntaxin 4,5.28,6.55E-08,3.87E-04
+PTPRE,"protein tyrosine phosphatase, receptor type e",5.19,1.06E-07,6.28E-04
+UHRF1,ubiquitin like with phd and ring finger domains 1,5.15,1.32E-07,7.78E-04
+AGAP2,"arfgap with gtpase domain, ankyrin repeat and ph domain 2",4.90,4.78E-07,0.003
+C16orf45,chromosome 16 open reading frame 45,4.90,4.95E-07,0.003
+DPH3P1,diphthamide biosynthesis 3 pseudogene 1,4.75,1.06E-06,0.006
+ACP5,"acid phosphatase 5, tartrate resistant",4.65,1.68E-06,0.010
+CBLL1,cbl proto-oncogene like 1,4.65,1.72E-06,0.010
+QRICH1,glutamine rich 1,4.56,2.59E-06,0.015
+RAB7A,"rab7a, member ras oncogene family",4.53,2.93E-06,0.017
+PSMD5,"proteasome 26s subunit, non-atpase 5",4.48,3.86E-06,0.023
+CBY1,"chibby family member 1, beta catenin antagonist",4.47,4.02E-06,0.024
+CACNA1C,calcium voltage-gated channel subunit alpha1 c,4.46,4.08E-06,0.024
+TUBA4B,tubulin alpha 4b,4.41,5.16E-06,0.031
+WNT8B,wnt family member 8b,4.40,5.59E-06,0.033
+PMEL,premelanosome protein,4.36,6.60E-06,0.039
+EFR3B,efr3 homolog b,4.34,7.36E-06,0.044
+MYLPF,"myosin light chain, phosphorylatable, fast skeletal muscle",4.33,7.45E-06,0.044
+NSG1,neuronal vesicle trafficking associated 1,4.33,7.66E-06,0.045
+CHKA,choline kinase alpha,4.33,7.67E-06,0.045

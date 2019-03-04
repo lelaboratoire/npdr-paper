@@ -43,11 +43,11 @@ clean_df_results <- function(input_df, ana_name){
          !!sym(paste0('p.adj.', ana_name)) := p.adj)
 }
 
-# Read in age data.frame:
-# fam.data <- read_table('data/MDD_LD.fam', col_names = 
-#     c('pedigree', 'member', 'father', 'mother', 'age', 'affected')) %>% 
-#   rowwise() %>% mutate(ids = unlist(strsplit(pedigree, "[_ ]+"))[3])
-# 274 male, 641 female
+load('data/0.8genes.filtered.corrected.Rdata') ### RNA-Seq data
+dim(rnaSeq)  # 915 subjects x (15230 genes + 1 class)
+mdd.pheno <- data.frame(class = phenos) %>% 
+   rownames_to_column('ids')
+
 ```
 
 
