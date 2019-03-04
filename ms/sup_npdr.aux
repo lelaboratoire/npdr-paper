@@ -1,9 +1,12 @@
 \relax 
+\citation{le18}
 \citation{stir}
+\citation{le18}
 \citation{stir}
 \bibstyle{unsrt}
 \bibdata{NPDR_refs}
-\bibcite{stir}{1}
+\bibcite{le18}{1}
+\bibcite{stir}{2}
 \@writefile{lof}{\contentsline {figure}{\numberline {S1}{\ignorespaces Similarity between NPDR and STIR for one simulation of $m = 200$ samples and $p = 1000$ attributes. In 100 replications, $R^2$ ranges from 0.9827 to 0.9994. STIR is based on a t-test of projected distances and NPDR is based on a logistic regression of projected distances.}}{2}}
 \newlabel{fig:npdr_stir}{{S1}{2}}
 \@writefile{lof}{\contentsline {figure}{\numberline {S2}{\ignorespaces Receiver Operating Characteristics (ROC) curves for Relief-F and NPDR for simualted case-control data with interactions (left) and RRelief and NPDR for simulated continuous outcome data with main effects (right). Simulation uses $m = 200$ samples and $p = 1000$ attributes with 100 functional. }}{3}}
@@ -12,7 +15,7 @@
 \newlabel{fig:auPRC}{{S3}{4}}
 \@writefile{lof}{\contentsline {figure}{\numberline {S4}{\ignorespaces \textbf  {Comparison of NPDR and random forest importance scores} for continuous outcome data with main effects (top row) and dichotomous outcome data with interaction effects (bottom row). Results for one replicate simulation ($m = 200$ samples and $p = 1,000$ attributes with 100 functional). For continuous outcome (A), importance scores computed by random forest permutation (percent increase in MSE) and NPDR standardized linear regression coefficient. For case-control outcome (C), scores computed by random forest permutation (mean decrease in accuracy) and NPDR standardized logistic regression coefficient. A regression line between the scores with $R^2$ is shown, and a 0.05 Bonferroni cutoff (dashed) is shown for NPDR (A and C). There is no statistical threshold for random forest, so area under the precision-recall curve (auPRC) is used to compare algorithm performance (B, D).}}{5}}
 \newlabel{fig:auPRC}{{S4}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {S5}{\ignorespaces NPDR with and without sex adjustment for analysis of MDD-associated genes in Le et al.'s RNASeq dataset. Adjustment for the sex covariate has a negligible effect on the resulting P values for each important gene because of the balanced study design. Both methods yield consistent results with STIR from previous study (Fig. 4 of Ref. \cite  {stir}), not shown.}}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {S5}{\ignorespaces NPDR with and without sex adjustment for analysis of MDD-associated genes in Le et al.'s RNASeq dataset \cite  {le18}. Adjustment for the sex covariate has a negligible effect on the resulting P values for each important gene because of the balanced study design. Both methods yield consistent results with STIR from previous study (Fig. 4 of Ref. \cite  {stir}), not shown.}}{6}}
 \newlabel{fig:jerzy_npdrs_mdd}{{S5}{6}}
 \@writefile{lof}{\contentsline {figure}{\numberline {S6}{\ignorespaces The distribution of the Pittsburgh Sleep Quality Index (PSQI) among individuals with and without MDD.}}{7}}
 \newlabel{fig:psqi_plots}{{S6}{7}}
