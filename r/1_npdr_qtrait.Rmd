@@ -213,8 +213,7 @@ rf_imp_qtrait <- randomForest::importance(qtrait_forest) %>%
   data.frame() %>%
   rownames_to_column('att') %>%
   mutate(functional = att %in% functional.qtrait)
-rf_npdr_qtrait <- merge(rf_imp_qtrait, npdr.qtrait.results, by = 'att') %>%
-  mutate(functional = att %in% functional.qtrait)
+rf_npdr_qtrait <- merge(rf_imp_qtrait, npdr.qtrait.results, by = 'att')
 r2_rf_qtrait <- round(cor(rf_npdr_qtrait$X.IncMSE, rf_npdr_qtrait$beta.Z.att), 3)
 
 ```
