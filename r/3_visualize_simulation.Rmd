@@ -109,8 +109,8 @@ fig1 <- plot_grid(qtrait_plot, cc_plot, nrow = 2, labels = 'AUTO')
 ggsave(fig1, filename = 'figs/fig1.pdf', height = 7, width = 7)
 ```
 
-## Generate figure 2:
 
+## Generate figure 2:
 
 ```{r}
 pr_qtrait <- prr_rf_qtrait %>%
@@ -231,30 +231,36 @@ pr_qtrait_100 <- pr_df
 
 # pr_df
 pr_df <- rbind(pr_cc_100, pr_qtrait_100) %>%
-  mutate(sim = rep(c('Dichotomous outcome', 'Continuous outcome'), each = nrow(pr_qtrait_100))) %>%
-  # mutate(newtype = case_when((sim == 'Continuous outcome' & type == 'Relief-F') ~ 'RRelief',
-  #                            TRUE ~ as.character(type)))
-  mutate(newtype = as.factor(case_when((type == 'Relief-F') ~ 'Relief',
+  mutate(sim = c(rep('Dichotomous outcome', nrow(pr_cc_100)), 
+         rep('Continuous outcome', nrow(pr_qtrait_100)))) %>%
+  mutate(newtype = as.factor(case_when((type %in% c('Relief-F', 'RRelief')) ~ 'Relief',
                              TRUE ~ as.character(type))))
-
+pr_df$newtype <- factor(pr_df$newtype, levels = c('Relief', 'NPDR', 'Random forest'))
 
 p_text <- data.frame(
-  label = c('p < 0.0001', 'p < 0.0001'),
+  label = c('***', '***'),
   sim = c('Dichotomous outcome', 'Continuous outcome'),
-  x = c(1.5, 1.5), y = c(0.56, 0.47), newtype =  c('NPDR', 'Relief')
+  x = c(1.5, 1.5), y = c(0.52, 0.39), newtype =  c('NPDR', 'Relief')
+)
+
+p_text_2 <- data.frame(
+  label = c('***', '***'),
+  sim = c('Dichotomous outcome', 'Continuous outcome'),
+  x = c(2.5, 2.5), y = c(0.52, 0.39), newtype =  c('NPDR', 'Relief')
 )
 
 pr_100 <- ggplot(pr_df, aes(x = newtype, y = aupr, fill = newtype, color = newtype)) + 
-  geom_boxplot(alpha = 0.3, color = 'grey30', outlier.size = -1, width = 0.5) +
+  geom_boxplot(alpha = 0.5, color = 'grey30', outlier.size = -1, width = 0.5) +
   labs(x = NULL, y = 'Area under the PR curve') + facet_wrap(~ sim, scales = 'free') +
   geom_jitter(height = 0, width = 0.1) +
-  scale_color_manual(values = cbbPalette[c(8,6, 5)]) +
-  scale_fill_manual(values = cbbPalette[c(8,6, 5)]) +
+  scale_color_manual(values = cbbPalette[c(6, 8, 3)]) +
+  scale_fill_manual(values = cbbPalette[c(6, 8, 3)]) +
   geom_text(p_text, mapping = aes(x = x, y = y, label = label), color = 'grey20') +
+  geom_text(p_text_2, mapping = aes(x = x, y = y, label = label), color = 'grey20') +
   # annotate("text", x = 1.5, y = 0.5, label = paste('p < 0.0001')) + 
   theme_bw() + guides(fill = F, color = F) 
 pr_100
 
-ggsave(pr_100, filename = paste0('figs/pr_compare_100.pdf'), height = 3, width = 5)
+ggsave(pr_100, filename = paste0('figs/pr_compare_100.pdf'), height = 2.5, width = 5)
 ```
 
