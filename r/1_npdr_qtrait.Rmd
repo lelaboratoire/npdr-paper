@@ -174,36 +174,10 @@ prr.dat <- rbind(x, y) %>%
 
 
 
-What about auROC?
 
-```{r}
-ss_npdr <- pROC::roc(test.df$functional, test.df$beta.Z.att)
-ss_relief <- pROC::roc(test.df$functional, test.df$rrelief)
-auroc_npdr_qtrait <- round(ss_npdr$auc, 3)
-auroc_relief_qtrait <- round( ss_relief$auc, 3)
-
-ss_df_qtrait <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities),
-                    Specificity = c(ss_npdr$specificities, ss_relief$specificities)) %>%
-  mutate(type = rep(c('NPDR', 'Relief'), each = length(ss_npdr$sensitivities)))
-```
 
 
 How much better is NPDR? Is this just by chance? 100 replications result show the same thing (npdr_100_quant.Rmd).
-
-```{r}
-# ss_df_qtrait <- ss_df
-test_df_qtrait <- test.df
-prr_dat_qtrait <- prr.dat
-
-save(ss_df_qtrait, test_df_qtrait, prr_dat_qtrait,
-     auprc_npdr_qtrait, auprc_relief_qtrait, r2_qtrait,
-     npdr.beta.cutoff.qtrait, ss_df_qtrait,
-     auroc_npdr_qtrait, auroc_relief_qtrait,
-     file = 'results/df_qtrait.Rdata')
-
-```
-
-
 
 Compare with random forest:
 
@@ -241,3 +215,35 @@ save(rf_imp_qtrait, auprc_rf_qtrait, pr_rf_qtrait, prr_rf_qtrait, rf_npdr_qtrait
 ```
 
 
+What about auROC?
+
+```{r}
+ss_npdr <- pROC::roc(test.df$functional, test.df$beta.Z.att)
+ss_relief <- pROC::roc(test.df$functional, test.df$rrelief)
+ss_rf <- pROC::roc(rf_imp_qtrait$functional, rf_imp_qtrait$X.IncMSE)
+auroc_npdr_qtrait <- ss_npdr$auc
+auroc_relief_qtrait <- ss_relief$auc
+auroc_rf_qtrait <- ss_rf$auc
+
+ss_df_qtrait <- data.frame(Sensitivity = c(ss_npdr$sensitivities, 
+                                       ss_relief$sensitivities,
+                                       ss_rf$sensitivities), 
+                    Specificity = c(ss_npdr$specificities, ss_relief$specificities,
+                                    ss_rf$specificities)) %>%
+  mutate(type = c(rep('NPDR', length(ss_npdr$sensitivities)),
+                  rep('Relief', length(ss_relief$sensitivities)),
+                  rep('Random forest', length(ss_rf$sensitivities))))
+```
+
+
+```{r}
+test_df_qtrait <- test.df
+prr_dat_qtrait <- prr.dat
+
+save(ss_df_qtrait, test_df_qtrait, prr_dat_qtrait,
+     auprc_npdr_qtrait, auprc_relief_qtrait, r2_qtrait,
+     npdr.beta.cutoff.qtrait, ss_df_qtrait,
+     auroc_npdr_qtrait, auroc_relief_qtrait,
+     auroc_rf_qtrait, 
+     file = 'results/df_qtrait.Rdata')
+```
