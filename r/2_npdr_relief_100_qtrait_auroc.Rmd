@@ -1,0 +1,110 @@
+---
+title: "Comparing NPDR and Relief-F, 100 replications"
+output: html_document
+---
+
+### Load packages:
+
+```{r echo=FALSE}
+library(privateEC)
+library(broom)
+library(tidyverse)
+# library(devtools)
+# install_github("insilico/npdr") # npdr install
+library(npdr)
+
+rm(list = ls())
+set.seed(1618)
+
+cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
+```
+
+
+### Simulate case-control interaction effect data:
+
+```{r}
+#####
+
+##### simulate case-control interaction effect data 
+n.samples <- 300     # 100 samples in train/holdout/test
+n.variables <- 1000   # 100 features
+label <- "qtrait"   # tells simulator to do quantitative trait and adds this colname
+type <- "mainEffect"
+bias <- 0.6          # moderate effect size
+pct.signals <- 0.1   # pct functional features
+verbose <- FALSE
+```
+
+
+```{r}
+n_sims <- 100
+
+auroc_npdr_qtrait <- vector(mode = 'numeric', length = n_sims)
+auroc_relief_qtrait <- vector(mode = 'numeric', length = n_sims)
+auroc_rf_qtrait <- vector(mode = 'numeric', length = n_sims)
+
+set.seed(16183)
+for (i in 1:n_sims){
+  qtrait.3sets <- createSimulation(num.samples = n.samples,
+                              num.variables = n.variables,
+                              pct.signals = pct.signals,
+                              label = label,
+                              bias = bias,
+                              pct.train = 1/3,
+                              pct.holdout = 1/3,
+                              pct.validation = 1/3,
+                              sim.type = type,
+                              save.file = NULL,
+                              verbose = verbose)
+  qtrait.data <- rbind(qtrait.3sets$train, qtrait.3sets$holdout)
+  n.samples.qtrait <- nrow(qtrait.data)
+  functional.qtrait <- qtrait.3sets$signal.names # functional attributes
+
+  npdr.qtrait.results <- 
+  npdr(label, qtrait.data, regression.type="lm", 
+          attr.diff.type = "numeric-abs", nbd.method = "multisurf", 
+          nbd.metric = "manhattan", msurf.sd.frac = .5, 
+          padj.method = "bonferroni", verbose = T) %>%
+  mutate(npdr.log10 = -log10(pval.att))
+  
+  core.learn.qtrait <- CORElearn::attrEval(label, data = qtrait.data,
+                                      estimator = "RReliefFequalK",
+                                      costMatrix = NULL,
+                                      outputNumericSplits=FALSE,
+                                      kNearestEqual = knnSURF(n.samples.qtrait,.5))
+  corelearn.df <- data.frame(att=names(core.learn.qtrait), rrelief=core.learn.qtrait)
+  
+  test.df <- merge(corelearn.df, npdr.qtrait.results) %>% 
+    mutate(functional = att %in% functional.qtrait)
+  qtrait_forest <- randomForest::randomForest(qtrait ~ ., data = qtrait.data, importance = T)
+  rf_imp_qtrait <- randomForest::importance(qtrait_forest) %>%
+    data.frame() %>%
+    rownames_to_column('att') %>%
+    mutate(functional = att %in% functional.qtrait)
+  rf_npdr_qtrait <- merge(rf_imp_qtrait, npdr.qtrait.results, by = 'att') 
+  
+  ss_npdr <- pROC::roc(test.df$functional, test.df$beta.Z.att)
+  ss_relief <- pROC::roc(test.df$functional, test.df$rrelief)
+  ss_rf <- pROC::roc(rf_imp_qtrait$functional, rf_imp_qtrait$X.IncMSE)
+  auroc_npdr_qtrait[i] <- ss_npdr$auc
+  auroc_relief_qtrait[i] <- ss_relief$auc
+  auroc_rf_qtrait[i] <- ss_rf$auc
+}
+
+```
+
+
+```{r}
+roc_df <- data.frame(aupr = c(auroc_relief_qtrait, auroc_npdr_qtrait, auroc_rf_qtrait),
+                    type = rep(c('Relief', 'NPDR', 'Random forest'), each = n_sims))
+roc_df$type <- factor(roc_df$type, levels = rev(levels(roc_df$type)))
+
+roc_compare_relief <- t.test(auroc_npdr_qtrait, auroc_relief_qtrait)
+roc_compare_rf <- t.test(auroc_npdr_qtrait, auroc_rf_qtrait)
+print(roc_compare_relief$p.value)
+roc_p <- round(roc_compare_relief$p.value, 3)
+print(roc_compare_rf$p.value)
+roc_p <- round(roc_compare_rf$p.value, 3)
+save.image(file = 'results/npdr_100_qtrait_auroc.Rdata')
+```
