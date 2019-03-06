@@ -53,17 +53,17 @@ ggsave(pboth, filename = 'figs/mostafavi_npdrs_mdd.pdf', width = 6, height = 4.5
 
 
 ```{r}
-rf_imp_sorted[rf_imp_sorted$att=='sex',]
-npdr_rf_df_sorted <- npdr_rf_df %>% arrange(desc(beta.npdr.sex))
-last.imp.att <- which(npdr_rf_df_sorted$p.adj.npdr.sex > 0.05)[1]-1
-npdr.beta.cutoff.cc <- npdr_rf_df_sorted[last.imp.att, 'beta.npdr.sex']
-
 npdr_rf_df <- npdr_w_wo_sex %>%
   select(att, beta.npdr.sex, nlog10.sex.genes, sig.genes, p.adj.npdr.sex, p.adj.gene.sex) %>%
   merge(rf_imp_sorted, by = 'att') %>%
   arrange(p.adj.gene.sex) %>%
   mutate(hili = (p.adj.gene.sex < 1e-19)) %>%
   mutate(imp.genes = ifelse(hili, att, NA))
+
+# rf_imp_sorted[rf_imp_sorted$att=='sex',]
+npdr_rf_df_sorted <- npdr_rf_df %>% arrange(desc(beta.npdr.sex))
+last.imp.att <- which(npdr_rf_df_sorted$p.adj.npdr.sex > 0.05)[1]-1
+npdr.beta.cutoff.cc <- npdr_rf_df_sorted[last.imp.att, 'beta.npdr.sex']
 
 npdr_rf_df %>% filter(MeanDecreaseGini > 0.1) %>% tally()
 
@@ -96,17 +96,39 @@ p_npdr_rf <- ggplot(npdr_rf_df_hili, aes(x = MeanDecreaseAccuracy, y = beta.npdr
         legend.title = element_text(size = 8)) 
 
 p_npdr_rf
-ggsave(p_npdr_rf, filename = 'figs/mostafavi_npdr_rf_mdd.pdf', width = 6, height = 4)
-
+# ggsave(p_npdr_rf, filename = 'figs/mostafavi_npdr_rf_mdd.pdf', width = 6, height = 6)
 ```
-
 
 Random forest importance vs. nlog10.sex.genes:
+
 ```{r}
-# best_att <- head(sort(rf_imp_sorted$importance, decreasing = T), 100)
-# plot()
-ggplot(rf_imp_sorted[2:50,], aes(y = importance, x = att)) + geom_point() + geom_label(aes(label = att))
+(r2.npdr.sex <- cor(npdr_rf_df$beta.npdr.sex, npdr_rf_df$nlog10.sex.genes))
+(r2.rf.sex <- cor(npdr_rf_df$MeanDecreaseAccuracy, npdr_rf_df$nlog10.sex.genes))
+npdr_spec <- data.frame(method = 'beta.npdr.sex', y = npdr.beta.cutoff.cc, label = 'NPDR cutoff')
+npdr_rf_df %>%
+  gather('method', 'score', c(MeanDecreaseAccuracy, beta.npdr.sex)) %>%
+  ggplot(aes(x = nlog10.sex.genes, y = score)) + 
+  facet_wrap(~ method, scales = 'free_y') +
+  geom_hline(npdr_spec, color = cbbPalette[1],
+             mapping = aes(yintercept = y), linetype = 2) + 
+  geom_text(npdr_spec, color = cbbPalette[1],
+            mapping = aes(x = 40, y = y + 0.4, label = label)) +
+  geom_point(shape = 21, size = 2.5, fill = alpha("grey", 0.5), color = alpha("grey", 0.3)) + 
+  labs(x = bquote(''~-log[10]~'p'['sex']),
+       y = bquote('Importance score'),
+       fill = bquote(''~-log[10]~'p'['sex'])) +
+  viridis::scale_fill_viridis(option = 'B', direction = -1) + 
+  theme_bw() + 
+  theme(legend.position = c(0.92, 0.25), 
+        legend.key.width = unit(0.8, "line"),
+        legend.key.height = unit(1, "line"),
+        legend.text = element_text(size = 8),
+        legend.title = element_text(size = 8)) 
 ```
+
+
+
+
 
 
 
