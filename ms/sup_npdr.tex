@@ -26,16 +26,16 @@ University of Pennsylvania, Philadelphia, PA 19104}
 \label{fig:npdr_stir}
 \end{figure}
 
-\begin{figure}[h]%figure2
-\centerline{\includegraphics[]{../figs/npdr_relief_auroc.pdf}}
-\caption{Receiver Operating Characteristics (ROC) curves for Relief-F and NPDR for simualted case-control data with interactions (left) and RRelief and NPDR for simulated continuous outcome data with main effects (right). Simulation uses $m = 200$ samples and $p = 1000$ attributes with 100 functional. }
-\label{fig:auROC}
-\end{figure}
-
 \begin{figure}[h]%figure3
 \centerline{\includegraphics[]{../figs/pr_compare_100.pdf}}
-\caption{NPDR and Relief comparison of area under the PRC for 100 replicate simulations of case-control (left) and continuous (right) data. All simulations use $m = 200$ samples and $p = 1000$ attributes with 100 functional. NPDR yields significantly higher auPRC.}
+\caption{\textbf{Relief, NPDR and random forest comparison of area under the PRC (auPRC)} for 100 replicate simulations of continuous outcome data with main effect (left) and dichotomous outcome data with interaction effect (right). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional. NPDR yields significantly higher auPRC in both simulation types.}
 \label{fig:auPRC}
+\end{figure}
+
+\begin{figure}[h]%figure2
+\centerline{\includegraphics[]{../figs/roc_compare_100.pdf}}
+\caption{Receiver Operating Characteristics (ROC) curves of Relief, NPDR and random forest in one replicate simulation (A) and comparison of their area under the ROC (auROC) for 100 replicate simulations (B) of continuous outcome data with main effect (left) and dichotomous outcome data with interaction effect (right). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}
+\label{fig:auROC}
 \end{figure}
 
 % \begin{figure}[h]%figure
@@ -48,7 +48,7 @@ University of Pennsylvania, Philadelphia, PA 19104}
 \begin{figure}[!tpb]%figure2
 \centerline{\includegraphics[]{../figs/mostafavi_npdr_rf_mdd.pdf}}
 \caption{{\bf NPDR vs random forest feature importance.}
-Gene scatter plot of importance score for association with major depressive disorder using random forest and NPDR with correction for sex. Most genes highly associated with sex are removed by adjustment in NPDR (above horizontal dashed line). Many genes with high random forest importance score also have high association with sex (dark genes). Top 50 genes with strongest association with sex are labeled.}
+Gene scatter plot of importance score for association with major depressive disorder using random forest and NPDR with correction for sex. Most genes highly associated with sex are removed by adjustment in NPDR (above horizontal dashed line). Many genes with high random forest importance score also have high association with sex (dark genes). Top 50 genes with strongest association with sex are labeled. Alternatively, the \texttt{ranger} \texttt{R} package allows the option of forcing the inclusion of covariates (e.g., sex) in the model in addition to a set number of random variables selected prior to node splitting. However, when the forced covariate is associated with the outcome (potential confounding), the covariate has very high importance at the cost of diminished importance of other variables. In the case of the current real RNASeq data analysis of MDD, when we utilized this option in \texttt{ranger}, the covariate ``sex" is more than 20 times more important than the next most important attribute (ZNF845). To summarize, the effect of forced inclusion of a particular covariate at node splitting on the entire algorithm is unclear. More specific studies with simulations of covariates will prove useful in determining the effect of this implementation on the final result.}
 \label{fig:mostafavi_npdr_rf_mdd}
 \end{figure}
 
