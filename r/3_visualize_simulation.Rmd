@@ -26,14 +26,16 @@ Require run `1_npdr_cc.Rmd`, `1_npdr_qtrait.Rmd`.
 
 ```{r}
 alpha <- 0.05
+n.variables <- 1000
+pct.signals <- 0.1
 true.pos <- test_df_qtrait %>%
   filter((pval.adj < alpha) & functional) %>%
   nrow()
 n.pos <- test_df_qtrait %>%
   filter((pval.adj < alpha)) %>%
   nrow()
-(npdr.recall <- true.pos/(n.variables*pct.signals))
-(npdr.precis <- true.pos/n.pos)
+(npdr.recall.qtrait <- true.pos/(n.variables*pct.signals))
+(npdr.precis.qtrait <- true.pos/n.pos)
 
 alpha <- 0.05
 true.pos <- test_df_cc %>%
@@ -42,8 +44,8 @@ true.pos <- test_df_cc %>%
 n.pos <- test_df_cc %>%
   filter((pval.adj < alpha)) %>%
   nrow()
-(npdr.recall <- true.pos/(n.variables*pct.signals))
-(npdr.precis <- true.pos/n.pos)
+(npdr.recall.cc <- true.pos/(n.variables*pct.signals))
+(npdr.precis.cc <- true.pos/n.pos)
 ```
 
 
@@ -155,7 +157,13 @@ rf_text <- data.frame(
   sim = c('Continuous outcome', 'Dichotomous outcome'),
   x = c( 0.3, 0.65), y = c(0.2, 0.2), type = c('Random forest', 'Random forest')
 )
-colors <- viridis::viridis(n = 8)
+
+cutoff_point <- data.frame(
+  sim = c('Continuous outcome', 'Dichotomous outcome'),
+  x = c(npdr.recall.qtrait, npdr.recall.cc), y = c(npdr.precis.qtrait, npdr.precis.cc), 
+  type = c('NPDR', 'NPDR')
+)
+
 pr <- rbind(pr_qtrait, pr_cc) %>% #data.frame() %>%
   mutate(sim = c(rep('Continuous outcome', nrow(pr_qtrait)), rep('Dichotomous outcome', nrow(pr_cc)))) %>%
   ggplot(aes(Recall, Precision, color = type)) +
@@ -167,6 +175,7 @@ pr <- rbind(pr_qtrait, pr_cc) %>% #data.frame() %>%
   geom_text(rf_text, mapping = aes(x = x, y = y, label = label), size = 3) +
   geom_text(npdr_text, mapping = aes(x = x, y = y, label = label), size = 3) +
   geom_text(relief_text, mapping = aes(x = x, y = y, label = label), size = 3) + 
+  geom_point(cutoff_point, mapping = aes(x = x, y = y), shape = 8, size = 2, stroke = 1) +
   guides(color = FALSE)
 pr
 
