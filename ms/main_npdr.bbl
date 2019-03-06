@@ -169,14 +169,6 @@ Daniel~J. Buysse, Charles~F. Reynolds, Timothy~H. Monk, Susan~R. Berman, and
   practice and research.
 \newblock {\em Psychiatry Research}, 28(2):193 -- 213, 1989.
 
-\bibitem{lopes2010human}
-Alexandra~M Lopes, Ricardo~N Miguel, Carole~A Sargent, Peter~J Ellis,
-  Ant{\'o}nio Amorim, and Nabeel~A Affara.
-\newblock The human rps4 paralogue on yq11. 223 encodes a structurally
-  conserved ribosomal protein and is preferentially expressed during
-  spermatogenesis.
-\newblock {\em BMC molecular biology}, 11(1):33, 2010.
-
 \bibitem{mckinney2009capturing}
 Brett~A McKinney, James~E Crowe~Jr, Jingyu Guo, and Dehua Tian.
 \newblock Capturing the spectrum of interaction effects in genetic association
@@ -189,6 +181,14 @@ Stacey~J Winham, Colin~L Colby, Robert~R Freimuth, Xin Wang, Mariza De~Andrade,
 \newblock Snp interaction detection with random forests in high-dimensional
   genetic data.
 \newblock {\em BMC bioinformatics}, 13(1):164, 2012.
+
+\bibitem{lopes2010human}
+Alexandra~M Lopes, Ricardo~N Miguel, Carole~A Sargent, Peter~J Ellis,
+  Ant{\'o}nio Amorim, and Nabeel~A Affara.
+\newblock The human rps4 paralogue on yq11. 223 encodes a structurally
+  conserved ribosomal protein and is preferentially expressed during
+  spermatogenesis.
+\newblock {\em BMC molecular biology}, 11(1):33, 2010.
 
 \bibitem{shimada2010}
 Mihoko Shimada, Taku Miyagawa, Minae Kawashima, Susumu Tanaka, Yutaka Honda,
