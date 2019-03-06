@@ -99,7 +99,7 @@ cutoff_text <- data.frame(
   label = rep('NPDR cutoff', 2), method = qtrait_methods,
   x = c(0.24, 18), y = c(npdr.beta.cutoff.qtrait + 4, npdr.beta.cutoff.qtrait + 4))
 r2_text <- data.frame(
-  label = c(deparse(bquote(R^2 == .(r2_qtrait))), deparse(bquote(R^2 == .(r2_rf_qtrait)))),
+  label = c(deparse(bquote(r == .(r2_qtrait))), deparse(bquote(r == .(r2_rf_qtrait)))),
   method = qtrait_methods, x = c(0.25, 19), y = c(80, 80))
 qtrait_plot <- ggplot(qtrait_r, aes(x = imp_score, y = beta.Z.att)) + 
   labs(x = NULL, title = 'Continuous outcome data with main effect', 
@@ -112,7 +112,7 @@ cutoff_text <- data.frame(
   label = rep('NPDR cutoff', 2), method = cc_methods,
   x = c( 0.06, 3.7), y = c(npdr.beta.cutoff.cc + 1.25, npdr.beta.cutoff.cc + 1.25))
 r2_text <- data.frame(
-  label = c(deparse(bquote(R^2 == .(r2_cc))), deparse(bquote(R^2 == .(r2_rf_cc)))),
+  label = c(deparse(bquote(r == .(r2_cc))), deparse(bquote(r == .(r2_rf_cc)))),
   method = cc_methods, x = c(0.062, 4) , y = c(24, 24))
 cc_plot <- ggplot(cc_r, aes(x = imp_score, y = beta.Z.att)) + 
   labs(x = NULL, title = 'Dichotomous outcome data with interaction effect', 
@@ -194,7 +194,7 @@ p <- ggplot(npdr_stir, aes(x=stir.log10,y=npdr.log10)) +
        x = bquote('STIR ('~-log[10]~'p'~')'), 
        y = bquote('NPDR ('~-log[10]~'p'~')'),
        title = NULL) + 
-  annotate("text", x = 130, y = 130, label = deparse(bquote(R^2 > 0.99)), parse = T) +
+  annotate("text", x = 130, y = 130, label = deparse(bquote(r > 0.99)), parse = T) +
   scale_color_manual(values = cbbPalette[c(1,2)],
                      labels = c('Non-functional', 'Functional')) +
   geom_vline(xintercept=pcutoff, linetype='dashed', alpha = 0.5) +
