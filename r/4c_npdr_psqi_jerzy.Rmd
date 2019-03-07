@@ -109,6 +109,9 @@ psqi_box <- ggplot(covs.short, aes(x = Diag, y = psqi_score, fill = Diag)) +
   scale_y_continuous(limits = c(0, 20)) +
   theme_bw() + labs(x = NULL, y = 'PSQI') +
   guides(fill = F) +
+  ggsignif::geom_signif(
+    comparisons = list(c('HC', 'MDD')),
+    map_signif_level = TRUE, y_position = 19, vjust = 0.5, tip_length = 0) +
   viridis::scale_fill_viridis(discrete = T) 
 
 psqi_hist <- ggplot(covs.short, aes(x = psqi_score, fill = Diag)) + 
