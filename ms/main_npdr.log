@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  7 MAR 2019 09:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  7 MAR 2019 15:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -772,13 +772,13 @@ File: ../figs/fig1.pdf Graphic file (type pdf)
 <use ../figs/fig1.pdf>
 Package pdftex.def Info: ../figs/fig1.pdf  used on input line 490.
 (pdftex.def)             Requested size: 303.53514pt x 348.41716pt.
-<../figs/fig2_pr_plots.pdf, id=236, 418.56375pt x 230.8625pt>
+<../figs/fig2_pr_plots.pdf, id=236, 418.56375pt x 461.725pt>
 File: ../figs/fig2_pr_plots.pdf Graphic file (type pdf)
 <use ../figs/fig2_pr_plots.pdf>
 Package pdftex.def Info: ../figs/fig2_pr_plots.pdf  used on input line 496.
-(pdftex.def)             Requested size: 379.4175pt x 209.26793pt.
+(pdftex.def)             Requested size: 379.4175pt x 418.53589pt.
  [9] [10 <../figs/fig1.pdf>] [11 <../figs/fig2_pr_plots.pdf>]
-<../figs/mostafavi_npdrs_mdd.pdf, id=287, 433.62pt x 325.215pt>
+<../figs/mostafavi_npdrs_mdd.pdf, id=294, 433.62pt x 325.215pt>
 File: ../figs/mostafavi_npdrs_mdd.pdf Graphic file (type pdf)
 <use ../figs/mostafavi_npdrs_mdd.pdf>
 Package pdftex.def Info: ../figs/mostafavi_npdrs_mdd.pdf  used on input line 55
@@ -809,10 +809,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 576--626
 
  []
 
-[12 <../figs/mostafavi_npdrs_mdd.pdf>] [13] [14] (./main_npdr.bbl [15] [16]
-[17])
+[12] [13 <../figs/mostafavi_npdrs_mdd.pdf>] [14] [15] (./main_npdr.bbl [16]
+[17] [18])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 690.
- [18]
+ [19]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 690.
  (./main_npdr.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 690.
@@ -821,9 +821,9 @@ Package rerunfilecheck Info: File `main_npdr.out' has not changed.
 (rerunfilecheck)             Checksum: 719288089E1BE54C13E9754803E5DFE4;1748.
  ) 
 Here is how much of TeX's memory you used:
- 12856 strings out of 492649
- 192502 string characters out of 6129622
- 349828 words of memory out of 5000000
+ 12857 strings out of 492649
+ 192509 string characters out of 6129622
+ 354941 words of memory out of 5000000
  15962 multiletter control sequences out of 15000+600000
  78288 words of font info for 396 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -846,10 +846,10 @@ exmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2018/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2018/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2018/texmf-
 dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on main_npdr.pdf (18 pages, 611754 bytes).
+Output written on main_npdr.pdf (19 pages, 648739 bytes).
 PDF statistics:
- 452 PDF objects out of 1000 (max. 8388607)
- 401 compressed objects within 5 object streams
- 106 named destinations out of 1000 (max. 500000)
+ 464 PDF objects out of 1000 (max. 8388607)
+ 412 compressed objects within 5 object streams
+ 107 named destinations out of 1000 (max. 500000)
  65716 words of extra memory for PDF output out of 74296 (max. 10000000)
 
