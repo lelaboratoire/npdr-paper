@@ -286,18 +286,21 @@ roc_100 <- ggplot(roc_df, aes(x = newtype, y = aupr, color = newtype)) +
   scale_y_continuous(breaks = seq(0, 1, 0.1), 
                      minor_breaks = seq(0.65, 1, 0.1),
                      labels = scales::percent_format(accuracy = 1),
-                     limits = c(NA, 1.08)) + 
+                     limits = c(NA, 1.05)) + 
   scale_color_manual(values = cbbPalette[c(3, 6, 8)]) +
   scale_fill_manual(values = cbbPalette[c(3, 6, 8)]) +
-  ggsignif::geom_signif(comparisons = list(c('Random forest', 'NPDR')), 
-              map_signif_level=TRUE, y_position = 1.06, vjust = 0.5, tip_length = 0) +
-  ggsignif::geom_signif(comparisons = list(c('Relief', 'NPDR')), 
-              map_signif_level=TRUE, y_position = 1.02, vjust = 0.5, tip_length = 0) +
+  ggsignif::geom_signif(
+  comparisons = list(c('Random forest', 'NPDR'), c('Relief', 'NPDR')),
+  map_signif_level = TRUE, y_position = c(1.045, 1.02), vjust = 0.5, tip_length = 0) +
+  # ggsignif::geom_signif(comparisons = list(c('Random forest', 'NPDR')), 
+  #             map_signif_level=TRUE, y_position = 1.06, vjust = 0.5, tip_length = 0) +
+  # ggsignif::geom_signif(comparisons = list(c('Relief', 'NPDR')), 
+  #             map_signif_level=TRUE, y_position = 1.02, vjust = 0.5, tip_length = 0) +
   theme_bw() + guides(fill = F, color = F)
 roc_100
 rocs <- plot_grid(roc, roc_100, nrow = 2, labels = 'AUTO')
 rocs
 
-ggsave(rocs, filename = paste0('figs/roc_compare_100.pdf'), height = 6.2, width = 5)
+ggsave(rocs, filename = paste0('figs/roc_compare_100.pdf'), height = 6.24, width = 5)
 ```
 
