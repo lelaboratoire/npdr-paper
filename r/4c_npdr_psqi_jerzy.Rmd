@@ -104,15 +104,15 @@ dim(filtered.jerzy.df)
 
 ```{r}
 psqi_box <- ggplot(covs.short, aes(x = Diag, y = psqi_score, fill = Diag)) + 
-  geom_boxplot(width = 0.5, alpha = 0.8, outlier.shape = NA) + 
+  geom_boxplot(width = 0.5, alpha = 0.7, outlier.shape = NA) + 
   geom_jitter(height = 0, width = 0.1, alpha = 0.5) +
   scale_y_continuous(limits = c(0, 20)) +
   theme_bw() + labs(x = NULL, y = 'PSQI') +
   guides(fill = F) +
   viridis::scale_fill_viridis(discrete = T) 
 
-psqi_hist <- ggplot(covs.short, aes(x = psqi_score, color = Diag, fill = Diag)) + 
-  geom_histogram(binwidth = 1, alpha = 0.8, position="identity") +
+psqi_hist <- ggplot(covs.short, aes(x = psqi_score, fill = Diag)) + 
+  geom_histogram(binwidth = 1, alpha = 0.7, position="identity", color = 'grey20') +
   viridis::scale_color_viridis(discrete = T) +
   viridis::scale_fill_viridis(discrete = T) +
   scale_y_continuous(limits = c(0, 20)) +
