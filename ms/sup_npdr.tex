@@ -20,13 +20,9 @@ University of Pennsylvania, Philadelphia, PA 19104}
 \newpage
 % \section{Performance comparison between NPDR and Relief-F}
 
-\begin{figure}[h]%figure1
-\centerline{\includegraphics[]{../figs/npdr_stir_p_cc.pdf}}
-\caption{Similarity between NPDR and STIR for one simulation of $m = 200$ samples and $p = 1000$ attributes. In 100 replications, $R^2$ ranges from 0.9827 to 0.9994. STIR is based on a t-test of projected distances and NPDR is based on a logistic regression of projected distances.}
-\label{fig:npdr_stir}
-\end{figure}
 
-\begin{figure}[h]%figure3
+
+\begin{figure}[h]%figure1
 \centerline{\includegraphics[]{../figs/pr_compare_100.pdf}}
 \caption{\textbf{Relief, NPDR and random forest comparison of area under the PRC (auPRC)} for 100 replicate simulations of continuous outcome data with main effect (left) and dichotomous outcome data with interaction effect (right). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional. NPDR yields significantly higher auPRC in both simulation types.}
 \label{fig:auPRC}
@@ -34,8 +30,14 @@ University of Pennsylvania, Philadelphia, PA 19104}
 
 \begin{figure}[h]%figure2
 \centerline{\includegraphics[]{../figs/roc_compare_100.pdf}}
-\caption{Receiver Operating Characteristics (ROC) curves of Relief, NPDR and random forest in one replicate simulation (A) and comparison of their area under the ROC (auROC) for 100 replicate simulations (B) of continuous outcome data with main effect (left) and dichotomous outcome data with interaction effect (right). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}
+\caption{\textbf{Receiver Operating Characteristics (ROC) curves of Relief, NPDR and random forest} in one replicate simulation (A) and comparison of their area under the ROC (auROC) for 100 replicate simulations (B) of continuous outcome data with main effect (left) and dichotomous outcome data with interaction effect (right). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}
 \label{fig:auROC}
+\end{figure}
+
+\begin{figure}[h]%figure3
+\centerline{\includegraphics[]{../figs/npdr_stir_p_cc.pdf}}
+\caption{\textbf{Similarity between NPDR and STIR} for one simulation of $m = 200$ samples and $p = 1000$ attributes. In 100 replications, correlation of the P values produced by the two methods $r$ ranges from 0.9827 to 0.9994. STIR is based on a t-test of projected distances and NPDR is based on a logistic regression of projected distances.}
+\label{fig:npdr_stir}
 \end{figure}
 
 % \begin{figure}[h]%figure
@@ -53,18 +55,19 @@ University of Pennsylvania, Philadelphia, PA 19104}
 % \end{figure}
 
 \begin{figure}[h]%figure
-\centerline{\includegraphics[]{../figs/jerzy_npdrs_mdd.pdf}}
-\caption{NPDR with and without sex adjustment for analysis of MDD-associated genes in Le et al.'s RNASeq dataset \cite{le18}. Adjustment for the sex covariate has a negligible effect on the resulting P values for each important gene because of the balanced study design. Both methods yield consistent results with STIR from previous study (Fig. 4 of Ref. \cite{stir}), not shown.}
-\label{fig:jerzy_npdrs_mdd}
-\end{figure}
-
-\begin{figure}[h]%figure
 \centerline{\includegraphics[]{../figs/psqi_plots.pdf}}
-\caption{The distribution of the Pittsburgh Sleep Quality Index (PSQI) among individuals with and without MDD in Le et al.'s RNASeq dataset \cite{le18}.}
+\caption{\textbf{The distribution of the Pittsburgh Sleep Quality Index (PSQI)} among individuals with and without MDD in Le et al.'s RNASeq dataset \cite{le18}.}
 \label{fig:psqi_plots}
 \end{figure}
 
 
+\begin{figure}[h]%figure
+\centerline{\includegraphics[]{../figs/jerzy_npdrs_mdd.pdf}}
+\caption{\textbf{NPDR with and without sex adjustment for analysis of MDD-associated genes} in Le et al.'s RNASeq dataset \cite{le18}. Adjustment for the sex covariate has a negligible effect on the resulting P values for each important gene because of the balanced study design. Both methods yield consistent results with STIR from previous study (Fig. 4 of Ref. \cite{stir}), not shown.}
+\label{fig:jerzy_npdrs_mdd}
+\end{figure}
+
+\clearpage
 \bibliographystyle{unsrt}
 \bibliography{NPDR_refs}   % name of bib file
 
