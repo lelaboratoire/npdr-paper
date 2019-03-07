@@ -494,7 +494,7 @@ All P values were adjusted with the Bonferroni procedure.
 
 \begin{figure}[!tbp]
 \centerline{\includegraphics[trim = 0 0 0 0]{../figs/fig2_pr_plots.pdf}}
-\caption{{\bf Area under the precision-recall curve (auPRC) of NPDR, random forest and Relief-based importance scores} for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right). Results for one replicate simulation ($m = 200$ samples and $p = 1,000$ attributes with 100 functional). The stars $\ast$ indicate the NPDR cutoffs.}
+\caption{{\bf Area under the precision-recall curve (auPRC) of NPDR, random forest and Relief-based importance scores} for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right) for one replicate simulation (A) and 100 replicate simulations (B). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional. The stars $\ast$ indicate the NPDR cutoffs. NPDR yields significantly higher auPRC in both simulation types.}
 \label{fig:pr_curve}
 \end{figure}
 
@@ -512,10 +512,10 @@ However, when a vertical cutoff is drawn for Relief-based or random forest impor
 To explain this underwhelming performance, we recall that random forest underestimates the importance of interacting attributes as the attribute dimensionality becomes too large \cite{mckinney2009capturing,winham2012snp}.
 
 Meanwhile, there is a clearer separation between the functional and non-functional attributes on the NPDR importance metric.
-This improved feature selection performance of NPDR is better illustrated with the precision-recall curves (Fig \ref{fig:pr_curve}).
+This improved feature selection performance of NPDR is better illustrated with the precision-recall curves (Fig \ref{fig:pr_curve}A).
 For both datasets with different outcome and effect types, NPDR yields the highest auPRC compared to random forest and Relief-based methods.
 The auPRC of these methods in the interaction effect simulations are more than main effect simulations, which is due to differences in the simulated effect size.
-Across 100 replicated simulations for each data type, NPDR shows significantly higher auPRC than random forest and Relief (both P < 0.0001, see Supplementary Fig S1).
+Across 100 replicated simulations for each data type, NPDR shows significantly higher auPRC than random forest and Relief (both P < 0.0001, Fig \ref{fig:pr_curve}B).
 %Because of the structural difference between simulation of main and interaction effect, it is not trivial to [...].
 %Therefore, we aim to simulate similar correlation between NPDR and Relief-F importance score as in the case of binary outcome data with interaction effect (Fig. \ref{fig:npdr_relief}C).
 % Because Relief-based methods do not have a statistical threshold, we use the auPRC for comparison, which shows the improved feature selection performance of using a distance regression-based attribute score in NPDR compared to the standard RRelief and random forest importance score (Fig \ref{fig:pr_curve}).
@@ -524,14 +524,14 @@ Across 100 replicated simulations for each data type, NPDR shows significantly h
 % The precision-recall curve clearly demonstrates NPDR outperforms Relief-F in this particular simulated dataset (Fig \ref{fig:pr_curve}), and across 100 simulations of moderate effect size, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S2).
 % While the importance scores from NPDR and Relief-F are correlated ($r = 0.869$), [any RRelief threshold (vertical line in A) will yield an equal or greater false positive rate than NDPR. ]
 Expectedly, when the effect size increases, the auPRC values of all methods approach 100\% and become closer together.
-Moreover, even though area under the Receiver Operating Characteristics curve (auROC) is not our primary metric, NPDR also gives significantly higher auROC than random forest and Relief (both P < 0.0001, see Supplementary Fig S2).
+Moreover, even though area under the Receiver Operating Characteristics curve (auROC) is not our primary metric, NPDR also gives significantly higher auROC than random forest and Relief (both P < 0.0001, see Supplementary Fig S1).
 In summary, as the effect size varies, NPDR produces distance regression-based importance scores at least as good as if not better than random forest and Relief-based method.
 % For dichotomous outcome data with network interaction effects, we use the logistic model (Eq.~\ref{eq:logit_nocovar}) in NPDR and compare the regression coefficients with Relief-F weights in CORElearn and random forest permutation importance score (Fig \ref{fig:npdr_relief}B).
 % We again use the fixed-$k$ neighborhood for both methods to approximate a multiSURF neighborhood.
 
 We also compare NPDR (based on logistic regression) and STIR (based on a t-test) for the dichotomous outcome data with interaction effects.
 %Across 100 simulations with specified effect size, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S3). 
-While logistic regression and the t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yield highly correlated scores for dichotomous data with interaction effects, where the correlation value $r$ between the P values produced from the two methods ranges from 0.9827 to 0.9994 in 100 replications (Supplementary Fig S3). 
+While logistic regression and the t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yield highly correlated scores for dichotomous data with interaction effects, where the correlation value $r$ between the P values produced from the two methods ranges from 0.9827 to 0.9994 in 100 replications (Supplementary Fig S2). 
 
 For a dataset of the size simulated in our study ($m=200$ samples and $p=1000$ attributes), on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM, NPDR has a 24-second and 3-second runtime for binary and continuous outcome data, respectively.
 
@@ -628,12 +628,12 @@ CHKA     & Choline kinase alpha                                       & 4.33    
 \end{table}
 
 The Pittsburgh Sleep Quality Index (PSQI) measures the quality and patterns of sleep over a one-month interval, where low PSQI indicates high sleep quality.
-Patients with MDD on average have significantly higher PSQI (9.7) compared to healthy participants (5.0) (P < 0.0001, see Supplementary Fig S4).
+Patients with MDD on average have significantly higher PSQI (9.7) compared to healthy participants (5.0) (P < 0.0001, see Supplementary Fig S3).
 NPDR identifies 24 genes significantly associated with PSQI (Table \ref{tab:psqi}).
 Among these genes, CACNA1C has been found to be associated with narcolepsy \cite{shimada2010}, and its genetic variation has been linked to increase risk for sleep latency in infants \cite{kantojarvi2017} and psychiatric disorders, including bipolar disorder \cite{franke2010}, schizophrenia, recurrent major depression \cite{green2009} and across psychiatric disorders \cite{crossdisorder2013, lotan2014}.
 Further characterization of the interactions among these genes will prove useful in establishing an sleep-associated expression-epistasis network \cite{lareau15, mckinney2009capturing}.
 
-Notably, when depression status instead of sleep quality is considered, NPDR with and without sex adjustment produced results that are consistent with previously published results using the STIR algorithm (Supplementary Fig S5) \cite{stir}.
+Notably, when depression status instead of sleep quality is considered, NPDR with and without sex adjustment produced results that are consistent with previously published results using the STIR algorithm (Supplementary Fig S4) \cite{stir}.
 We expected this consistency because of the balance in sex between diagnostic groups was designed to reduce confounding.
 The NPDR runtime was 99 seconds (on desktop with an Intel Xeon W-2104 CPU and 32GB of RAM).
 
@@ -650,7 +650,7 @@ Rather, NPDR simply performs a regression between the outcome and attribute proj
 Moreover, we introduced a regularized NPDR that adds another layer of multivariate modeling to an already multi-dimensional nearest-neighbor method to shrink correlated projected attribute differences.  
 
 The regression formalism of NPDR is a novel way to perform RRelief by defining the attribute importance as the standardized regression coefficient between the projected attribute differences and the numeric outcome differences between neighbors.
-For linear regression, NPDR shares some similarity with the original RRelief algorithm because the regression coefficient is related to the correlation coefficient.
+For linear regression, NPDR shares some similarity with the original RRelief algorithm because the standardized regression coefficient is related to the correlation coefficient.
 The RRelief importance score is a weighted correlation between attribute and outcome differences, while the NPDR regression coefficient is a covariance between attribute and outcome differences divided by the variance in the outcome.
 We showed that the NPDR regression coefficient is a better attribute estimator than RRelief and the NPDR models may include correction terms for covariates that may be confounding and other sources of variation. 
 
