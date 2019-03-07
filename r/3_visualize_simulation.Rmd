@@ -57,7 +57,7 @@ Set theme:
 plot_r2 <- function(x){
   x + geom_smooth(method = "lm", se = F, color = 'grey') + 
   facet_wrap(~ method, scale = 'free_x', strip.position = 'bottom') +
-  geom_point(aes(colour = functional), alpha = 0.7, size = 2) +
+  geom_point(aes(colour = functional), fill = NA, size = 2, shape = 21) +
   scale_x_continuous(breaks = scales::pretty_breaks(4)) + 
   theme_bw() + 
   theme(plot.title = element_text(hjust = 0.5, size = 12),
@@ -71,7 +71,7 @@ plot_r2 <- function(x){
       legend.text = element_text(size = 8),
       legend.title = element_text(size = 8),
       legend.margin = margin(c(1,1,1,1))) +
-  scale_color_manual(values = cbbPalette[c(1,2)], labels = c('Non-functional', 'Functional')) +
+  scale_color_manual(values = cbbPalette[c(1,7)], labels = c('Non-functional', 'Functional')) +
   geom_text(cutoff_text, mapping = aes(x = x, y = y, label = label) , size = 3, color = cbbPalette[1]) + 
   geom_text(r2_text, mapping = aes(x = x, y = y, label = label), size = 3, parse = T)
 }
@@ -101,7 +101,7 @@ cutoff_text <- data.frame(
 r2_text <- data.frame(
   label = c(deparse(bquote(r == .(r2_qtrait))), deparse(bquote(r == .(r2_rf_qtrait)))),
   method = qtrait_methods, x = c(0.25, 19), y = c(80, 80))
-qtrait_plot <- ggplot(qtrait_r, aes(x = imp_score, y = beta.Z.att)) + 
+qtrait_plot <- ggplot(qtrait_r %>% arrange(functional), aes(x = imp_score, y = beta.Z.att)) + 
   labs(x = NULL, title = 'Continuous outcome data with main effect', 
        y = bquote('NPDR linear'~beta), color = NULL) +
   geom_hline(yintercept = npdr.beta.cutoff.qtrait, linetype='dashed', alpha = 0.5)
@@ -114,7 +114,7 @@ cutoff_text <- data.frame(
 r2_text <- data.frame(
   label = c(deparse(bquote(r == .(r2_cc))), deparse(bquote(r == .(r2_rf_cc)))),
   method = cc_methods, x = c(0.062, 4) , y = c(24, 24))
-cc_plot <- ggplot(cc_r, aes(x = imp_score, y = beta.Z.att)) + 
+cc_plot <- ggplot(cc_r %>% arrange(functional), aes(x = imp_score, y = beta.Z.att)) + 
   labs(x = NULL, title = 'Dichotomous outcome data with interaction effect', 
        y = bquote('NPDR logistic'~beta), color = NULL) +
   geom_hline(yintercept=npdr.beta.cutoff.qtrait, linetype='dashed', alpha = 0.5)
@@ -290,12 +290,8 @@ roc_100 <- ggplot(roc_df, aes(x = newtype, y = aupr, color = newtype)) +
   scale_color_manual(values = cbbPalette[c(3, 6, 8)]) +
   scale_fill_manual(values = cbbPalette[c(3, 6, 8)]) +
   ggsignif::geom_signif(
-  comparisons = list(c('Random forest', 'NPDR'), c('Relief', 'NPDR')),
-  map_signif_level = TRUE, y_position = c(1.045, 1.02), vjust = 0.5, tip_length = 0) +
-  # ggsignif::geom_signif(comparisons = list(c('Random forest', 'NPDR')), 
-  #             map_signif_level=TRUE, y_position = 1.06, vjust = 0.5, tip_length = 0) +
-  # ggsignif::geom_signif(comparisons = list(c('Relief', 'NPDR')), 
-  #             map_signif_level=TRUE, y_position = 1.02, vjust = 0.5, tip_length = 0) +
+    comparisons = list(c('Random forest', 'NPDR'), c('Relief', 'NPDR')),
+    map_signif_level = TRUE, y_position = c(1.045, 1.02), vjust = 0.5, tip_length = 0) +
   theme_bw() + guides(fill = F, color = F)
 roc_100
 rocs <- plot_grid(roc, roc_100, nrow = 2, labels = 'AUTO')
