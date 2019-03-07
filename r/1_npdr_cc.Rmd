@@ -129,8 +129,8 @@ pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>%
                         filter(functional == F) %>%
                         pull(beta.Z.att),
                       curve = T)
-pr_uni$auc.integral
-pr_npdr$auc.integral
+pr_uni$c.integral
+pr_npdr$c.integral
 
 ```
 
@@ -225,24 +225,71 @@ prr.dat <- rbind(x, y) %>%
 ```
 
 
+
+How much better is NPDR? Is this just by chance? 100 replications result show the same thing (npdr_100_cc.Rmd).
+
+
+
+
+Compare with random forest:
+
+```{r}
+cc_forest <- randomForest::randomForest(class ~ ., data = cc.data, importance = T)
+rf_imp_cc <- randomForest::importance(cc_forest) %>%
+  data.frame() %>%
+  rownames_to_column('att') %>%
+  mutate(functional = att %in% functional.cc)
+rf_npdr_cc <- merge(rf_imp_cc, npdr.cc.results, by = 'att') %>%
+  mutate(functional = att %in% functional.cc)
+r2_rf_cc <- round(cor(rf_npdr_cc$MeanDecreaseAccuracy, rf_npdr_cc$beta.Z.att), 3)
+```
+
+Draw the Precision-Recall curve:
+
+```{r}
+pr_rf_cc <- PRROC::pr.curve(scores.class0 = rf_imp_cc %>% 
+                        filter(functional == T) %>% 
+                        pull(MeanDecreaseAccuracy), 
+                      scores.class1 = rf_imp_cc %>% 
+                        filter(functional == F) %>% 
+                        pull(MeanDecreaseAccuracy), 
+                      curve = T)
+
+z <- as.data.frame(pr_rf_cc$curve) 
+colnames(z) <- paste0(c('Recall', 'Precision', 'w'))
+auprc_rf_cc <- round(pr_rf_cc$auc.integral, 3)
+
+prr_rf_cc <- rbind(x, z) %>% 
+  mutate(type = c(rep('NPDR', nrow(x)), rep('Random forest', nrow(z))))
+
+save(rf_imp_cc, auprc_rf_cc, pr_rf_cc, prr_rf_cc, rf_npdr_cc, r2_rf_cc,
+     file = 'results/rf_cc.Rdata')
+```
+
+
 What about auROC?
 
 ```{r}
 ss_npdr <- pROC::roc(test.df$functional, test.df$beta.Z.att)
 ss_relief <- pROC::roc(test.df$functional, test.df$rrelief)
-auroc_npdr_cc <- round(ss_npdr$auc, 3)
-auroc_relief_cc <- round( ss_relief$auc, 3)
+ss_rf <- pROC::roc(rf_imp_cc$functional, rf_imp_cc$MeanDecreaseAccuracy)
+auroc_npdr_cc <- ss_npdr$auc
+auroc_relief_cc <- ss_relief$auc
+auroc_rf_cc <- ss_rf$auc
 
-ss_df_cc <- data.frame(Sensitivity = c(ss_npdr$sensitivities, ss_relief$sensitivities), 
-                    Specificity = c(ss_npdr$specificities, ss_relief$specificities)) %>%
-  mutate(type = rep(c('NPDR', 'Relief'), each = length(ss_npdr$sensitivities)))
+ss_df_cc <- data.frame(Sensitivity = c(ss_npdr$sensitivities, 
+                                       ss_relief$sensitivities,
+                                       ss_rf$sensitivities), 
+                    Specificity = c(ss_npdr$specificities, 
+                                    ss_relief$specificities,
+                                    ss_rf$specificities)) %>%
+  mutate(type = c(rep('NPDR', length(ss_npdr$sensitivities)),
+                  rep('Relief', length(ss_relief$sensitivities)),
+                  rep('Random forest', length(ss_rf$sensitivities))))
 ```
 
 
-How much better is NPDR? Is this just by chance? 100 replications result show the same thing (npdr_100_cc.Rmd).
-
 ```{r}
-ss_df_cc <- ss_df
 test_df_cc <- test.df
 prr_dat_cc <- prr.dat
 
@@ -250,9 +297,7 @@ save(npdr_stir, ss_df_cc, test_df_cc, prr_dat_cc,
      auprc_npdr_cc, auprc_relief_cc, r2_cc,
      npdr.beta.cutoff.cc, ss_df_cc,
      auroc_npdr_cc, auroc_relief_cc,
-     pcutoff,
+     auroc_rf_cc, pcutoff,
      file = 'results/df_cc.Rdata')
 ```
-
-
 

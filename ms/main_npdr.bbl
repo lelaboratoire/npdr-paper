@@ -40,7 +40,7 @@ Marziyeh Arabnejad, BD~Dawkins, WS~Bush, BC~White, AR~Harkness, and Brett~A
 \bibitem{stir}
 Trang~T Le, Ryan~J Urbanowicz, Jason~H Moore, and Brett~A McKinney.
 \newblock Statistical inference relief (stir) feature selection.
-\newblock {\em Bioinformatics}, page bty788, 2018.
+\newblock {\em Bioinformatics}, 2018.
 
 \bibitem{urbanowicz17b}
 Ryan~J. Urbanowicz, Melissa Meeker, William~La Cava, Randal~S. Olson, and
@@ -155,12 +155,12 @@ Sara Mostafavi, Alexis Battle, Xiaowei Zhu, James~B Potash, Myrna~M Weissman,
 \newblock {\em Molecular psychiatry}, 19(12):1267, 2014.
 
 \bibitem{le18}
-Trang~T Le, Jonathan Savitz, Hideo Suzuki, Masaya Misaki, T~Kent Teague, Bill~C
-  White, Julie~H Marino, Graham Wiley, Patrick~M Gaffney, Wayne~C Drevets,
-  Brett~A. McKinney, Jerzy Bodurka, and Brett~A McKinney.
-\newblock Identification and replication of rna-seq gene network modules
+Trang~T. Le, Jonathan Savitz, Hideo Suzuki, Masaya Misaki, T.~Kent Teague,
+  Bill~C. White, Julie~H. Marino, Graham Wiley, Patrick~M. Gaffney, Wayne~C.
+  Drevets, Brett~A. McKinney, and Jerzy Bodurka.
+\newblock Identification and replication of {RNA}-{Seq} gene network modules
   associated with depression severity.
-\newblock {\em Translational Psychiatry}, \noop{2018}in press.
+\newblock {\em Translational Psychiatry}, 8(1):180, September 2018.
 
 \bibitem{psqi}
 Daniel~J. Buysse, Charles~F. Reynolds, Timothy~H. Monk, Susan~R. Berman, and
@@ -168,14 +168,6 @@ Daniel~J. Buysse, Charles~F. Reynolds, Timothy~H. Monk, Susan~R. Berman, and
 \newblock The pittsburgh sleep quality index: A new instrument for psychiatric
   practice and research.
 \newblock {\em Psychiatry Research}, 28(2):193 -- 213, 1989.
-
-\bibitem{lopes2010human}
-Alexandra~M Lopes, Ricardo~N Miguel, Carole~A Sargent, Peter~J Ellis,
-  Ant{\'o}nio Amorim, and Nabeel~A Affara.
-\newblock The human rps4 paralogue on yq11. 223 encodes a structurally
-  conserved ribosomal protein and is preferentially expressed during
-  spermatogenesis.
-\newblock {\em BMC molecular biology}, 11(1):33, 2010.
 
 \bibitem{mckinney2009capturing}
 Brett~A McKinney, James~E Crowe~Jr, Jingyu Guo, and Dehua Tian.
@@ -189,6 +181,14 @@ Stacey~J Winham, Colin~L Colby, Robert~R Freimuth, Xin Wang, Mariza De~Andrade,
 \newblock Snp interaction detection with random forests in high-dimensional
   genetic data.
 \newblock {\em BMC bioinformatics}, 13(1):164, 2012.
+
+\bibitem{lopes2010human}
+Alexandra~M Lopes, Ricardo~N Miguel, Carole~A Sargent, Peter~J Ellis,
+  Ant{\'o}nio Amorim, and Nabeel~A Affara.
+\newblock The human rps4 paralogue on yq11. 223 encodes a structurally
+  conserved ribosomal protein and is preferentially expressed during
+  spermatogenesis.
+\newblock {\em BMC molecular biology}, 11(1):33, 2010.
 
 \bibitem{shimada2010}
 Mihoko Shimada, Taku Miyagawa, Minae Kawashima, Susumu Tanaka, Yutaka Honda,

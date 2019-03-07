@@ -32,8 +32,8 @@ pboth <- ggplot(npdr_w_wo_sex, aes(x = nlog10.nosex, y = nlog10.sex)) +
            size = 3, color = cbbPalette[1]) +
   annotate("text", -log10(0.05) - 0.2, 9.7, label = "0.05 Bonferroni", 
            size = 3, color = cbbPalette[1], angle = 90) +
-  labs(x = bquote('Vanilla NPDR ('~-log[10]~'p'[adj]~')'),
-       y = bquote('Sex-adjusted NPDR ('~-log[10]~'p'[adj]~')'),
+  labs(x = bquote('No-covariate NPDR ('~-log[10]~'p'[mdd]~')'),
+       y = bquote('Sex-adjusted NPDR ('~-log[10]~'p'[mdd]~')'),
        fill = bquote(''~-log[10]~'p'['sex'])) +
   ggrepel::geom_text_repel(aes(label = sig.genes), #check_overlap = TRUE, 
             hjust=-0.12, vjust=1.7, fontface = "italic",
@@ -53,58 +53,82 @@ ggsave(pboth, filename = 'figs/mostafavi_npdrs_mdd.pdf', width = 6, height = 4.5
 
 
 ```{r}
-rf_imp_sorted[rf_imp_sorted$att=='sex',]
-npdr_rf_df_sorted <- npdr_rf_df %>% arrange(desc(beta.npdr.sex))
-last.imp.att <- which(npdr_rf_df_sorted$p.adj.npdr.sex > 0.05)[1]-1
-npdr.beta.cutoff.cc <- npdr_rf_df_sorted[last.imp.att, 'beta.npdr.sex']
-
 npdr_rf_df <- npdr_w_wo_sex %>%
   select(att, beta.npdr.sex, nlog10.sex.genes, sig.genes, p.adj.npdr.sex, p.adj.gene.sex) %>%
   merge(rf_imp_sorted, by = 'att') %>%
-  mutate(hili = (p.adj.gene.sex < 0.001)) %>%
+  arrange(p.adj.gene.sex) %>%
+  mutate(hili = (p.adj.gene.sex < 1e-19)) %>%
   mutate(imp.genes = ifelse(hili, att, NA))
+
+# rf_imp_sorted[rf_imp_sorted$att=='sex',]
+npdr_rf_df_sorted <- npdr_rf_df %>% arrange(desc(beta.npdr.sex))
+last.imp.att <- which(npdr_rf_df_sorted$p.adj.npdr.sex > 0.05)[1]-1
+npdr.beta.cutoff.cc <- npdr_rf_df_sorted[last.imp.att, 'beta.npdr.sex']
 
 npdr_rf_df %>% filter(MeanDecreaseGini > 0.1) %>% tally()
 
 npdr_rf_df_nohili <- npdr_rf_df %>% filter(!hili)
 npdr_rf_df_hili <- npdr_rf_df %>% filter(hili)
 # x = importance
-p_npdr_rf <- ggplot(npdr_rf_df_hili, aes(x = MeanDecreaseGini, y = beta.npdr.sex)) + 
+p_npdr_rf <- ggplot(npdr_rf_df_hili, aes(x = MeanDecreaseAccuracy, y = beta.npdr.sex)) + 
   geom_hline(yintercept = npdr.beta.cutoff.cc, linetype = 2, color = cbbPalette[1]) + 
-  annotate("text", 0.22, npdr.beta.cutoff.cc + 0.4, label = "NPDR cutoff", 
+  annotate("text", 2.7, npdr.beta.cutoff.cc + 0.4, label = "NPDR cutoff", 
            size = 4, color = cbbPalette[1]) +
-  geom_point(npdr_rf_df_nohili, mapping = aes(x = MeanDecreaseGini, y = beta.npdr.sex),
+  geom_point(npdr_rf_df_nohili, mapping = aes(x = MeanDecreaseAccuracy, y = beta.npdr.sex),
              shape = 21, size = 2.5, fill = alpha("grey", 0.5), color = alpha("grey", 0.3)) +
   geom_point(shape = 21, size = 2.5,
              mapping = aes(fill = nlog10.sex.genes)) +
-  scale_x_continuous(breaks = seq(0,0.5,0.02), limits = c(0.1, 0.26)) +
+  scale_x_continuous(limits = c(-2.5, 3)) +
+  # scale_x_continuous(breaks = seq(0,0.5,0.02), limits = c(0, 0.26)) +
   scale_y_continuous(breaks = seq(-8,8,2)) +
-  labs(x = bquote('Random forest Gini importance'),
+  labs(x = bquote('Random forest permutation importance'),
        y = bquote('Sex-adjusted NPDR'~beta),
        fill = bquote(''~-log[10]~'p'['sex'])) +
   geom_text(aes(label = imp.genes), check_overlap = TRUE, 
             hjust=-0.15, vjust=1.15, fontface = "italic",
-            size = 2.5, segment.alpha = 0.3) +
+            size = 2.5) +
   viridis::scale_fill_viridis(option = 'B', direction = -1) + 
   theme_bw() + 
-  theme(legend.position = c(0.89, 0.25), 
+  theme(legend.position = c(0.92, 0.25), 
         legend.key.width = unit(0.8, "line"),
         legend.key.height = unit(1, "line"),
         legend.text = element_text(size = 8),
         legend.title = element_text(size = 8)) 
 
 p_npdr_rf
-ggsave(p_npdr_rf, filename = 'figs/mostafavi_npdr_rf_mdd.pdf', width = 6, height = 4)
-
+# ggsave(p_npdr_rf, filename = 'figs/mostafavi_npdr_rf_mdd.pdf', width = 6, height = 6)
 ```
-
 
 Random forest importance vs. nlog10.sex.genes:
+
 ```{r}
-# best_att <- head(sort(rf_imp_sorted$importance, decreasing = T), 100)
-# plot()
-ggplot(rf_imp_sorted[2:50,], aes(y = importance, x = att)) + geom_point() + geom_label(aes(label = att))
+(r2.npdr.sex <- cor(npdr_rf_df$beta.npdr.sex, npdr_rf_df$nlog10.sex.genes))
+(r2.rf.sex <- cor(npdr_rf_df$MeanDecreaseAccuracy, npdr_rf_df$nlog10.sex.genes))
+npdr_spec <- data.frame(method = 'beta.npdr.sex', y = npdr.beta.cutoff.cc, label = 'NPDR cutoff')
+npdr_rf_df %>%
+  gather('method', 'score', c(MeanDecreaseAccuracy, beta.npdr.sex)) %>%
+  ggplot(aes(x = nlog10.sex.genes, y = score)) + 
+  facet_wrap(~ method, scales = 'free_y') +
+  geom_hline(npdr_spec, color = cbbPalette[1],
+             mapping = aes(yintercept = y), linetype = 2) + 
+  geom_text(npdr_spec, color = cbbPalette[1],
+            mapping = aes(x = 40, y = y + 0.4, label = label)) +
+  geom_point(shape = 21, size = 2.5, fill = alpha("grey", 0.5), color = alpha("grey", 0.3)) + 
+  labs(x = bquote(''~-log[10]~'p'['sex']),
+       y = bquote('Importance score'),
+       fill = bquote(''~-log[10]~'p'['sex'])) +
+  viridis::scale_fill_viridis(option = 'B', direction = -1) + 
+  theme_bw() + 
+  theme(legend.position = c(0.92, 0.25), 
+        legend.key.width = unit(0.8, "line"),
+        legend.key.height = unit(1, "line"),
+        legend.text = element_text(size = 8),
+        legend.title = element_text(size = 8)) 
 ```
+
+
+
+
 
 
 
