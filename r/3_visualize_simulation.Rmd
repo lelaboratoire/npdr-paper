@@ -169,7 +169,7 @@ pr <- rbind(pr_qtrait, pr_cc) %>%
   guides(color = FALSE)
 pr
 
-ggsave(pr, filename = 'figs/fig2_pr_plots.pdf', width = 5.8, height = 3.2)
+# ggsave(pr, filename = 'figs/fig2_pr_plots.pdf', width = 5.8, height = 3.2)
 ```
 
 
@@ -224,9 +224,13 @@ pr_100 <- ggplot(pr_df, aes(x = newtype, y = aupr, color = newtype)) +
     comparisons = list(c('Random forest', 'NPDR'), c('Relief', 'NPDR')),
     map_signif_level = TRUE, y_position = c(1.06, 1.02), vjust = 0.5, tip_length = 0)
   
-pr_100
+prs <- plot_grid(pr, pr_100, nrow = 2, labels = 'AUTO')
+rocs
 
-ggsave(pr_100, filename = paste0('figs/pr_compare_100.pdf'), height = 3, width = 5)
+# ggsave(rocs, filename = paste0('figs/roc_compare_100.pdf'), height = 6.24, width = 5)
+# ggsave(pr_100, filename = paste0('figs/pr_compare_100.pdf'), height = 3, width = 5)
+ggsave(prs, filename = 'figs/fig2_pr_plots.pdf', width = 5.8, height = 6.4)
+
 ```
 
 
