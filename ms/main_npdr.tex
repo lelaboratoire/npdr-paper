@@ -652,7 +652,7 @@ Moreover, we introduced a regularized NPDR that adds another layer of multivaria
 The regression formalism of NPDR is a novel way to perform RRelief by defining the attribute importance as the standardized regression coefficient between the projected attribute differences and the numeric outcome differences between neighbors.
 For linear regression, NPDR shares some similarity with the original RRelief algorithm because the standardized regression coefficient is related to the correlation coefficient.
 The RRelief importance score is a weighted correlation between attribute and outcome differences, while the NPDR regression coefficient is a covariance between attribute and outcome differences divided by the variance in the outcome.
-We showed that the NPDR regression coefficient is a better attribute estimator than RRelief and the NPDR models may include correction terms for covariates that may be confounding and other sources of variation. 
+We showed that the NPDR standardized regression coefficient is a better attribute estimator than RRelief and the NPDR models may include correction terms for covariates that may be confounding and other sources of variation. 
 
 The original formulation of Relief focused on binary outcome data, which lends itself naturally to nearest hit (same class) and miss (opposite class) neighbors.
 As discussed above, for regression problems, the original regression Relief (RRelief) score was cast as a weighted correlation between outcome and the attribute diff~\cite{robnik03}.
