@@ -120,7 +120,6 @@ cc_plot <- ggplot(cc_r, aes(x = imp_score, y = beta.Z.att)) +
   geom_hline(yintercept=npdr.beta.cutoff.qtrait, linetype='dashed', alpha = 0.5)
 cc_plot <- plot_r2(cc_plot)
 
- 
 fig1 <- plot_grid(qtrait_plot, cc_plot, nrow = 2, labels = 'AUTO')
 ggsave(fig1, filename = 'figs/fig1.pdf', height = 5.5, width = 4.8)
 ```
@@ -137,25 +136,17 @@ pr_cc <- prr_rf_cc %>%
   filter(type != 'NPDR') %>%
   rbind(prr_dat_cc) #%>% 
 
-relief_text <- data.frame(
-  label = c(paste0('RRelief \n ', auprc_relief_qtrait), 
-            paste0('Relief-F \n', auprc_relief_cc)),
-  sim = c('Continuous outcome', 'Dichotomous outcome'),
-  x = c(0.485 , 0.28), y = c(0.7, 0.91), type = c('Relief-F', 'Relief-F')
-)
-
-npdr_text <- data.frame(
-  label = c(paste0('NPDR \n ', auprc_npdr_qtrait), 
-            paste0('NPDR \n   ', auprc_npdr_cc)),
-  sim = c('Continuous outcome', 'Dichotomous outcome'),
-  x = c(0.755, 0.815), y = c(0.45, 0.88), type = c('NPDR', 'NPDR')
-)
-
-rf_text <- data.frame(
-  label = c(paste0('Random forest \n', auprc_rf_qtrait), 
-            paste0('Random forest \n', auprc_rf_cc)),
-  sim = c('Continuous outcome', 'Dichotomous outcome'),
-  x = c( 0.3, 0.65), y = c(0.2, 0.2), type = c('Random forest', 'Random forest')
+pr_text <- data.frame(
+  label = c(
+    paste0('Random forest \n', c(round(auprc_rf_qtrait, 3), c(round(auprc_rf_cc, 3)))),
+    paste0('RRelief \n ', round(auprc_relief_qtrait, 3)),
+    paste0('Relief-F\n', round(auprc_relief_cc, 3)), 
+    paste0('NPDR\n', round(auprc_npdr_qtrait, 3)),
+    paste0('NPDR\n   ', round(auprc_npdr_cc, 3))), 
+  sim = rep(c('Continuous outcome', 'Dichotomous outcome'), 3),
+  x = c(0.3, 0.65, 0.485 , 0.28, 0.755, 0.81), 
+  y = c(0.2, 0.2, 0.7, 0.91, 0.45, 0.88), 
+  type = rep(c('Random forest', 'Relief-F', 'NPDR'), each = 2)
 )
 
 cutoff_point <- data.frame(
@@ -164,22 +155,21 @@ cutoff_point <- data.frame(
   type = c('NPDR', 'NPDR')
 )
 
-pr <- rbind(pr_qtrait, pr_cc) %>% #data.frame() %>%
-  mutate(sim = c(rep('Continuous outcome', nrow(pr_qtrait)), rep('Dichotomous outcome', nrow(pr_cc)))) %>%
+pr <- rbind(pr_qtrait, pr_cc) %>% 
+  mutate(sim = c(rep('Continuous outcome', nrow(pr_qtrait)), 
+                 rep('Dichotomous outcome', nrow(pr_cc)))) %>%
   ggplot(aes(Recall, Precision, color = type)) +
-  geom_path(size = 0.8) + theme_bw() +
-  facet_wrap(~ sim) + 
+  geom_path(size = 0.8) + theme_bw() + facet_wrap(~ sim) + 
   scale_color_manual(values = cbbPalette[c(8,3,6)]) +
   scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) +
-  geom_text(rf_text, mapping = aes(x = x, y = y, label = label), size = 3) +
-  geom_text(npdr_text, mapping = aes(x = x, y = y, label = label), size = 3) +
-  geom_text(relief_text, mapping = aes(x = x, y = y, label = label), size = 3) + 
+  geom_text(pr_text, mapping = aes(x = x, y = y, label = label), size = 3) +
   geom_point(cutoff_point, mapping = aes(x = x, y = y), shape = 8, size = 2, stroke = 1) +
+  coord_fixed(ratio = 1) +
   guides(color = FALSE)
 pr
 
-ggsave(pr, filename = 'figs/fig2_pr_plots.pdf', width = 6.2, height = 3)
+ggsave(pr, filename = 'figs/fig2_pr_plots.pdf', width = 5.8, height = 3.2)
 ```
 
 
@@ -190,13 +180,11 @@ p <- ggplot(npdr_stir, aes(x=stir.log10,y=npdr.log10)) +
   geom_smooth(method = 'lm', se = F, color = 'grey') + 
   geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
   theme_bw() + theme(legend.position = c(0.78, 0.23)) +
-  labs(colour = NULL, 
+  labs(colour = NULL, title = NULL,
        x = bquote('STIR ('~-log[10]~'p'~')'), 
-       y = bquote('NPDR ('~-log[10]~'p'~')'),
-       title = NULL) + 
+       y = bquote('NPDR ('~-log[10]~'p'~')')) + 
   annotate("text", x = 130, y = 130, label = deparse(bquote(r > 0.99)), parse = T) +
-  scale_color_manual(values = cbbPalette[c(1,2)],
-                     labels = c('Non-functional', 'Functional')) +
+  scale_color_manual(values = cbbPalette[c(1,2)], labels = c('Non-functional', 'Functional')) +
   geom_vline(xintercept=pcutoff, linetype='dashed', alpha = 0.5) +
   geom_hline(yintercept=pcutoff, linetype='dashed', alpha = 0.5)
 p
@@ -219,22 +207,23 @@ pr_df <- rbind(pr_cc_100, pr_qtrait_100) %>%
          rep('Continuous outcome', nrow(pr_qtrait_100)))) %>%
   mutate(newtype = as.factor(case_when((type %in% c('Relief-F', 'RRelief')) ~ 'Relief',
                              TRUE ~ as.character(type))))
-pr_df$newtype <- factor(pr_df$newtype, levels = c( 'Random forest', 'Relief', 'NPDR'))
+pr_df$newtype <- factor(pr_df$newtype, levels = c('Random forest', 'Relief', 'NPDR'))
 
-pr_100 <- ggplot(pr_df, aes(x = newtype, y = aupr, fill = newtype, color = newtype)) + 
-  geom_boxplot(alpha = 0.5, color = 'grey30', outlier.size = -1, width = 0.5) +
+pr_100 <- ggplot(pr_df, aes(x = newtype, y = aupr, color = newtype)) + 
+  geom_boxplot(alpha = 0.5, color = 'grey50', outlier.size = -1, width = 0.5) +
+  geom_jitter(height = 0, width = 0.15, alpha = 0.3) +
   labs(x = NULL, y = 'Area under the PR curve') + facet_wrap(~ sim) +
-  geom_jitter(height = 0, width = 0.1) +
-  scale_y_continuous(breaks = seq(0, 1, 0.2), 
-                     labels = scales::percent_format(accuracy = 1),
-                     limits = c(NA, 1.08)) + 
+  theme_bw() + guides(fill = F, color = F) +
   scale_color_manual(values = cbbPalette[c(3, 6, 8)]) +
   scale_fill_manual(values = cbbPalette[c(3, 6, 8)]) +
-  ggsignif::geom_signif(comparisons = list(c('Random forest', 'NPDR')), 
-              map_signif_level=TRUE, y_position = 1.06, vjust = 0.5, tip_length = 0) +
-  ggsignif::geom_signif(comparisons = list(c('Relief', 'NPDR')), 
-              map_signif_level=TRUE, y_position = 1.02, vjust = 0.5, tip_length = 0) +
-  theme_bw() + guides(fill = F, color = F) 
+  scale_y_continuous(
+    breaks = seq(0, 1, 0.2), minor_breaks = seq(0.5, 1, 0.2),
+    labels = scales::percent_format(accuracy = 1),
+    limits = c(NA, 1.08)) + 
+  ggsignif::geom_signif(
+    comparisons = list(c('Random forest', 'NPDR'), c('Relief', 'NPDR')),
+    map_signif_level = TRUE, y_position = c(1.06, 1.02), vjust = 0.5, tip_length = 0)
+  
 pr_100
 
 ggsave(pr_100, filename = paste0('figs/pr_compare_100.pdf'), height = 3, width = 5)
@@ -248,47 +237,28 @@ ss_df <- rbind(ss_df_cc, ss_df_qtrait) %>%
   mutate(sim = c(rep('Dichotomous outcome', nrow(ss_df_cc)),
                  rep('Continuous outcome', nrow(ss_df_qtrait))))
 
-npdr_text <- data.frame(
-  label = c(paste0('NPDR ', round(auroc_npdr_cc, 3)), 
-            paste0('NPDR\n', round(auroc_npdr_qtrait, 3))),
-  sim = c('Dichotomous outcome', 'Continuous outcome'),
-  x = c(0.85, 0.77), y = c(1.05, 1), type = c('NPDR', 'NPDR')
+pr_text <- data.frame(
+  label = c(
+    paste0('Random forest \n', c(round(auroc_rf_cc, 3), round(auroc_rf_qtrait, 3))),
+    paste0('Relief-F \n', round(auroc_relief_cc, 3)), 
+    paste0('RRelief \n', round(auroc_relief_qtrait, 3)),
+    paste0('NPDR ', round(auroc_npdr_cc, 3)), 
+    paste0('NPDR\n', round(auroc_npdr_qtrait, 3))),
+  sim = rep(c('Dichotomous outcome', 'Continuous outcome'), 3),
+  x = c(0.6, 0.33, 0.8, 0.79, 0.83, 0.77), 
+  y = c(0.63, 0.6, 0.38, 0.1, 1.05, 1), 
+  type = rep(c('Random forest', 'Relief', 'NPDR'), each = 2)
 )
-
-relief_text <- data.frame(
-  label = c(paste0('Relief-F \n', round(auroc_relief_cc, 3)), 
-            paste0('RRelief \n', round(auroc_relief_qtrait, 3))),
-  sim = c('Dichotomous outcome', 'Continuous outcome'),
-  x = c(0.8, 0.79), y = c(0.38, 0.1), type = c('Relief', 'Relief')
-)
-
-rf_text <- data.frame(
-  label = c(paste0('Random forest \n', round(auroc_rf_cc, 3)), 
-            paste0('Random forest \n', round(auroc_rf_qtrait, 3))),
-  sim = c('Dichotomous outcome', 'Continuous outcome'),
-  x = c(0.6, 0.33), y = c(0.63, 0.6), type = c('Random forest', 'Random forest')
-)
-
 
 roc <- ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +   
-  geom_path(size = 0.8) + theme_bw() + facet_wrap(~ sim) +
-  scale_color_manual(values = cbbPalette[c(8,3,6)]) +
+  geom_path(size = 0.8) + theme_bw() + facet_wrap(~ sim) + coord_fixed(ratio = 1) +
+  scale_color_manual(values = cbbPalette[c(8,3,6)]) + guides(color = FALSE) +
   scale_x_reverse(breaks = seq(1, 0, -0.2), labels = scales::percent) + 
-  scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent, limits = c(NA, 1.08)) + 
-  geom_text(npdr_text, mapping = aes(x = x, y = y, label = label), size = 3) +
-  geom_text(relief_text, mapping = aes(x = x, y = y, label = label), size = 3) +
-  geom_text(rf_text, mapping = aes(x = x, y = y, label = label), size = 3) +
-  guides(color = FALSE)
+  scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent, limits = c(NA, 1.05)) + 
+  geom_text(pr_text, mapping = aes(x = x, y = y, label = label), size = 3)
 
 roc
-
-rocs <- plot_grid(roc, roc_100, nrow = 2, labels = 'AUTO')
-rocs
-
-ggsave(rocs, filename = paste0('figs/roc_compare_100.pdf'), height = 5, width = 5)
 ```
-
-
 
 
 # Replications of auROC for Supplement:
@@ -309,11 +279,12 @@ roc_df <- rbind(roc_cc_100, roc_qtrait_100) %>%
                              TRUE ~ as.character(type))))
 roc_df$newtype <- factor(roc_df$newtype, levels = c('Random forest', 'Relief', 'NPDR'))
 
-roc_100 <- ggplot(roc_df, aes(x = newtype, y = aupr, fill = newtype, color = newtype)) + 
-  geom_boxplot(alpha = 0.5, color = 'grey30', outlier.size = -1, width = 0.5) +
+roc_100 <- ggplot(roc_df, aes(x = newtype, y = aupr, color = newtype)) + 
+  geom_boxplot(alpha = 0.5, color = 'grey50', outlier.size = -1, width = 0.5) +
+  geom_jitter(height = 0, width = 0.15, alpha = 0.3) +
   labs(x = NULL, y = 'Area under the ROC curve') + facet_wrap(~ sim) +
-  geom_jitter(height = 0, width = 0.1) +
   scale_y_continuous(breaks = seq(0, 1, 0.1), 
+                     minor_breaks = seq(0.65, 1, 0.1),
                      labels = scales::percent_format(accuracy = 1),
                      limits = c(NA, 1.08)) + 
   scale_color_manual(values = cbbPalette[c(3, 6, 8)]) +
@@ -327,6 +298,6 @@ roc_100
 rocs <- plot_grid(roc, roc_100, nrow = 2, labels = 'AUTO')
 rocs
 
-ggsave(rocs, filename = paste0('figs/roc_compare_100.pdf'), height = 5, width = 5)
+ggsave(rocs, filename = paste0('figs/roc_compare_100.pdf'), height = 6.2, width = 5)
 ```
 
