@@ -103,7 +103,7 @@ r2_text <- data.frame(
   method = qtrait_methods, x = c(0.25, 19), y = c(80, 80))
 qtrait_plot <- ggplot(qtrait_r %>% arrange(functional), aes(x = imp_score, y = beta.Z.att)) + 
   labs(x = NULL, title = 'Continuous outcome data with main effect', 
-       y = bquote('NPDR linear'~beta), color = NULL) +
+       y = bquote('NPDR linear'~beta*minute), color = NULL) +
   geom_hline(yintercept = npdr.beta.cutoff.qtrait, linetype='dashed', alpha = 0.5)
 qtrait_plot <- plot_r2(qtrait_plot)
 
@@ -116,7 +116,7 @@ r2_text <- data.frame(
   method = cc_methods, x = c(0.062, 4) , y = c(24, 24))
 cc_plot <- ggplot(cc_r %>% arrange(functional), aes(x = imp_score, y = beta.Z.att)) + 
   labs(x = NULL, title = 'Dichotomous outcome data with interaction effect', 
-       y = bquote('NPDR logistic'~beta), color = NULL) +
+       y = bquote("NPDR logistic"~beta*minute), color = NULL) +
   geom_hline(yintercept=npdr.beta.cutoff.qtrait, linetype='dashed', alpha = 0.5)
 cc_plot <- plot_r2(cc_plot)
 
