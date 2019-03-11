@@ -30,13 +30,13 @@ University of Pennsylvania, Philadelphia, PA 19104}
 
 \begin{figure}[h]%figure2
 \centerline{\includegraphics[]{../figs/roc_compare_100.pdf}}
-\caption{\textbf{Receiver Operating Characteristics (ROC) curves of Relief, NPDR and random forest} in one replicate simulation (A) and comparison of their area under the ROC (auROC) for 100 replicate simulations (B) of continuous outcome data with main effect (left) and dichotomous outcome data with interaction effect (right). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}
+\caption{\textbf{Receiver Operating Characteristic (ROC) curves for Relief, NPDR and random forest feature selection.} For one replicate simulation (A), ROCs for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right). The auROC value is given for each method. For 100 replicate simulations of both simulation types (B), NPDR yields statistically significant higher auROC than Relief or random forest (blue $\ast$$\ast$$\ast$ indicate P<.0001). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}
 \label{fig:auROC}
 \end{figure}
 
 \begin{figure}[h]%figure3
 \centerline{\includegraphics[]{../figs/npdr_stir_p_cc.pdf}}
-\caption{\textbf{Similarity between NPDR and STIR} for one simulation of $m = 200$ samples and $p = 1000$ attributes. In 100 replications, correlation of the P values produced by the two methods $r$ ranges from 0.9827 to 0.9994. STIR is based on a t-test of projected distances and NPDR is based on a logistic regression of projected distances.}
+\caption{\textbf{Similarity between NPDR and STIR (dichotomous outcomes).} Comparison of -log$_{10}$ P values for one interaction simulation of $m = 200$ (100 cases and 100 controls) and $p = 1000$ attributes with 100 functional. In 100 replicate simulations, correlation,  $r$, between the two methods ranges from 0.9827 to 0.9994. STIR is based on a t-test of projected distances and NPDR is based on a logistic regression of projected distances. NPDR has the added benefit of handling continuous outcomes and covariate correction.}
 \label{fig:npdr_stir}
 \end{figure}
 
