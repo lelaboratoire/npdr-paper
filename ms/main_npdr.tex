@@ -1,10 +1,8 @@
 \documentclass[10pt]{article}
-\usepackage[top=1in,left=1.75in,footskip=0.75in]{geometry}
 
-% amsmath and amssymb packages, useful for mathematical formulas and symbols
-\usepackage{amsmath,amssymb}
+\usepackage[top=1in,left=1.75in,footskip=0.75in]{geometry}
+\usepackage{amsmath,amssymb} % useful for mathematical formulas and symbols
 \usepackage{pifont}
-% \usepackage{titling}
 \usepackage{blindtext}
 \usepackage{tablefootnote}
 \usepackage{authblk}
@@ -12,52 +10,18 @@
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
-
-
-% \usepackage{changepage} % Use adjustwidth environment to exceed column width (see example table in text)
 \usepackage[utf8x]{inputenc} % Use Unicode characters when possible
 \usepackage{textcomp,marvosym} % textcomp package and marvosym package for additional characters
 \usepackage{cite} % cite package, to clean up citations in the main text. Do not remove.
-\usepackage{nameref,hyperref} % Use nameref to cite supporting information files (see Supporting Information section for more info)
+\usepackage{nameref,hyperref} % Use nameref to cite supporting information files
 \usepackage[right]{lineno} % line numbers
 \usepackage{microtype} % ligatures disabled
 \DisableLigatures[f]{encoding = *, family = * }
 \usepackage{epstopdf}
-
-% color can be used to apply background shading to table cells only
-\usepackage[table]{xcolor}
-
-% array package and thick rules for tables
-\usepackage{array}
-
-% bold math symbols package
-\usepackage{bm}
-
-% nice figures and captions
-\usepackage{graphicx}
-
-%\renewcommand{\arraystretch}{1.2}
-%\setlength{\tabcolsep}{12pt}
-
-% create "+" rule type for thick vertical lines
-\newcolumntype{+}{!{\vrule width 2pt}}
-
-% create \thickcline for thick horizontal lines of variable length
-% \newlength\savedwidth
-% \newcommand\thickcline[1]{%
-%   \noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
-%   \cline{#1}%
-%   \noalign{\vskip\arrayrulewidth}%
-%   \noalign{\global\arrayrulewidth\savedwidth}%
-% }
-% \thickhline command for thick horizontal lines that span the table
-% \newcommand\thickhline{\noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
-% \hline
-% \noalign{\global\arrayrulewidth\savedwidth}}
-% Remove comment for double spacing
-%\usepackage{setspace} 
-%\doublespacing
-% Text layout
+\usepackage[table]{xcolor} % color can be used to apply background shading to table cells only
+\usepackage{array} % array package and thick rules for tables
+\usepackage{bm} % bold math symbols package
+\usepackage{graphicx} % nice figures and captions
 \raggedright
 \setlength{\parindent}{0.5cm}
 \textwidth 5.25in 
@@ -67,36 +31,12 @@
 % Captions will be left justified
 \usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
 \renewcommand{\figurename}{Fig}
-
-% Use the PLoS provided BiBTeX style
-%\bibliographystyle{plos2015}
-
 % Remove brackets from numbering in List of References
 \makeatletter
 \renewcommand{\@biblabel}[1]{\quad#1.}
 \makeatother
 
-% Header and Footer with logo
-% \usepackage{lastpage,fancyhdr,graphicx}
 
-%\pagestyle{myheadings}
-% \pagestyle{fancy}
-% \fancyhf{}
-% \rfoot{\thepage/\pageref{LastPage}}
-% \renewcommand{\headrulewidth}{0pt}
-% \renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
-% \fancyheadoffset[L]{2.25in}
-% \fancyfootoffset[L]{2.25in}
-%\lfoot{\today}
-
-%% Include all macros below
-
-\newcommand{\lorem}{{\bf LOREM}}
-\newcommand{\ipsum}{{\bf IPSUM}}
-
-%% END MACROS SECTION
-
-% Insert author names, affiliations and corresponding author email (do not include titles, positions, or degrees).
 \title{Nearest-neighbor Projected-Distance Regression (NPDR) detects network interactions and controls for confounding and multiple testing} 
 \author[1]{Trang T. Le}
 \author[2]{Bryan A. Dawkins}
@@ -109,11 +49,7 @@ University of Pennsylvania, Philadelphia, PA 19104}
 \date{\today}
 
 
-\usepackage{Sweave}
 \begin{document}
-\input{main_npdr-concordance}
-\setkeys{Gin}{width=1\textwidth}
-% \begin{titlingpage}
 \maketitle
 \begin{abstract}
 
@@ -137,7 +73,7 @@ Efficient machine learning methods are needed to detect complex interaction netw
 \end{abstract}
 % \end{titlingpage}
 
-\linenumbers
+% \linenumbers
 
 \section{Introduction}
 
@@ -412,7 +348,7 @@ Our implementation uses lasso ($\alpha$=1) with a zero lower limit for the coeff
 
 \subsection{Properties of NPDR and existing Relief-based methods}
 Here we summarize the properties and capabilities of standard Relief-based methods and the generalizations STIR and NPDR (Table \ref{tab:compare_npdr}).
-When there are no covariates for dichotomous outcome data, the STIR (based on a pseudo t-test) and NPDR (based on regression with a logit model) are approximately equivalent given reasonable distribution assumptions (see Supplementary Fig S2).
+When there are no covariates for dichotomous outcome data, the STIR (based on a pseudo t-test) and NPDR (based on regression with a logit model) are approximately equivalent given reasonable distribution assumptions (see Supplementary Fig S1).
 However, by design, the NPDR framework is more flexible and able to handle covariate adjustment and continuous outcomes.
 In the current notation, the STIR null and alternative hypotheses would be
 
@@ -511,7 +447,7 @@ All P values are adjusted for multiple testing.
 
 \begin{figure}[!tbp]
 \centerline{\includegraphics[trim = 0 0 0 0]{../figs/fig2_pr_plots.pdf}}
-\caption{{\bf Precision-recall curve (PRC) and area under the PRC (auPRC) for NPDR, random forest and Relief-based importance scores.} For one replicate simulation (A), PRCs for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right). The magenta $\ast$ indicates the NPDR .05 adjusted cutoffs in Fig.~\ref{fig:npdr_relief}. The auPRC value is given for each method. For 100 replicate simulations of both simulation types (B), NPDR yields statistically significant higher auPRC than Relief or random forest (blue $\ast$$\ast$$\ast$ indicate P<.0001). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional. }
+\caption{{\bf Precision-recall curve (PRC) and area under the PRC (auPRC) for NPDR, random forest and Relief-based importance scores.} For one replicate simulation (A), PRCs for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right). The magenta $\ast$ indicates the NPDR .05 adjusted cutoffs in Fig.~\ref{fig:npdr_relief}. The auPRC value is given for each method. For 100 replicate simulations of both simulation types (B), NPDR yields statistically significant higher auPRC than Relief or random forest ($\ast$$\ast$$\ast$ indicate P $<.0001$). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional. }
 \label{fig:pr_curve}
 \end{figure}
 
@@ -553,9 +489,9 @@ As expected, NPDR importance scores are more correlated with Relief-F ($r = 0.86
 % % For dichotomous outcome data with network interaction effects, we use the logistic model (Eq.~\ref{eq:logit_nocovar}) in NPDR and compare the regression coefficients with Relief-F weights in CORElearn and random forest permutation importance score (Fig \ref{fig:npdr_relief}B).
 % % We again use the fixed-$k$ neighborhood for both methods to approximate a multiSURF neighborhood.
 
-Although our primary performance metric is auPRC, we also use the area under the Receiver Operating Characteristics curve (auROC), which also shows NPDR has statistically significant higher feature selection performance than random forest and Relief (both P < 0.0001, see Supplementary Fig S1). We also compare NPDR (based on logistic regression) and STIR (based on a t-test) for the dichotomous outcome data with interaction effects.
+Although our primary performance metric is auPRC, we also use the area under the Receiver Operating Characteristics curve (auROC), which also shows NPDR has statistically significant higher feature selection performance than random forest and Relief (both P < 0.0001, see Supplementary Fig S2). We also compare NPDR (based on logistic regression) and STIR (based on a t-test) for the dichotomous outcome data with interaction effects.
 %Across 100 simulations with specified effect size, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S3). 
-While logistic regression and the t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yield highly correlated scores for dichotomous data with interaction effects, where the correlation value $r$ between the P values produced from the two methods ranges from 0.9827 to 0.9994 in 100 replications (Supplementary Fig S2). 
+While logistic regression and the t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yield highly correlated scores for dichotomous data with interaction effects, where the correlation value $r$ between the P values produced from the two methods ranges from 0.9827 to 0.9994 in 100 replications (Supplementary Fig S1). 
 
 In the continuous and dichotomous simulations, respectively, we use NPDR with a linear model (Eq.~\ref{eq:lin_reg}) and logistic model (Eq.~\ref{eq:logit_nocovar}) to compare with random forest (permutation importance, R package randomforest) and standard RRelief and Relief-F (R package CORElearn). Because CORElearn does not include the adaptive multiSURF neighborhood, we use a fixed-$k$ neighborhood $\mathcal{N}_{\bar{k}_{1/2}}$ for the Relief-based methods.
 The value $\bar{k}_{1/2}=30$ (Eq.~\ref{eq:kbar}) is the expected number of nearest neighbors corresponding to a multiSURF neighborhood \cite{bod}. In both simulation of main effects with a continuous outcome and interaction effects with a dichotomous outcome, we generate $m = 200$ samples and $p = 1,000$ attributes with $100$ functional. For a dataset of the size simulated in this study, on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM, NPDR has a 24-second and 3-second runtime for dichotomous and continuous outcome data, respectively.
@@ -702,9 +638,6 @@ NPDR can use fixed-$k$ Relief neighborhoods and radius-based Relief neighborhood
 \section*{Funding}
 This work was supported in part by the National Institute of Health Grant Nos. GM121312 and GM103456 (to BAM). 
 
-%This work has been supported by the... Text Text  Text Text.\vspace*{-12pt}
-
-%\bibliographystyle{plain}
 \bibliographystyle{unsrt}
 \bibliography{NPDR_refs}   % name of bib file
 
