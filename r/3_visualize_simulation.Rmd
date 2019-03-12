@@ -49,7 +49,7 @@ n.pos <- test_df_cc %>%
 ```
 
 
-## Generate figure 1:
+## Generate figure 2:
 
 Set theme:
 
@@ -125,7 +125,7 @@ ggsave(fig1, filename = 'figs/fig1.pdf', height = 5.5, width = 4.8)
 ```
 
 
-## Generate figure 2:
+## Generate figure 1:
 
 ```{r}
 pr_qtrait <- prr_rf_qtrait %>%
@@ -168,8 +168,6 @@ pr <- rbind(pr_qtrait, pr_cc) %>%
   coord_fixed(ratio = 1) +
   guides(color = FALSE)
 pr
-
-# ggsave(pr, filename = 'figs/fig2_pr_plots.pdf', width = 5.8, height = 3.2)
 ```
 
 
@@ -178,20 +176,21 @@ Require run `1_npdr_cc.Rmd`.
 ```{r}
 p <- ggplot(npdr_stir, aes(x=stir.log10,y=npdr.log10)) + 
   geom_smooth(method = 'lm', se = F, color = 'grey') + 
-  geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
+  geom_point(aes(colour = functional), fill = NA, size = 2, shape = 21) +
+  # geom_point(aes(colour = functional), alpha = 0.7, size = 3) +
   theme_bw() + theme(legend.position = c(0.78, 0.23)) +
   labs(colour = NULL, title = NULL,
        x = bquote('STIR ('~-log[10]~'p'~')'), 
        y = bquote('NPDR ('~-log[10]~'p'~')')) + 
   annotate("text", x = 130, y = 130, label = deparse(bquote(r > 0.99)), parse = T) +
-  scale_color_manual(values = cbbPalette[c(1,2)], labels = c('Non-functional', 'Functional')) +
+  scale_color_manual(values = cbbPalette[c(1,7)], labels = c('Non-functional', 'Functional')) +
   geom_vline(xintercept=pcutoff, linetype='dashed', alpha = 0.5) +
   geom_hline(yintercept=pcutoff, linetype='dashed', alpha = 0.5)
 p
 ggsave(p, filename = paste0('figs/npdr_stir_p_cc.pdf'), height = 4.5, width = 4.5 )
 ```
 
-# Replications of auPRC for Supplement:
+# Replications of auPRC:
 Require run `2_npdr_relief_100_cc.Rmd`, `2_npdr_relief_100_qtrait.Rmd`.
 
 ```{r}
