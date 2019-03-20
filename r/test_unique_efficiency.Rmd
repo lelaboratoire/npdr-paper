@@ -21,7 +21,7 @@ system.time(
 
 Comparing different pasting mechanisms: (Note: in `do.call`, `quote = T` reduces the time approximately by half)
 
-```{r setup, include=FALSE}
+```{r}
 system.time(pair_str <- do.call('paste', c(sorted_pairs, sep = ','), quote = TRUE)) 
 system.time(pair_str <- sorted_pairs %>% transmute(paste(xmin, xmax, sep = ',')))
 system.time(pair_str <- sorted_pairs %>% unite(xmin, xmax, sep = ','))
