@@ -1,0 +1,45 @@
+---
+title: "Testing efficiency of finding unique neighbor pairs"
+output: html_document
+---
+```{r}
+library(tidyverse)
+nsamp <- 10000
+```
+
+Naive random generation of over 16 million neigbor pairs, followed by parallel sorting (lower sample number goes first):
+
+```{r}
+pairs <- data.frame(
+  x1 = sample(nsamp, nsamp^2/6, replace = T),
+  x2 = sample(nsamp, nsamp^2/6, replace = T))
+system.time(
+  sorted_pairs <- with(
+    pairs, 
+    data.frame(xmin = pmin(x1, x2), xmax = pmax(x1, x2))))
+```
+
+Comparing different pasting mechanisms: (Note: in `do.call`, `quote = T` reduces the time approximately by half)
+
+```{r setup, include=FALSE}
+system.time(pair_str <- do.call('paste', c(sorted_pairs, sep = ','), quote = TRUE)) 
+system.time(pair_str <- sorted_pairs %>% transmute(paste(xmin, xmax, sep = ',')))
+system.time(pair_str <- sorted_pairs %>% unite(xmin, xmax, sep = ','))
+```
+
+It seems that `unite` is the most efficient to combine the pairs.
+
+Comparing the two get unique methods: base::duplicated, data.table::duplicated.
+
+```{r}
+system.time(unique.idx <- which(!base::duplicated(pair_str)))
+system.time(unique.idx <- which(!duplicated(pair_str)))
+```
+
+There seem to be negligible difference between the two methods.
+Finally, we can slice `pairs` by the unique indices:
+
+```{r}
+unique_pairs <- pairs[unique.idx, ]
+```
+
