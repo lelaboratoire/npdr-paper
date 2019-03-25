@@ -9,8 +9,7 @@ output: html_document
 library(privateEC)
 library(broom)
 library(tidyverse)
-# library(devtools)
-# install_github("insilico/npdr") # npdr install
+# devtools::install_github("insilico/npdr") # npdr install
 library(npdr)
 
 rm(list = ls())
@@ -129,8 +128,8 @@ pr_npdr <- PRROC::pr.curve(scores.class0 = test.df %>%
                         filter(functional == F) %>%
                         pull(beta.Z.att),
                       curve = T)
-pr_uni$c.integral
-pr_npdr$c.integral
+pr_uni$auc.integral
+pr_npdr$auc.integral
 
 ```
 
@@ -141,7 +140,7 @@ pr_npdr$c.integral
 # expect: npdr gives same resutls as original t-STIR
 # stir interface requires splitting phenotype and predictor matrix, 
 # and requires finding the neighborhood separately.
-predictors.cc.mat <- cc.data %>% select(-class)
+predictors.cc.mat <- cc.data %>% dplyr::select(-class)
 neighbor.idx.observed <- stir::find.neighbors(predictors.cc.mat, 
                                         pheno.cc, k = 0, method = "multisurf")
 stir.results <- stir::stir(predictors.cc.mat, neighbor.idx.observed, k = 0, 
@@ -165,7 +164,6 @@ test.df <- merge(multisurf_softed_imp, npdr.cc.results) %>%
   mutate(functional = att %in% functional.cc)
 r2_stir_cc <- round(cor(test.df$stir.log10, test.df$npdr.log10), digits = 3)
 
-npdr_stir_p_cc <- p
 npdr_stir <- test.df
 ```
 
@@ -221,7 +219,7 @@ auprc_npdr_cc <- round(pr_npdr$auc.integral, 3)
 auprc_relief_cc <- round(pr_relief$auc.integral, 3)
 
 prr.dat <- rbind(x, y) %>% 
-  mutate(type = rep(c('NPDR', 'Relief-F'), each = nrow(x)))
+  mutate(type = c(rep('NPDR', nrow(x)), rep('Relief-F', nrow(y))))
 ```
 
 
@@ -301,3 +299,6 @@ save(npdr_stir, ss_df_cc, test_df_cc, prr_dat_cc,
      file = 'results/df_cc.Rdata')
 ```
 
+```{r}
+sessionInfo()
+```
