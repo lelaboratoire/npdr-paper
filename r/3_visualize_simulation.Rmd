@@ -84,12 +84,12 @@ Now plot:
 qtrait_methods <-  c('RRelief score', 'Random forest score')
 cc_methods <-  c('Relief-F score', 'Random forest score')
 qtrait_r <- merge(test_df_qtrait, rf_npdr_qtrait) %>%
-  select(rrelief, beta.Z.att, functional, X.IncMSE) %>%
+  dplyr::select(rrelief, beta.Z.att, functional, X.IncMSE) %>%
   rename(`RRelief score` = rrelief, `Random forest score` = X.IncMSE) %>%
   gather('method', 'imp_score', c(`RRelief score`, `Random forest score`))
 qtrait_r$method <- factor(qtrait_r$method, levels = qtrait_methods)
 cc_r <- merge(test_df_cc, rf_npdr_cc) %>%
-  select(rrelief, beta.Z.att, functional, MeanDecreaseAccuracy) %>%
+  dplyr::select(rrelief, beta.Z.att, functional, MeanDecreaseAccuracy) %>%
   rename(`Relief-F score` = rrelief, `Random forest score` = MeanDecreaseAccuracy) %>%
   gather('method', 'imp_score', c(`Relief-F score`, `Random forest score`))
 cc_r$method <- factor(cc_r$method, levels = cc_methods)
@@ -121,6 +121,7 @@ cc_plot <- ggplot(cc_r %>% arrange(functional), aes(x = imp_score, y = beta.Z.at
 cc_plot <- plot_r2(cc_plot)
 
 fig1 <- plot_grid(qtrait_plot, cc_plot, nrow = 2, labels = 'AUTO')
+fig1
 ggsave(fig1, filename = 'figs/fig1.pdf', height = 5.5, width = 4.8)
 ```
 
