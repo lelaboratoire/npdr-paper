@@ -9,8 +9,7 @@ output: html_document
 library(privateEC)
 library(broom)
 library(tidyverse)
-# library(devtools)
-# install_github("insilico/npdr") # npdr install
+# devtools::install_github("insilico/npdr") # npdr install
 library(npdr)
 
 rm(list = ls())
@@ -246,4 +245,9 @@ save(ss_df_qtrait, test_df_qtrait, prr_dat_qtrait,
      auroc_npdr_qtrait, auroc_relief_qtrait,
      auroc_rf_qtrait, 
      file = 'results/df_qtrait.Rdata')
+```
+
+
+```{r}
+sessionInfo()
 ```
