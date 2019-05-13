@@ -225,11 +225,51 @@ pr_100 <- ggplot(pr_df, aes(x = newtype, y = aupr, color = newtype)) +
     map_signif_level = TRUE, y_position = c(1.06, 1.02), vjust = 0.5, tip_length = 0)
   
 prs <- plot_grid(pr, pr_100, nrow = 2, labels = 'AUTO')
-rocs
+# rocs
 
 # ggsave(rocs, filename = paste0('figs/roc_compare_100.pdf'), height = 6.24, width = 5)
 # ggsave(pr_100, filename = paste0('figs/pr_compare_100.pdf'), height = 3, width = 5)
 ggsave(prs, filename = 'figs/fig2_pr_plots.pdf', width = 5.8, height = 6.4)
+
+```
+
+
+```{r}
+pr <- rbind(pr_qtrait, pr_cc) %>% 
+  mutate(sim = c(rep('Continuous outcome', nrow(pr_qtrait)), 
+                 rep('Dichotomous outcome', nrow(pr_cc)))) %>%
+  filter(sim == 'Continuous outcome') %>%
+  ggplot(aes(Recall, Precision, color = type)) +
+  geom_path(size = 0.8) + theme_bw() + 
+  scale_color_manual(values = cbbPalette[c(8,3,6)]) +
+  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) +
+  geom_text(pr_text %>% filter(sim == 'Continuous outcome') , mapping = aes(x = x, y = y, label = label), size = 3) +
+  geom_point(cutoff_point %>% filter(sim == 'Continuous outcome'), 
+             mapping = aes(x = x, y = y), shape = 8, size = 2, stroke = 1) +
+  coord_fixed(ratio = 1) +
+  guides(color = FALSE)
+pr
+
+pr_100 <- ggplot(pr_df %>% filter(sim == 'Continuous outcome'), aes(x = newtype, y = aupr, color = newtype)) + 
+  geom_boxplot(alpha = 0.5, color = 'grey50', outlier.size = -1, width = 0.5) +
+  geom_jitter(height = 0, width = 0.15, alpha = 0.3) +
+  labs(x = 'Method', y = 'Area under the PR curve') +
+  theme_bw() + guides(fill = F, color = F) +
+  scale_color_manual(values = cbbPalette[c(3, 6, 8)]) +
+  scale_fill_manual(values = cbbPalette[c(3, 6, 8)]) +
+  scale_y_continuous(
+    breaks = seq(0, 1, 0.2), minor_breaks = seq(0.5, 1, 0.2),
+    labels = scales::percent_format(accuracy = 1),
+    limits = c(NA, 1.08)) + 
+  ggsignif::geom_signif(
+    comparisons = list(c('Random forest', 'NPDR'), c('Relief', 'NPDR')),
+    map_signif_level = TRUE, y_position = c(1.06, 1.02), vjust = 0.5, tip_length = 0)
+
+
+pr_100
+grant1 <- plot_grid(pr, pr_100, nrow = 1, labels = 'auto')
+ggsave(grant1, filename = 'figs/grant_fig_1.pdf', width = 7, height = 3.2)
 
 ```
 
