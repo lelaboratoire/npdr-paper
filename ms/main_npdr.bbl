@@ -154,21 +154,6 @@ Sara Mostafavi, Alexis Battle, Xiaowei Zhu, James~B Potash, Myrna~M Weissman,
   increased expression detected by whole-blood rna sequencing.
 \newblock {\em Molecular psychiatry}, 19(12):1267, 2014.
 
-\bibitem{le18}
-Trang~T Le, Jonathan Savitz, Hideo Suzuki, Masaya Misaki, T~Kent Teague, Bill~C
-  White, Julie~H Marino, Graham Wiley, Patrick~M Gaffney, Wayne~C Drevets,
-  Brett~A McKinney, and Jerzy Bodurka.
-\newblock Identification and replication of {RNA}-{Seq} gene network modules
-  associated with depression severity.
-\newblock {\em Translational Psychiatry}, 8(1):180, September 2018.
-
-\bibitem{psqi}
-Daniel~J. Buysse, Charles~F. Reynolds, Timothy~H. Monk, Susan~R. Berman, and
-  David~J. Kupfer.
-\newblock The pittsburgh sleep quality index: A new instrument for psychiatric
-  practice and research.
-\newblock {\em Psychiatry Research}, 28(2):193 -- 213, 1989.
-
 \bibitem{mckinney2009capturing}
 Brett~A McKinney, James~E Crowe~Jr, Jingyu Guo, and Dehua Tian.
 \newblock Capturing the spectrum of interaction effects in genetic association
@@ -190,56 +175,42 @@ Alexandra~M Lopes, Ricardo~N Miguel, Carole~A Sargent, Peter~J Ellis,
   spermatogenesis.
 \newblock {\em BMC molecular biology}, 11(1):33, 2010.
 
-\bibitem{shimada2010}
-Mihoko Shimada, Taku Miyagawa, Minae Kawashima, Susumu Tanaka, Yutaka Honda,
-  Makoto Honda, and Katsushi Tokunaga.
-\newblock An approach based on a genome-wide association study reveals
-  candidate loci for narcolepsy.
-\newblock {\em Human Genetics}, 128(4):433--441, Oct 2010.
+\bibitem{borglum2014genome}
+AD~B{\o}rglum, D~Demontis, Jakob Grove, J~Pallesen, Mads~V Hollegaard,
+  CB~Pedersen, A~Hedemand, Manuel Mattheisen, Andr{\'e} Uitterlinden, Mette
+  Nyegaard, et~al.
+\newblock Genome-wide study of association and interaction with maternal
+  cytomegalovirus infection suggests new schizophrenia loci.
+\newblock {\em Molecular psychiatry}, 19(3):325, 2014.
 
-\bibitem{kantojarvi2017}
-Katri Kantoj{\"a}rvi, Johanna Liuhanen, Outi Saarenp{\"a}{\"a}-Heikkil{\"a},
-  Anna-Liisa Satomaa, Anneli Kylli{\"a}inen, Pirjo P{\"o}lkki, Julia Jaatela,
-  Auli Toivola, Lili Milani, Sari-Leena Himanen, Tarja Porkka-Heiskanen, Juulia
-  Paavonen, and Tiina Paunio.
-\newblock Variants in calcium voltage-gated channel subunit alpha1 c-gene
-  (cacna1c) are associated with sleep latency in infants.
-\newblock {\em PLOS ONE}, 12(8):1--12, 08 2017.
+\bibitem{miyashita2007genetic}
+Akinori Miyashita, Hiroyuki Arai, Takashi Asada, Masaki Imagawa, Etsuro
+  Matsubara, Mikio Shoji, Susumu Higuchi, Katsuya Urakami, Akiyoshi Kakita,
+  Hitoshi Takahashi, et~al.
+\newblock Genetic association of ctnna3 with late-onset alzheimer's disease in
+  females.
+\newblock {\em Human molecular genetics}, 16(23):2854--2869, 2007.
 
-\bibitem{franke2010}
-Barbara Franke, Alejandro~Arias Vasquez, Joris~A. Veltman, Han~G. Brunner, Mark
-  Rijpkema, and Guill{\'e}n Fern{\'a}ndez.
-\newblock Genetic variation in cacna1c, a gene associated with bipolar
-  disorder, influences brainstem rather than gray matter volume in healthy
-  individuals.
-\newblock {\em Biological Psychiatry}, 68(6):586 -- 588, 2010.
-\newblock Animal Models for Mania and Melancholia.
-
-\bibitem{green2009}
-E~K Green, D~Grozeva, I~Jones, L~Jones, G~Kirov, S~Caesar, K~Gordon-Smith,
-  C~Fraser, L~Forty, E~Russell, M~L Hamshere, V~Moskvina, I~Nikolov, A~Farmer,
-  P~McGuffin, Wellcome Trust Case~Control Consortium, P~A Holmans, M~J Owen,
-  M~C O'Donovan, and N~Craddock.
-\newblock The bipolar disorder risk allele at cacna1c also confers risk of
-  recurrent major depression and of schizophrenia.
-\newblock {\em Molecular Psychiatry}, 15:1016 EP --, 07 2009.
-
-\bibitem{crossdisorder2013}
-Identification of risk loci with shared effects on five major psychiatric
-  disorders: a genome-wide analysis.
-\newblock {\em The Lancet}, 381(9875):1371 -- 1379, 2013.
-
-\bibitem{lotan2014}
-Amit Lotan, Michaela Fenckova, Janita Bralten, Aet Alttoa, Luanna Dixson,
-  Robert~W. Williams, and Monique van~der Voet.
-\newblock Neuroinformatic analyses of common and distinct genetic components
-  associated with major neuropsychiatric disorders.
-\newblock {\em Frontiers in Neuroscience}, 8:331, 2014.
+\bibitem{wang2009common}
+Kai Wang, Haitao Zhang, Deqiong Ma, Maja Bucan, Joseph~T Glessner, Brett~S
+  Abrahams, Daria Salyakina, Marcin Imielinski, Jonathan~P Bradfield,
+  Patrick~MA Sleiman, et~al.
+\newblock Common genetic variants on 5p14. 1 associate with autism spectrum
+  disorders.
+\newblock {\em Nature}, 459(7246):528, 2009.
 
 \bibitem{robnik03}
 Marko Robnik-{\v{S}}ikonja and Igor Kononenko.
 \newblock Theoretical and empirical analysis of relieff and rrelieff.
 \newblock {\em Machine learning}, 53(1-2):23--69, 2003.
+
+\bibitem{kim2007exposure}
+Jung~Jin Kim, Brian~H Shirts, Madhulika Dayal, Silviu-alin Bacanu, Joel Wood,
+  Weiting Xie, Xiaohua Zhang, Kodavali~V Chowdari, Robert Yolken, Bernie
+  Devlin, et~al.
+\newblock Are exposure to cytomegalovirus and genetic variation on chromosome
+  6p joint risk factors for schizophrenia?
+\newblock {\em Annals of medicine}, 39(2):145--153, 2007.
 
 \bibitem{schork12}
 Nicholas~J Schork and Matthew~A Zapala.
