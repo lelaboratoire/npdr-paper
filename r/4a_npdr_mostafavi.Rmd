@@ -51,7 +51,7 @@ Load data:
 load('data/unfilteredMostafavi.Rdata') ### RNA-Seq data
 dim(unfiltered.mostafavi)  # 915 subjects x (15230 genes + 1 class)
 mdd.pheno <- unfiltered.mostafavi %>% 
-  select(class) %>% rownames_to_column('ids') 
+  dplyr::select(class) %>% rownames_to_column('ids') 
 # 463 MDD, 452 HC
 
 # Read in sex data.frame:
@@ -80,13 +80,13 @@ table(pheno.sex$class, pheno.sex$sex)
 ### Filter RNA-Seq:
 
 ```{r}
-unfiltered.predictors.mat <- unfiltered.mostafavi %>% select(-class)
+unfiltered.predictors.mat <- unfiltered.mostafavi %>% dplyr::select(-class)
 # strict filter so it finishes in a couple minutes
 # use .5 in real analysis, but it will take a while (a day?)
 pct <- 0 # .9, 1,524 genes, .75 3,809 vars, .98 306vars 4.7mins, .7 4570vars
 filter <- geneLowVarianceFilter(unfiltered.predictors.mat, pct)
 filtered.mostafavi.df <- data.frame(filter$fdata, class = mdd.pheno$class)
-filtered.pred <- filtered.mostafavi.df %>% select(-class)
+filtered.pred <- filtered.mostafavi.df %>% dplyr::select(-class)
 dim(filtered.mostafavi.df)
 ```
 
@@ -194,7 +194,7 @@ save(gene_sex, gene_mdd, gene_sex_mdd, npdr_mdd_nosex, npdr_mdd_sex,
 set.seed(1618)
 rnaseq_sex <- filtered.mostafavi.df %>%
   rownames_to_column('ids') %>%
-  merge(select(pheno.sex, ids, sex), by = 'ids') %>%
+  merge(dplyr::select(pheno.sex, ids, sex), by = 'ids') %>%
   column_to_rownames('ids')
 
 # mostafavi_forest <- ranger::ranger(formula = class ~ ., data = rnaseq_sex,
