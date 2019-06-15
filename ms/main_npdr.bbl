@@ -7,7 +7,7 @@ MS~Breen, C~Kemena, PK~Vlasov, C~Notredame, and Kondrashov FA.
 \newblock {\em Nature}, 490(7421):535--8, 2012.
 
 \bibitem{weinreich13}
-DM~Weinreich, Y~Lan, e~CS Wyli, and RB~Heckendorn.
+DM~Weinreich, Y~Lan, CS~Wylie, and RB~Heckendorn.
 \newblock Should evolutionary geneticists worry about higher-order epistasis?
 \newblock {\em Curr Opin Genet Dev.}, 23(6):700--7, 2013.
 
@@ -107,6 +107,14 @@ Limin Li, Barbara Rakitsch, and Karsten Borgwardt.
   biological data classification.
 \newblock {\em Bioinformatics}, 27(13):i342--i348, 2011.
 
+\bibitem{mostafavi14}
+Sara Mostafavi, Alexis Battle, Xiaowei Zhu, James~B Potash, Myrna~M Weissman,
+  Jianxin Shi, Kenneth Beckman, Christian Haudenschild, Courtney McCormick, Rui
+  Mei, et~al.
+\newblock Type i interferon signaling genes in recurrent major depression:
+  increased expression detected by whole-blood rna sequencing.
+\newblock {\em Molecular psychiatry}, 19(12):1267, 2014.
+
 \bibitem{greene09}
 Casey~S. Greene, Nadia~M. Penrod, Jeff Kiralis, and Jason~H. Moore.
 \newblock Spatially {Uniform} {ReliefF} ({SURF}) for computationally-efficient
@@ -145,14 +153,6 @@ Trang~T Le, W~Kyle Simmons, Masaya Misaki, Jerzy Bodurka, Bill~C White,
 \newblock Differential privacy-based evaporative cooling feature selection and
   classification with relief-f and random forests.
 \newblock {\em Bioinformatics}, 33(18):2906--2913, 2017.
-
-\bibitem{mostafavi14}
-Sara Mostafavi, Alexis Battle, Xiaowei Zhu, James~B Potash, Myrna~M Weissman,
-  Jianxin Shi, Kenneth Beckman, Christian Haudenschild, Courtney McCormick, Rui
-  Mei, et~al.
-\newblock Type i interferon signaling genes in recurrent major depression:
-  increased expression detected by whole-blood rna sequencing.
-\newblock {\em Molecular psychiatry}, 19(12):1267, 2014.
 
 \bibitem{mckinney2009capturing}
 Brett~A McKinney, James~E Crowe~Jr, Jingyu Guo, and Dehua Tian.
@@ -204,14 +204,6 @@ Marko Robnik-{\v{S}}ikonja and Igor Kononenko.
 \newblock Theoretical and empirical analysis of relieff and rrelieff.
 \newblock {\em Machine learning}, 53(1-2):23--69, 2003.
 
-\bibitem{kim2007exposure}
-Jung~Jin Kim, Brian~H Shirts, Madhulika Dayal, Silviu-alin Bacanu, Joel Wood,
-  Weiting Xie, Xiaohua Zhang, Kodavali~V Chowdari, Robert Yolken, Bernie
-  Devlin, et~al.
-\newblock Are exposure to cytomegalovirus and genetic variation on chromosome
-  6p joint risk factors for schizophrenia?
-\newblock {\em Annals of medicine}, 39(2):145--153, 2007.
-
 \bibitem{schork12}
 Nicholas~J Schork and Matthew~A Zapala.
 \newblock Statistical properties of multivariate distance matrix regression for
@@ -227,5 +219,20 @@ Nicholas~J Schork and Matthew~A Zapala.
 Brett McKinney and Nicholas Pajewski.
 \newblock Six degrees of epistasis: statistical network models for gwas.
 \newblock {\em Frontiers in genetics}, 2:109, 2012.
+
+\bibitem{de2010benchmark}
+Beno{\^\i}t De~Hertogh, Bertrand De~Meulder, Fabrice Berger, Michael Pierre,
+  Eric Bareke, Anthoula Gaigneaux, and Eric Depiereux.
+\newblock A benchmark for statistical microarray data analysis that preserves
+  actual biological and technical variance.
+\newblock {\em BMC bioinformatics}, 11(1):17, 2010.
+
+\bibitem{kim2007exposure}
+Jung~Jin Kim, Brian~H Shirts, Madhulika Dayal, Silviu-alin Bacanu, Joel Wood,
+  Weiting Xie, Xiaohua Zhang, Kodavali~V Chowdari, Robert Yolken, Bernie
+  Devlin, et~al.
+\newblock Are exposure to cytomegalovirus and genetic variation on chromosome
+  6p joint risk factors for schizophrenia?
+\newblock {\em Annals of medicine}, 39(2):145--153, 2007.
 
 \end{thebibliography}
