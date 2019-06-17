@@ -670,13 +670,13 @@ Rather, NPDR simply performs a regression between the outcome and attribute proj
 (5) The NPDR attribute estimator (regression coefficient) includes more variation from the projected differences than other Relief-based methods and thereby improves attribute estimate quality.
 Moreover, we introduced a regularized NPDR that adds another layer of multivariate modeling to an already multi-dimensional nearest-neighbor method to shrink correlated projected attribute differences.
 
-The novel importance score of an attribute in NPDR is the standardized regression coefficient between the projected attribute differences and the numeric outcome differences between neighbors.
-For continuous outcomes, the regression Relief (RRelief) importance score~\cite{robnik03} is a weighted correlation between attribute and outcome differences. This score has a similar form to the NPDR standardized regression coefficient, which is a covariance between attribute and outcome differences divided by the variance in the outcome.
+The novel NPDR importance score of an attribute is the standardized regression coefficient between the projected attribute differences and the numeric outcome differences between neighbors.
+For continuous outcomes, the regression Relief (RRelief) importance score~\cite{robnik03} is a weighted correlation between attribute and outcome differences. This weighted correlation has a similar form to the NPDR standardized regression coefficient, which is a covariance between attribute and outcome differences divided by the variance in the outcome.
 However, we provided evidence that the NPDR standardized regression coefficient is a better attribute estimator than Relief and random forest, and we showed that the NPDR models can adjust for confounding covariates and other sources of variation.
 
 We assessed NPDR's power and ability to control false positives using realistic simulations with main effects and network interactions.
 We showed that the statistical performance using NPDR P values is the same as STIR, which is limited to dichotomous outcome data.
-In other words, by modeling hit/miss differences between neighbors with a logit link, NPDR can be safely used instead of STIR with the added benefit of covariate correction and the analysis of quantitative traits.
+In other words, by modeling hit/miss differences between neighbors with a logit link, NPDR can be used safely instead of STIR with the added benefit of covariate correction and the analysis of quantitative traits.
 In a different Relief-based approach for continuous outcomes, Ref.~\cite{urbanowicz17} uses a standard deviation of the continuous outcome diffs to discretize the numeric outcome and make the RRelief algorithm compatible with the idea of hits and misses.
 However, discretization puts constraints on the variation in numeric data that increase the risk of losing power.
 NPDR uses the full variation in the continuous outcome variable, and the regression coefficient provides an interpretation in terms of variation explained while again providing flexibility for modeling additional sources of variation.
@@ -690,7 +690,7 @@ The MDMR regression is performed for the distance matrix for all pairs of instan
 Its use of local neighborhoods allows NPDR to remove imposter/irrelevant instances from the neighborhood and detect interactions in the higher dimensional space. 
 The ability to remove imposters from the set of nearest neighbors illustrates the ``blessings of dimensionality'' for Relief-based methods~\cite{bod}, but this class of nearest-neighbor methods is still, of course, susceptible to the curses of dimensionality~\cite{CoD}.
 Another distinction between methods is that NPDR projects distances onto each attribute, allowing for hypothesis testing of individual attributes (i.e., perform feature selection), whereas MDMR focuses on specified sets of attributes.
-NPDR uses the context of all attributes to compute nearest neighbors, but it focuses on the projected regression of each attribute at a time and uses the nearest neighbors to allow for detection of interactions. However, NPDR can also be used to compute the importance of sets of factors like MMDR.
+NPDR uses the context of all attributes to compute nearest neighbors, but it focuses on the projected regression of each attribute at a time and uses the nearest neighbors to allow for detection of interactions. However, NPDR can also be used to compute the importance of sets of factors, like MDMR.
 An example of this is the penalized version of NPDR that uses the set of all attributes in a nearest-neighbor projected-distance multiple regression.
 
 NPDR can use fixed-$k$ Relief neighborhoods and radius-based Relief neighborhoods.
@@ -707,10 +707,10 @@ A challenge in NPDR analysis is the inherent dependence between neighbors in the
 The ability to incorporate covariates into NPDR models addresses the important but often neglected issue of confounding factors in machine learning.
 We applied NPDR to a real RNA-Seq dataset for MDD to demonstrate the identification of biologically relevant genes and the removal of spurious associations by covariate correction.
 NPDR with sex as a covariate adjustment successfully removed X and Y-linked genes and genes highly expressed in sex organs.
-However, it is important to note that some genes removed due to a shared association with sex may be important for the pathophysiology of MDD or for classifiers.
+However, it is important to note that some genes removed due to a shared association with sex may be important for the pathophysiology of MDD or for classification accuracy.
 Thus, covariate adjustment in NPDR is a useful option to inform a holistic analysis of a given dataset.
 
-Application to GWAS data requires no additional modifications of the algorithm other than specification of a different diff function for categorical variables~\cite{titv}, and the covariate option allows principal components to be included to adjust for population structure.
+Application to GWAS data required no additional modifications of the algorithm other than specification of a different diff projection operator for categorical variables~\cite{titv}, and the covariate option allows principal components to be included to adjust for population structure.
 One of the trans-eQTLs found by NPDR in CTNNA3 (rs10997355) for SCAI may suggest a gene-environment interaction due to maternal CMV infection.
 In addition, it has been suggested that exposure to CMV may increase mood disorder risk through interactions with susceptibility variants~\cite{kim2007exposure}.
 However, antibody titers for CMV were not available in this study.
