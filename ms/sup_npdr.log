@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  17 JUN 2019 06:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  17 JUN 2019 12:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -184,7 +184,11 @@ LaTeX Font Info:    Try loading font information for T1+aer on input line 105.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/ae/t1aer.fd
 File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
-)))) (./sup_npdr.aux)
+)))) (./sup_npdr.aux
+
+LaTeX Warning: Label `fig:auROC' multiply defined.
+
+)
 \openout1 = `sup_npdr.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
@@ -201,8 +205,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 16.
-
-(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd
+ (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 16.
@@ -303,29 +306,46 @@ Package pdftex.def Info: ../figs/roc_compare_100.pdf used on input line 39.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[2 <../figs/npdr_stir_p_cc.pdf>] [3 <../figs/roc_compare_100.pdf>]
-(./sup_npdr.aux) ) 
+<../figs/scai_eqtls.pdf, id=13, 597.50829pt x 845.0471pt>
+File: ../figs/scai_eqtls.pdf Graphic file (type pdf)
+
+<use ../figs/scai_eqtls.pdf>
+Package pdftex.def Info: ../figs/scai_eqtls.pdf used on input line 45.
+(pdftex.def)             Requested size: 345.0pt x 487.92273pt.
+
+
+LaTeX Warning: Float too large for page by 21.86267pt on input line 48.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[2 <../figs/npdr_stir_p_cc.pdf>] [3 <../figs/roc_compare_100.pdf>] [4 <../figs/
+scai_eqtls.pdf>] (./sup_npdr.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 2763 strings out of 492995
- 39587 string characters out of 6132704
- 92818 words of memory out of 5000000
- 6260 multiletter control sequences out of 15000+600000
+ 2768 strings out of 492995
+ 39708 string characters out of 6132704
+ 93857 words of memory out of 5000000
+ 6264 multiletter control sequences out of 15000+600000
  20100 words of font info for 46 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,5n,25p,1312b,259s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmr17.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-r7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.
-pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.p
-fb>
-Output written on sup_npdr.pdf (3 pages, 199454 bytes).
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></
+usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></us
+r/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/
+local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/loc
+al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/
+texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/t
+exlive/2017/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb>
+Output written on sup_npdr.pdf (4 pages, 242577 bytes).
 PDF statistics:
- 69 PDF objects out of 1000 (max. 8388607)
- 50 compressed objects within 1 object stream
+ 80 PDF objects out of 1000 (max. 8388607)
+ 58 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 15 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 20 words of extra memory for PDF output out of 10000 (max. 10000000)
 
