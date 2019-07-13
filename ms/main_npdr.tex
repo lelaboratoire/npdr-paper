@@ -1,6 +1,7 @@
 \documentclass[10pt]{article}
 
-\usepackage[top=1in,left=1.75in,footskip=0.75in]{geometry}
+%\usepackage[top=1in,left=1.75in,footskip=0.75in]{geometry}
+\usepackage[top=1in,left=1in,footskip=0.75in]{geometry}
 \usepackage{amsmath,amssymb} % useful for mathematical formulas and symbols
 \usepackage{pifont}
 \usepackage{blindtext}
@@ -25,8 +26,8 @@
 \usepackage[hidelinks=true]{hyperref} % no green squares around references
 \raggedright
 \setlength{\parindent}{0.5cm}
-\textwidth 5.25in 
-\textheight 8.75in
+%\textwidth 5.25in 
+%\textheight 8.75in
 
 % Bold the 'Figure #' in the caption and separate it from the title/caption with a period
 % Captions will be left justified
@@ -38,7 +39,7 @@
 \makeatother
 
 
-\title{Nearest-neighbor Projected-Distance Regression (NPDR) detects network interactions and controls for confounding and multiple testing} 
+\title{Nearest-neighbor Projected-Distance Regression (NPDR) for detecting network interactions with control for multiple tests and confounding} 
 \author[1]{Trang T. Le}
 \author[2]{Bryan A. Dawkins}
 \author[2,3*]{Brett A. McKinney}
@@ -70,6 +71,10 @@ We apply NPDR to eQTL data to identify potentially interacting variants that reg
 % \end{titlingpage}
 
 % \linenumbers
+
+\section*{Significance} Interactions between genes in high dimensional genomic data play an important role in understanding complex biological systems. We propose and validate a flexible machine learning method that detects variables involved in network interactions in numerous types of data while correcting for false discoveries, confounding variables and correlation through regularization. We apply this projected nearest neighbor method to genome-wide association and transcriptomic data, but the new method is broadly applicable to high dimensional data in many fields beyond biology.    
+
+\newpage
 
 \section{Introduction}
 
