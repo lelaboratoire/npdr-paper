@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  26 JUL 2019 13:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  1 AUG 2019 21:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -752,7 +752,7 @@ Package rerunfilecheck Info: File `main_npdr.out' has not changed.
 Here is how much of TeX's memory you used:
  12125 strings out of 492995
  182441 string characters out of 6132704
- 335257 words of memory out of 5000000
+ 335261 words of memory out of 5000000
  15266 multiletter control sequences out of 15000+600000
  20169 words of font info for 102 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -774,7 +774,7 @@ ve/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/
 exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2017/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2017/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on main_npdr.pdf (17 pages, 626459 bytes).
+Output written on main_npdr.pdf (17 pages, 626136 bytes).
 PDF statistics:
  463 PDF objects out of 1000 (max. 8388607)
  415 compressed objects within 5 object streams
