@@ -1,0 +1,264 @@
+ \newcommand{\noop}[1]{}
+\begin{thebibliography}{}
+
+\bibitem[Altman and Krzywinski(2018)Altman and Krzywinski]{CoD}
+Altman, N. and Krzywinski, M. (2018).
+\newblock The curse(s) of dimensionality this-month.
+\newblock {\em Nature Methods\/}, {\bf 15}(6), 399--400.
+
+\bibitem[Arabnejad {\em et~al.}(2018)Arabnejad, Dawkins, Bush, White, Harkness,
+  and McKinney]{titv}
+Arabnejad, M., Dawkins, B., Bush, W., White, B., Harkness, A., and McKinney,
+  B.~A. (2018).
+\newblock Transition-transversion encoding and genetic relationship metric in
+  relieff feature selection improves pathway enrichment in gwas.
+\newblock {\em BioData mining\/}, {\bf 11}, 23.
+
+\bibitem[B{\o}rglum {\em et~al.}(2014)B{\o}rglum, Demontis, Grove, Pallesen,
+  Hollegaard, Pedersen, Hedemand, Mattheisen, Uitterlinden, Nyegaard, {\em
+  et~al.}]{borglum2014genome}
+B{\o}rglum, A., Demontis, D., Grove, J., Pallesen, J., Hollegaard, M.~V.,
+  Pedersen, C., Hedemand, A., Mattheisen, M., Uitterlinden, A., Nyegaard, M.,
+  {\em et~al.} (2014).
+\newblock Genome-wide study of association and interaction with maternal
+  cytomegalovirus infection suggests new schizophrenia loci.
+\newblock {\em Molecular psychiatry\/}, {\bf 19}(3), 325.
+
+\bibitem[Breen {\em et~al.}(2012)Breen, Kemena, Vlasov, Notredame, and
+  FA]{breen12}
+Breen, M., Kemena, C., Vlasov, P., Notredame, C., and FA, K. (2012).
+\newblock Epistasis as the primary factor in molecular evolution.
+\newblock {\em Nature\/}, {\bf 490}(7421), 535--8.
+
+\bibitem[Chen {\em et~al.}(2016)Chen, Wang, Conomos, Stilp, Li, Sofer, Szpiro,
+  Chen, Brehm, Celed{\'o}n, {\em et~al.}]{popstrat16}
+Chen, H., Wang, C., Conomos, M.~P., Stilp, A.~M., Li, Z., Sofer, T., Szpiro,
+  A.~A., Chen, W., Brehm, J.~M., Celed{\'o}n, J.~C., {\em et~al.} (2016).
+\newblock Control for population structure and relatedness for binary traits in
+  genetic association studies via logistic mixed models.
+\newblock {\em The American Journal of Human Genetics\/}, {\bf 98}(4),
+  653--666.
+
+\bibitem[Dawkins {\em et~al.}(2019)Dawkins, Le, and McKinney]{bod}
+Dawkins, B.~A., Le, T.~T., and McKinney, B.~A. (2019).
+\newblock Blessings of dimensionality: Theoretical analysis of nearest-neighbor
+  projected-distance methods for detecting interactions in high dimension.
+\newblock {\em Under Construction\/}.
+
+\bibitem[De~Hertogh {\em et~al.}(2010)De~Hertogh, De~Meulder, Berger, Pierre,
+  Bareke, Gaigneaux, and Depiereux]{de2010benchmark}
+De~Hertogh, B., De~Meulder, B., Berger, F., Pierre, M., Bareke, E., Gaigneaux,
+  A., and Depiereux, E. (2010).
+\newblock A benchmark for statistical microarray data analysis that preserves
+  actual biological and technical variance.
+\newblock {\em BMC bioinformatics\/}, {\bf 11}(1), 17.
+
+\bibitem[De~la Fuente(2010)De~la Fuente]{diffcoexp10}
+De~la Fuente, A. (2010).
+\newblock From differential expression to differential
+  networking--identification of dysfunctional regulatory networks in diseases.
+\newblock {\em Trends in genetics\/}, {\bf 26}(7), 326--333.
+
+\bibitem[Granizo-Mackenzie and Moore(2013)Granizo-Mackenzie and Moore]{msurf13}
+Granizo-Mackenzie, D. and Moore, J.~H. (2013).
+\newblock Multiple threshold spatially uniform relieff for the genetic analysis
+  of complex human diseases.
+\newblock In {\em European Conference on Evolutionary Computation, Machine
+  Learning and Data Mining in Bioinformatics\/}, pages 1--10. Springer.
+
+\bibitem[Greene {\em et~al.}(2009)Greene, Penrod, Kiralis, and Moore]{greene09}
+Greene, C.~S., Penrod, N.~M., Kiralis, J., and Moore, J.~H. (2009).
+\newblock Spatially {Uniform} {ReliefF} ({SURF}) for computationally-efficient
+  filtering of gene-gene interactions.
+\newblock {\em BioData Mining\/}, {\bf 2}, 5.
+
+\bibitem[Kim {\em et~al.}(2007)Kim, Shirts, Dayal, Bacanu, Wood, Xie, Zhang,
+  Chowdari, Yolken, Devlin, {\em et~al.}]{kim2007exposure}
+Kim, J.~J., Shirts, B.~H., Dayal, M., Bacanu, S.-a., Wood, J., Xie, W., Zhang,
+  X., Chowdari, K.~V., Yolken, R., Devlin, B., {\em et~al.} (2007).
+\newblock Are exposure to cytomegalovirus and genetic variation on chromosome
+  6p joint risk factors for schizophrenia?
+\newblock {\em Annals of medicine\/}, {\bf 39}(2), 145--153.
+
+\bibitem[Kononenko {\em et~al.}(1997)Kononenko, {\v{S}}imec, and
+  Robnik-{\v{S}}ikonja]{kononenko97}
+Kononenko, I., {\v{S}}imec, E., and Robnik-{\v{S}}ikonja, M. (1997).
+\newblock Overcoming the {Myopia} of {Inductive} {Learning} {Algorithms} with
+  {RELIEFF}.
+\newblock {\em Applied Intelligence\/}, {\bf 7}(1), 39--55.
+
+\bibitem[Lareau {\em et~al.}(2015)Lareau, White, Oberg, and McKinney]{lareau15}
+Lareau, C.~A., White, B.~C., Oberg, A.~L., and McKinney, B.~A. (2015).
+\newblock Differential co-expression network centrality and machine learning
+  feature selection for identifying susceptibility hubs in networks with
+  scale-free structure.
+\newblock {\em BioData mining\/}, {\bf 8}(1), 5.
+
+\bibitem[Le {\em et~al.}(2017)Le, Simmons, Misaki, Bodurka, White, Savitz, and
+  McKinney]{le17}
+Le, T.~T., Simmons, W.~K., Misaki, M., Bodurka, J., White, B.~C., Savitz, J.,
+  and McKinney, B.~A. (2017).
+\newblock Differential privacy-based evaporative cooling feature selection and
+  classification with relief-f and random forests.
+\newblock {\em Bioinformatics\/}, {\bf 33}(18), 2906--2913.
+
+\bibitem[Le {\em et~al.}(2018a)Le, Kuplicki, McKinney, Yeh, Thompson, and
+  Paulus]{le18_brainagesim}
+Le, T.~T., Kuplicki, R.~T., McKinney, B.~A., Yeh, H.-w., Thompson, W.~K., and
+  Paulus, M.~P. (2018a).
+\newblock A nonlinear simulation framework supports adjusting for age when
+  analyzing brainage.
+\newblock {\em Frontiers in aging neuroscience\/}, {\bf 10}.
+
+\bibitem[Le {\em et~al.}(2018b)Le, Urbanowicz, Moore, and McKinney]{stir}
+Le, T.~T., Urbanowicz, R.~J., Moore, J.~H., and McKinney, B.~A. (2018b).
+\newblock Statistical inference relief (stir) feature selection.
+\newblock {\em Bioinformatics\/}.
+
+\bibitem[Li {\em et~al.}(2011)Li, Rakitsch, and Borgwardt]{li2011ccsvm}
+Li, L., Rakitsch, B., and Borgwardt, K. (2011).
+\newblock ccsvm: correcting support vector machines for confounding factors in
+  biological data classification.
+\newblock {\em Bioinformatics\/}, {\bf 27}(13), i342--i348.
+
+\bibitem[Linn {\em et~al.}(2016)Linn, Gaonkar, Doshi, Davatzikos, and
+  Shinohara]{linn2016}
+Linn, K.~A., Gaonkar, B., Doshi, J., Davatzikos, C., and Shinohara, R.~T.
+  (2016).
+\newblock Addressing confounding in predictive models with an application to
+  neuroimaging.
+\newblock {\em The international journal of biostatistics\/}, {\bf 12}(1),
+  31--44.
+
+\bibitem[Lopes {\em et~al.}(2010)Lopes, Miguel, Sargent, Ellis, Amorim, and
+  Affara]{lopes2010human}
+Lopes, A.~M., Miguel, R.~N., Sargent, C.~A., Ellis, P.~J., Amorim, A., and
+  Affara, N.~A. (2010).
+\newblock The human rps4 paralogue on yq11. 223 encodes a structurally
+  conserved ribosomal protein and is preferentially expressed during
+  spermatogenesis.
+\newblock {\em BMC molecular biology\/}, {\bf 11}(1), 33.
+
+\bibitem[McKinney and Pajewski(2012)McKinney and Pajewski]{mckinney_pajewski}
+McKinney, B. and Pajewski, N. (2012).
+\newblock Six degrees of epistasis: statistical network models for gwas.
+\newblock {\em Frontiers in genetics\/}, {\bf 2}, 109.
+
+\bibitem[McKinney {\em et~al.}(2009a)McKinney, Crowe, Guo, and
+  Tian]{mckinney09}
+McKinney, B.~A., Crowe, J.~E., Guo, J., and Tian, D. (2009a).
+\newblock Capturing the spectrum of interaction effects in genetic association
+  studies by simulated evaporative cooling network analysis.
+\newblock {\em PLoS genetics\/}, {\bf 5}(3), e1000432.
+
+\bibitem[McKinney {\em et~al.}(2009b)McKinney, Crowe~Jr, Guo, and
+  Tian]{mckinney2009capturing}
+McKinney, B.~A., Crowe~Jr, J.~E., Guo, J., and Tian, D. (2009b).
+\newblock Capturing the spectrum of interaction effects in genetic association
+  studies by simulated evaporative cooling network analysis.
+\newblock {\em PLoS genetics\/}, {\bf 5}(3), e1000432.
+
+\bibitem[McKinney {\em et~al.}(2013)McKinney, White, Grill, Li, Kennedy,
+  Poland, and Oberg]{mckinney13}
+McKinney, B.~A., White, B.~C., Grill, D.~E., Li, P.~W., Kennedy, R.~B., Poland,
+  G.~A., and Oberg, A.~L. (2013).
+\newblock Reliefseq: a gene-wise adaptive-k nearest-neighbor feature selection
+  tool for finding gene-gene interactions and main effects in mrna-seq gene
+  expression data.
+\newblock {\em PLoS one\/}, {\bf 8}(12), e81527.
+
+\bibitem[Miyashita {\em et~al.}(2007)Miyashita, Arai, Asada, Imagawa,
+  Matsubara, Shoji, Higuchi, Urakami, Kakita, Takahashi, {\em
+  et~al.}]{miyashita2007genetic}
+Miyashita, A., Arai, H., Asada, T., Imagawa, M., Matsubara, E., Shoji, M.,
+  Higuchi, S., Urakami, K., Kakita, A., Takahashi, H., {\em et~al.} (2007).
+\newblock Genetic association of ctnna3 with late-onset alzheimer's disease in
+  females.
+\newblock {\em Human molecular genetics\/}, {\bf 16}(23), 2854--2869.
+
+\bibitem[Mostafavi {\em et~al.}(2014)Mostafavi, Battle, Zhu, Potash, Weissman,
+  Shi, Beckman, Haudenschild, McCormick, Mei, {\em et~al.}]{mostafavi14}
+Mostafavi, S., Battle, A., Zhu, X., Potash, J.~B., Weissman, M.~M., Shi, J.,
+  Beckman, K., Haudenschild, C., McCormick, C., Mei, R., {\em et~al.} (2014).
+\newblock Type i interferon signaling genes in recurrent major depression:
+  increased expression detected by whole-blood rna sequencing.
+\newblock {\em Molecular psychiatry\/}, {\bf 19}(12), 1267.
+
+\bibitem[Rao {\em et~al.}(2017)Rao, Monteiro, Mourao-Miranda, Initiative, {\em
+  et~al.}]{rao2017}
+Rao, A., Monteiro, J.~M., Mourao-Miranda, J., Initiative, A.~D., {\em et~al.}
+  (2017).
+\newblock Predictive modelling using neuroimaging data in the presence of
+  confounds.
+\newblock {\em NeuroImage\/}, {\bf 150}, 23--49.
+
+\bibitem[Riesselman {\em et~al.}(2018)Riesselman, Ingraham, and
+  Marks]{riesselman18}
+Riesselman, A.~J., Ingraham, J.~B., and Marks, D.~S. (2018).
+\newblock Deep generative models of genetic variation capture the effects of
+  mutations.
+\newblock {\em Nature methods\/}, {\bf 15}(10), 816--822.
+
+\bibitem[Robnik-{\v{S}}ikonja and Kononenko(2003a)Robnik-{\v{S}}ikonja and
+  Kononenko]{robnik2003theoretical}
+Robnik-{\v{S}}ikonja, M. and Kononenko, I. (2003a).
+\newblock Theoretical and empirical analysis of relieff and rrelieff.
+\newblock {\em Machine learning\/}, {\bf 53}(1-2), 23--69.
+
+\bibitem[Robnik-{\v{S}}ikonja and Kononenko(2003b)Robnik-{\v{S}}ikonja and
+  Kononenko]{robnik03}
+Robnik-{\v{S}}ikonja, M. and Kononenko, I. (2003b).
+\newblock Theoretical and empirical analysis of relieff and rrelieff.
+\newblock {\em Machine learning\/}, {\bf 53}(1-2), 23--69.
+
+\bibitem[Schork and Zapala(2012)Schork and Zapala]{schork12}
+Schork, N.~J. and Zapala, M.~A. (2012).
+\newblock Statistical properties of multivariate distance matrix regression for
+  high-dimensional data analysis.
+\newblock {\em Frontiers in genetics\/}, {\bf 3}, 190.
+
+\bibitem[Urbanowicz {\em et~al.}(2018a)Urbanowicz, Olson, Schmitt, Meeker, and
+  Moore]{urbanowicz17}
+Urbanowicz, R.~J., Olson, R.~S., Schmitt, P., Meeker, M., and Moore, J.~H.
+  (2018a).
+\newblock Benchmarking relief-based feature selection methods for
+  bioinformatics data mining.
+\newblock {\em Journal of Biomedical Informatics\/}, {\bf 85}, 168--188.
+
+\bibitem[Urbanowicz {\em et~al.}(2018b)Urbanowicz, Meeker, Cava, Olson, and
+  Moore]{urbanowicz17b}
+Urbanowicz, R.~J., Meeker, M., Cava, W.~L., Olson, R.~S., and Moore, J.~H.
+  (2018b).
+\newblock Relief-based feature selection: Introduction and review.
+\newblock {\em Journal of Biomedical Informatics\/}.
+
+\bibitem[Wang {\em et~al.}(2009)Wang, Zhang, Ma, Bucan, Glessner, Abrahams,
+  Salyakina, Imielinski, Bradfield, Sleiman, {\em et~al.}]{wang2009common}
+Wang, K., Zhang, H., Ma, D., Bucan, M., Glessner, J.~T., Abrahams, B.~S.,
+  Salyakina, D., Imielinski, M., Bradfield, J.~P., Sleiman, P.~M., {\em et~al.}
+  (2009).
+\newblock Common genetic variants on 5p14. 1 associate with autism spectrum
+  disorders.
+\newblock {\em Nature\/}, {\bf 459}(7246), 528.
+
+\bibitem[Weinreich {\em et~al.}(2013)Weinreich, Lan, Wylie, and
+  Heckendorn]{weinreich13}
+Weinreich, D., Lan, Y., Wylie, C., and Heckendorn, R. (2013).
+\newblock Should evolutionary geneticists worry about higher-order epistasis?
+\newblock {\em Curr Opin Genet Dev.}, {\bf 23}(6), 700--7.
+
+\bibitem[Winham {\em et~al.}(2012)Winham, Colby, Freimuth, Wang, De~Andrade,
+  Huebner, and Biernacka]{winham2012snp}
+Winham, S.~J., Colby, C.~L., Freimuth, R.~R., Wang, X., De~Andrade, M.,
+  Huebner, M., and Biernacka, J.~M. (2012).
+\newblock Snp interaction detection with random forests in high-dimensional
+  genetic data.
+\newblock {\em BMC bioinformatics\/}, {\bf 13}(1), 164.
+
+\bibitem[Zou and Hastie(2005)Zou and Hastie]{glmnet05}
+Zou, H. and Hastie, T. (2005).
+\newblock Regularization and variable selection via the elastic net.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)\/}, {\bf 67}(2), 301--320.
+
+\end{thebibliography}

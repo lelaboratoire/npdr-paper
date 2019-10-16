@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: main_npdr.aux
+The style file: natbib.bst
+Database file #1: NPDR_refs.bib
+You've used 36 entries,
+            2378 wiz_defined-function locations,
+            737 strings with 12255 characters,
+and the built_in function-call counts, 19853 in all, are:
+= -- 1722
+> -- 1483
+< -- 9
++ -- 459
+- -- 447
+* -- 2068
+:= -- 3536
+add.period$ -- 187
+call.type$ -- 36
+change.case$ -- 223
+chr.to.int$ -- 32
+cite$ -- 36
+duplicate$ -- 736
+empty$ -- 1134
+format.name$ -- 497
+if$ -- 3806
+int.to.chr$ -- 5
+int.to.str$ -- 0
+missing$ -- 36
+newline$ -- 184
+num.names$ -- 144
+pop$ -- 221
+preamble$ -- 2
+purify$ -- 223
+quote$ -- 0
+skip$ -- 448
+stack$ -- 0
+substring$ -- 1077
+swap$ -- 151
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 324
+warning$ -- 0
+while$ -- 157
+width$ -- 0
+write$ -- 469
