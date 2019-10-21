@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  16 OCT 2019 15:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 OCT 2019 14:50
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -712,23 +712,48 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
  []
 
 [8])
-Extra height:10.0pt when 244.0pt
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 235.0pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:0.0pt when 245.0pt
+Extra height:10.0pt when 236.0pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-(2)Left:245.0pt Right:245.0pt Output:245.0pt
+Extra height:10.0pt when 237.0pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 238.0pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 239.0pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 240.0pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 241.0pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 242.0pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 243.0pt
+Extra height:0.0pt when 244.0pt
+(2)Left:244.0pt Right:227.0pt Output:244.0pt
 - LAST -
 Extra skip:0.0pt
-Left:245.0pt
-Right:245.0pt
-Output:245.0pt
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
+Left:244.0pt
+Right:227.0pt
+Output:244.0pt
 
 Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
@@ -754,10 +779,10 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 3739 strings out of 492649
- 46981 string characters out of 6129622
- 129616 words of memory out of 5000000
- 7517 multiletter control sequences out of 15000+600000
+ 3738 strings out of 492649
+ 46958 string characters out of 6129622
+ 130532 words of memory out of 5000000
+ 7516 multiletter control sequences out of 15000+600000
  62953 words of font info for 117 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
  41i,15n,29p,1277b,315s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -782,7 +807,7 @@ s/type1/urw/helvetic/uhvr8ac.pfb></usr/local/texlive/2018/texmf-dist/fonts/type
 helvetic/uhvro8ac.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times
 /utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmr8a.pf
 b></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main_npdr.pdf (10 pages, 612159 bytes).
+Output written on main_npdr.pdf (10 pages, 612310 bytes).
 PDF statistics:
  166 PDF objects out of 1000 (max. 8388607)
  122 compressed objects within 2 object streams
