@@ -74,7 +74,7 @@ pboth_dark <- ggplot(npdr_w_wo_sex, aes(x = nlog10.nosex, y = nlog10.sex)) +
             seed = 1618, #angle = 45,
             size = 2.5, segment.alpha = 0.3) +
   # viridis::scale_fill_viridis(option = 'B', direction = -1) + 
-  theme_bw() + #theme(legend.position = c(0.9, 0.75)) +
+  # theme_bw() + #theme(legend.position = c(0.9, 0.75)) +
   theme(legend.position = c(0.9, 0.8), 
       legend.key.height = unit(1, "line"),
       legend.key.width = unit(0.8, "line"),

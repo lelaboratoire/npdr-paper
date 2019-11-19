@@ -233,6 +233,12 @@ ggsave(prs, filename = 'figs/fig2_pr_plots.pdf', width = 5.8, height = 6.4)
 
 ```
 
+Dark theme for presentation:
+```{r}
+ggsave(pr_100 + ggdark::dark_theme_bw(), filename = 'figs/rocky_fig1.svg', width = 5.8, height = 3.2)
+ggsave(pr + ggdark::dark_theme_bw(), filename = 'figs/rocky_fig2.pdf', width = 5.8, height = 3.15)
+```
+
 
 ```{r}
 pr <- rbind(pr_qtrait, pr_cc) %>% 
@@ -311,8 +317,8 @@ recall_text <- data.frame(
             'RRelief', 'Relief-F',
             'NPDR', 'NPDR'),
   sim = rep(c('Continuous outcome', 'Dichotomous outcome'), 3),
-  x = c(0.47, 0.65, 0.16, 0.17, 0.28, 0.3), 
-  y = c(0.5, 0.6, 0.15, 0.15, 0.85, 0.85), 
+  x = c(0.47, 0.53, 0.16, 0.17, 0.28, 0.05), 
+  y = c(0.5, 0.8, 0.15, 0.15, 0.85, 0.99), 
   type = rep(c('Random forest', 'Relief', 'NPDR'), each = 2)
 )
 
