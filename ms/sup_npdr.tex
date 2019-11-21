@@ -1,6 +1,8 @@
 \documentclass{article}
 \usepackage{authblk}
 \renewcommand{\thefigure}{S\arabic{figure}}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.25in}
 
 \title{NPDR Supplementary Material}
 \author[1]{Trang T. Le}
@@ -28,6 +30,8 @@ University of Pennsylvania, Philadelphia, PA 19104}
 % \label{fig:auPRC}
 % \end{figure}
 
+
+
 \begin{figure}[h]%figure3
 \centerline{\includegraphics[]{../figs/npdr_stir_p_cc.pdf}}
 \caption{\textbf{Similarity between NPDR and STIR (dichotomous outcomes).} Comparison of -log$_{10}$ P values for one interaction simulation of $m = 200$ (100 cases and 100 controls) and $p = 1000$ attributes with 100 functional. In 100 replicate simulations, correlation,  $r$, between the two methods ranges from 0.9827 to 0.9994. STIR is based on a t-test of projected distances and NPDR is based on a logistic regression of projected distances. NPDR has the added benefit of handling continuous outcomes and covariate correction.}
@@ -35,17 +39,37 @@ University of Pennsylvania, Philadelphia, PA 19104}
 \end{figure}
 
 
+\begin{figure}[!tbp]
+\centerline{\includegraphics[trim = 0 0 0 0, width=0.7\textwidth]{../figs/fig1.pdf}}
+\caption{{\bf Simulation comparison of importance scores.} Scatter plots of NPDR versus Relief-based scores (left) and NPDR versus random forest scores (right) for representative simulations of continuous outcome data with main effects (A, top row) and dichotomous outcome data with interaction effects (B, bottom row). Simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional (orange). For continuous outcome (A), importance scores computed by RRelief weight, random forest percent increase in MSE and NPDR standardized linear regression coefficient ($\beta'$ from Eq. 10, main text). For dichotomous outcome (B), scores computed by Relief-F, random forest mean decrease in accuracy and NPDR standardized logistic regression coefficient ($\beta'$ from Eq. 14, main text). A regression line between the scores with correlation $r$ is displayed, and a 0.05 Bonferroni-adjusted cutoff (dashed) is shown for NPDR scores. There is no statistical threshold for Relief-based methods or random forest (area under the precision-recall curve (auPRC) is used to compare algorithm performance, see Fig. 1, main text).}
+\label{fig:npdr_relief}
+\end{figure}
+
+
+
+
+
 \begin{figure}[h]%figure2
 \centerline{\includegraphics[]{../figs/roc_compare_100.pdf}}
-\caption{\textbf{Receiver Operating Characteristic (ROC) curves for Relief, NPDR and random forest feature selection.} For one replicate simulation (A), ROCs for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right). The auROC value is given for each method. For 100 replicate simulations of both simulation types (B), NPDR yields statistically significant higher auROC than Relief or random forest ($\ast$$\ast$$\ast$ indicate P $<.0001$). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}
+\caption{\textbf{Receiver Operating Characteristic (ROC) curves for Relief, NPDR and random forest feature selection.} For one replicate simulation (A), ROCs are displayed for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right). The auROC value is given for each method. For 100 replicate simulations of both simulation types (B), NPDR yields statistically significant higher auROC than Relief or random forest ($\ast$$\ast$$\ast$ indicate P $<.0001$). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}
 \label{fig:auROC}
 \end{figure}
+
+
+\begin{figure}[!tbp]
+\centerline{\includegraphics[trim = 0 0 0 0, width=1\textwidth]{../figs/recall_compare_1.pdf}}
+\caption{{\bf Recall curves for Relief, NPDR and random forest feature selection.} For one replicate simulation, recall values for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right) are shown at each feature selection threshold. For example, in continuous outcome data, at 20\% feature cutoff, NPDR yields a recall of approximately 70\%, RRelief 60\%, and random forest 50\%.}
+\label{fig:npdr_relief}
+\end{figure}
+
 
 \begin{figure}[h]%figure2
 \centerline{\includegraphics[]{../figs/scai_eqtls.pdf}}
 \caption{\textbf{NPDR gene regulation.} Top NPDR eQTLs associated with SCAI (suppressor of cancer cell invasion) RNA-Seq gene expression in major depressive disorder (MDD) study of 915 subjects. SNPs are tested genome-wide for NPDR-based association with SCAI. Tests are adjusted for MDD status and first 10 principal components. SNPs are ordered by NPDR P value, and annoation is provided for the SNPs chromosome location, nearest genes, and variant type. }
 \label{fig:auROC}
 \end{figure}
+
+
 
 % \begin{figure}[h]%figure
 % \centerline{\includegraphics[]{../figs/npdr_rf.pdf}}
