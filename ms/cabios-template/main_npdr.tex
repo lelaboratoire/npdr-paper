@@ -480,15 +480,15 @@ The \emph{npdr} R package is available at {{https://insilico.github.io/npdr/}}.
 
 \begin{figure}[!tbp]
 \centerline{\includegraphics[trim = 0 0 0 0, scale = 0.58]{../../figs/fig2_pr_plots.pdf}}
-\caption{{\bf Simulation comparison for detection of functional variables.} For one replicate simulation (A, top row), precision-recall curves (PRC) for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right). The area under the PRC (auPRC) value is reported next to each method: NPDR (magenta), Relief-based (dark blue) and random forest (light blue). The magenta $\ast$ indicates the NPDR 0.05 adjusted cutoffs (scores shown in Fig.~\ref{fig:npdr_relief}). For 100 replicate simulations (B, bottom row), the distributions of the auPRC values are compared for the methods. NPDR yields statistically significant higher auPRC than Relief or random forest ($\ast$$\ast$$\ast$ indicate P $<.0001$). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}
+\caption{{\bf Simulation comparison for detection of functional variables.} For one replicate simulation (A, top row), precision-recall curves (PRC) are displayed for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right). The area under the PRC (auPRC) value is reported next to each method: NPDR (magenta), Relief-based (dark blue) and random forest (light blue). The magenta $\ast$ indicates the NPDR 0.05 adjusted cutoffs (scores shown in Supplementary Fig. S2). For 100 replicate simulations (B, bottom row), the distributions of the auPRC values are compared for the methods. NPDR yields statistically significant higher auPRC than Relief or random forest ($\ast$$\ast$$\ast$ indicate P $<.0001$). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}
 \label{fig:pr_curve}
 \end{figure}
 
-\begin{figure}[!tbp]
-\centerline{\includegraphics[trim = 0 0 0 0, scale = 0.58]{../../figs/fig1.pdf}}
-\caption{{\bf Simulation comparison of importance scores.} Scatter plots of NPDR versus Relief-based scores (left) and NPDR versus random forest scores (right) for representative simulations of continuous outcome data with main effects (A, top row) and dichotomous outcome data with interaction effects (B, bottom row). Simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional (orange). For continuous outcome (A), importance scores computed by RRelief weight, random forest percent increase in MSE and NPDR standardized linear regression coefficient ($\beta'$ from Eq.~\ref{eq:lin_reg}). For dichotomous outcome (B), scores computed by Relief-F, random forest mean decrease in accuracy and NPDR standardized logistic regression coefficient ($\beta'$ from Eq.~\ref{eq:logit_nocovar}). A regression line between the scores with correlation $r$ is displayed, and a 0.05 Bonferroni-adjusted cutoff (dashed) is shown for NPDR scores. There is no statistical threshold for Relief-based methods or random forest (area under the precision-recall curve (auPRC) is used to compare algorithm performance, see Fig.~\ref{fig:pr_curve}).}
-\label{fig:npdr_relief}
-\end{figure}
+%\begin{figure}[!tbp]
+%\centerline{\includegraphics[trim = 0 0 0 0, scale = 0.58]{../../figs/fig1.pdf}}
+%\caption{{\bf Simulation comparison of importance scores.} Scatter plots of NPDR versus Relief-based scores (left) and NPDR versus random forest scores (right) for representative simulations of continuous outcome data with main effects (A, top row) and dichotomous outcome data with interaction effects (B, bottom row). Simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional (orange). For continuous outcome (A), importance scores computed by RRelief weight, random forest percent increase in MSE and NPDR standardized linear regression coefficient ($\beta'$ from Eq.~\ref{eq:lin_reg}). For dichotomous outcome (B), scores computed by Relief-F, random forest mean decrease in accuracy and NPDR standardized logistic regression coefficient ($\beta'$ from Eq.~\ref{eq:logit_nocovar}). A regression line between the scores with correlation $r$ is displayed, and a 0.05 Bonferroni-adjusted cutoff (dashed) is shown for NPDR scores. There is no statistical threshold for Relief-based methods or random forest (area under the precision-recall curve (auPRC) is used to compare algorithm performance, see Fig.~\ref{fig:pr_curve}).}
+%\label{fig:npdr_relief}
+%\end{figure}
 
 %\subsection{Simulation comparison for continuous outcome data} 
 In simulated data with main effects and interactions for continuous and dichotomous outcomes, NPDR attribute estimates show improved precision and recall over standard Relief and random forest importance scores for detecting functional variables (Fig. \ref{fig:pr_curve}).
@@ -497,20 +497,20 @@ Across 100 replicate simulations for each simulation type, NPDR shows significan
 The auPRC values for all methods are higher in the interaction effect simulations relative to the main effect simulations because of a larger simulated effect size.
 
 We use auPRC to compare other machine learning methods with NPDR because Relief and random forest lack a null distribution, whereas NPDR has an approximate distribution for hypothesis testing.
-NPDR correctly detects 57 out of 100 functional attributes in a continuous-outcome main effect simulation (Fig. \ref{fig:npdr_relief}A) and 86 out of 100 functional attributes in a dichotomous-outcome interaction simulation (Fig. \ref{fig:npdr_relief}B) using an adjusted P value threshold.
-Given any vertical score cutoff (Fig. \ref{fig:npdr_relief}), it is difficult for Relief or random forest to detect most of the functional attributes without including many more false positives than NPDR.
+NPDR correctly detects 57 out of 100 functional attributes in a continuous-outcome main effect simulation (Supplementary Fig. S2A) and 86 out of 100 functional attributes in a dichotomous-outcome interaction simulation (Supplementary Fig. S2B) using an adjusted P value threshold.
+Given any vertical score cutoff (Supplementary Fig. S2), it is difficult for Relief or random forest to detect most of the functional attributes without including many more false positives than NPDR.
 As shown by the auPRC, NPDR tends to include fewer false positives than the other methods as it detects more functional attributes (Fig. \ref{fig:pr_curve}).
 
-NPDR importance scores are highly correlated with Relief-F scores with $r = 0.869$ for continuous outcome main effects and $0.848$ for dichotomous outcome interaction effects (Fig. \ref{fig:npdr_relief}).
+NPDR importance scores are highly correlated with Relief-F scores with $r = 0.869$ for continuous outcome main effects and $0.848$ for dichotomous outcome interaction effects (Supplementary Fig. S2).
 This correlation is expected because both methods are nearest-neighbor based.
 The correlation of NPDR with random forest scores is lower than with Relief-F, where $r = 0.692$ for continuous outcome main effects and $0.578$ for dichotomous outcome interaction effects.
 The correlation for interaction effect simulations decreases further because random forest underestimates the importance of interacting attributes as the attribute dimensionality becomes large compared to the number of functional attributes~\citep{mckinney2009capturing,winham2012snp}.
 
-% With a Bonferroni cutoff, NPDR correctly detects 57 out of 100 functional attributes in the continuous outcome (Fig. \ref{fig:npdr_relief}A) and 86 out of 100 functional attributes in the dichotomous outcome data (Fig. \ref{fig:npdr_relief}B).
+% With a Bonferroni cutoff, NPDR correctly detects 57 out of 100 functional attributes in the continuous outcome (Supplementary Fig. S2A) and 86 out of 100 functional attributes in the dichotomous outcome data (Supplementary Fig. S2B).
 % As expected, NPDR importance scores are more correlated with Relief-F ($r = 0.869, 0.848$) than with random forest ($r = 0.692, 0.578$).
 % 
 % Due to the lack of statistical thresholds of random forest and Relief-based methods, in practice, the importance score cutoffs for these methods are chosen arbitrarily.
-% However, when a vertical cutoff is drawn for Relief-based or random forest importance score, it is difficult for random forest and Relief to detect most of the functional attributes without including many false positives, especially for random forest with interaction effects (Fig. \ref{fig:npdr_relief}).
+% However, when a vertical cutoff is drawn for Relief-based or random forest importance score, it is difficult for random forest and Relief to detect most of the functional attributes without including many false positives, especially for random forest with interaction effects (Supplementary Fig. S2).
 % To explain this underwhelming performance, we recall that random forest underestimates the importance of interacting attributes as the attribute dimensionality becomes too large~\citep{mckinney2009capturing,winham2012snp}.
 % 
 % Meanwhile, there is a clearer separation between the functional and non-functional attributes on the NPDR importance metric.
@@ -519,21 +519,21 @@ The correlation for interaction effect simulations decreases further because ran
 % The auPRC of these methods in the interaction effect simulations are more than main effect simulations, which is due to differences in the simulated effect size.
 % Across 100 replicated simulations for each data type, NPDR shows significantly higher auPRC than random forest and Relief (both P < 0.0001, Fig. \ref{fig:pr_curve}B).
 % %Because of the structural difference between simulation of main and interaction effect, it is not trivial to [...].
-% %Therefore, we aim to simulate similar correlation between NPDR and Relief-F importance score as in the case of binary outcome data with interaction effect (Fig. \ref{fig:npdr_relief}C).
+% %Therefore, we aim to simulate similar correlation between NPDR and Relief-F importance score as in the case of binary outcome data with interaction effect (Supplementary Fig. S2C).
 % % Because Relief-based methods do not have a statistical threshold, we use the auPRC for comparison, which shows the improved feature selection performance of using a distance regression-based attribute score in NPDR compared to the standard RRelief and random forest importance score (Fig. \ref{fig:pr_curve}).
 % %tend to there is a greater separation between the functional and nonfunctional group on the NPDR coefficient compared to Relief-F score.
 % %In other words, if a vertical line was drawn as an arbitrary Relief-F score cutoff that yields a reasonable number of correct functional attributes, it will include at least several incorrect ones. 
-% % The precision-recall curve clearly demonstrates NPDR outperforms Relief-F in this particular simulated dataset (Fig. \ref{fig:pr_curve}), and across 100 simulations of moderate effect size, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S2).
+% % The precision-recall curve clearly demonstrates NPDR outperforms Relief-F in this particular simulated dataset (Fig. \ref{fig:pr_curve}), and across 100 simulations of moderate effect size, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S3).
 % % While the importance scores from NPDR and Relief-F are correlated ($r = 0.869$), [any RRelief threshold (vertical line in A) will yield an equal or greater false positive rate than NDPR. ]
 % Expectedly, when the effect size increases, the auPRC values of all methods approach 100\% and become closer together.
 % Moreover, even though area under the Receiver Operating Characteristics curve (auROC) is not our primary metric, NPDR also gives significantly higher auROC than random forest and Relief (both P < 0.0001, see Supplementary Fig. S1).
 % In summary, as the effect size varies, NPDR produces distance regression-based importance scores at least as good as if not better than random forest and Relief-based method.
-% % For dichotomous outcome data with network interaction effects, we use the logistic model (Eq.~\ref{eq:logit_nocovar}) in NPDR and compare the regression coefficients with Relief-F weights in CORElearn and random forest permutation importance score (Fig. \ref{fig:npdr_relief}B).
+% % For dichotomous outcome data with network interaction effects, we use the logistic model (Eq.~\ref{eq:logit_nocovar}) in NPDR and compare the regression coefficients with Relief-F weights in CORElearn and random forest permutation importance score (Supplementary Fig. S2B).
 % % We again use the fixed-$k$ neighborhood for both methods to approximate a multiSURF neighborhood.
 
-Although our primary performance metric is auPRC, we also use the area under the Receiver Operating Characteristics curve (auROC), which also shows NPDR has statistically significant higher feature selection performance than random forest and Relief (both $P < 0.0001$, see Supplementary Fig. S2).
+Although our primary performance metric is auPRC, we also use the area under the Receiver Operating Characteristics curve (auROC), which also shows NPDR has statistically significant higher feature selection performance than random forest and Relief (both $P < 0.0001$, see Supplementary Fig. S3).
 We also compare NPDR (using a logistic model) with STIR (based on a t-test) for the dichotomous outcome data with interaction effects (Supplementary Fig. S1).
-%Across 100 simulations with specified effect size, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S3). 
+%Across 100 simulations with specified effect size, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S4). 
 While logistic regression and the t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yield highly correlated scores for dichotomous data with interaction effects, where the correlation value $r$ between the P values produced from the two methods ranges from 0.9827 to 0.9994 in 100 replications.
 
 In the continuous and dichotomous simulations, respectively, we use NPDR with a linear model (Eq.~\ref{eq:lin_reg}) and logistic model (Eq.~\ref{eq:logit_nocovar}) to compare with standard RRelief and Relief-F (R package CORElearn) and with random forest regression and classification (permutation importance, R package randomforest).
@@ -569,7 +569,7 @@ The NPDR runtime for this RNA-Seq dataset ($m=915$ samples and $p=15,231$ attrib
 % We next compare sex-adjusted NPDR with random forest feature selection. 
 % However, it is not trivial to include covariates in many widely used machine learning models including random forest.
 % Moreover, like previous feature selection methods before STIR, importance scores produced by random forest does not follow a distribution.
-% Hence, instead of P values, we compare NPDR standardized $\beta$ coefficient and random forest permutation importance score (Supplementary Fig. S4).
+% Hence, instead of P values, we compare NPDR standardized $\beta$ coefficient and random forest permutation importance score (Supplementary Fig. S5).
 % Several genes with high random forest importance score ($\geq 1$) but low NPDR coefficient are highly associated with sex (dark pink - purple).
 % 
 % NPDR effectively handles covariates and is less susceptible to the curse of dimensionality for detecting interactions. 
@@ -612,12 +612,12 @@ The NPDR runtime for this RNA-Seq dataset ($m=915$ samples and $p=15,231$ attrib
 % \end{table}
 % 
 % The Pittsburgh Sleep Quality Index (PSQI) measures the quality and patterns of sleep over a one-month interval, where low PSQI indicates high sleep quality.
-% Patients with MDD on average have significantly higher PSQI (9.7) compared to healthy participants (5.0) (P < 0.0001, see Supplementary Fig. S3).
+% Patients with MDD on average have significantly higher PSQI (9.7) compared to healthy participants (5.0) (P < 0.0001, see Supplementary Fig. S4).
 % NPDR identifies 24 genes significantly associated with PSQI (Table \ref{tab:psqi}).
 % Among these genes, CACNA1C has been found to be associated with narcolepsy~\citep{shimada2010}, and its genetic variation has been linked to increase risk for sleep latency in infants~\citep{kantojarvi2017} and psychiatric disorders, including bipolar disorder~\citep{franke2010}, schizophrenia, recurrent major depression~\citep{green2009} and across psychiatric disorders~\citep{crossdisorder2013, lotan2014}.
 % Further characterization of the interactions among these genes will prove useful in establishing a sleep-associated expression-epistasis network~\citep{lareau15, mckinney2009capturing}.
 % 
-% Notably, when depression status instead of sleep quality is considered, NPDR with and without sex adjustment produced results that are consistent with previously published results using the STIR algorithm (Supplementary Fig. S4)~\citep{stir}.
+% Notably, when depression status instead of sleep quality is considered, NPDR with and without sex adjustment produced results that are consistent with previously published results using the STIR algorithm (Supplementary Fig. S5)~\citep{stir}.
 % We expected this consistency because the balance in sex between diagnostic groups was designed to reduce confounding.
 
 \subsection{eQTL analysis using NPDR with GWAS and quantitative outcomes}

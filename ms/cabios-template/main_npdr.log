@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 OCT 2019 14:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 NOV 2019 14:50
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -659,11 +659,6 @@ LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.54997> not available
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <3.25> not available
 (Font)              size <5> substituted on input line 483.
 
-<../../figs/fig1.pdf, id=40, 346.29375pt x 397.485pt>
-File: ../../figs/fig1.pdf Graphic file (type pdf)
-<use ../../figs/fig1.pdf>
-Package pdftex.def Info: ../../figs/fig1.pdf  used on input line 488.
-(pdftex.def)             Requested size: 200.85051pt x 230.54146pt.
 
 Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
@@ -683,12 +678,18 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
  []
 
 [6 <../../figs/fig2_pr_plots.pdf>]
-<../../figs/mostafavi_npdrs_mdd.pdf, id=60, 433.62pt x 325.215pt>
+<../../figs/mostafavi_npdrs_mdd.pdf, id=59, 433.62pt x 325.215pt>
 File: ../../figs/mostafavi_npdrs_mdd.pdf Graphic file (type pdf)
 <use ../../figs/mostafavi_npdrs_mdd.pdf>
 Package pdftex.def Info: ../../figs/mostafavi_npdrs_mdd.pdf  used on input line
  562.
 (pdftex.def)             Requested size: 255.83359pt x 191.87518pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 
 Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
@@ -698,10 +699,6 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
 Underfull \hbox (badness 4328) in paragraph at lines 676--677
 \LY1/ptm/m/n/8 neighbors in the projection models, which violates distribution
  []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 
 (./main_npdr.bbl
 LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <7> not available
@@ -714,46 +711,54 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [8])
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:10.0pt when 235.0pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:10.0pt when 236.0pt
+Extra height:20.0pt when 257.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:10.0pt when 237.0pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:10.0pt when 238.0pt
+Extra height:20.0pt when 258.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:10.0pt when 239.0pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:10.0pt when 240.0pt
+Extra height:20.0pt when 259.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:10.0pt when 241.0pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:10.0pt when 242.0pt
+Extra height:20.0pt when 260.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:10.0pt when 243.0pt
-Extra height:0.0pt when 244.0pt
-(2)Left:244.0pt Right:227.0pt Output:244.0pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:20.0pt when 261.5pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:0.0pt when 262.5pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+(2)Left:262.5pt Right:254.0pt Output:262.5pt
 - LAST -
 Extra skip:0.0pt
-Left:244.0pt
-Right:227.0pt
-Output:244.0pt
+Left:262.5pt
+Right:254.0pt
+Output:262.5pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 
 Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
@@ -761,15 +766,7 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
 
 [9
 
-]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Overfull \hbox (252.0pt too wide) has occurred while \output is active
-[][] 
- []
-
-[10 <../../figs/fig1.pdf>] (./main_npdr.aux)
+] (./main_npdr.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.75pt have occurred.
@@ -779,13 +776,13 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 3738 strings out of 492649
- 46958 string characters out of 6129622
- 130532 words of memory out of 5000000
- 7516 multiletter control sequences out of 15000+600000
+ 3732 strings out of 492649
+ 46814 string characters out of 6129622
+ 129198 words of memory out of 5000000
+ 7511 multiletter control sequences out of 15000+600000
  62953 words of font info for 117 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 41i,15n,29p,1277b,315s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,15n,29p,1166b,313s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc}</usr/lo
 cal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy9.pfb></us
 r/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/
@@ -807,10 +804,10 @@ s/type1/urw/helvetic/uhvr8ac.pfb></usr/local/texlive/2018/texmf-dist/fonts/type
 helvetic/uhvro8ac.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times
 /utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmr8a.pf
 b></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main_npdr.pdf (10 pages, 612310 bytes).
+Output written on main_npdr.pdf (9 pages, 375939 bytes).
 PDF statistics:
- 166 PDF objects out of 1000 (max. 8388607)
- 122 compressed objects within 2 object streams
+ 152 PDF objects out of 1000 (max. 8388607)
+ 111 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
