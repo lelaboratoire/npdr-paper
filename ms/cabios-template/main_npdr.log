@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 NOV 2019 14:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 NOV 2019 17:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -541,53 +541,53 @@ Underfull \hbox (badness 1675) in paragraph at lines 284--284
 []\LY1/ptm/b/n/8 Dichotomous outcomes with covariates: logistic regression
  []
 
-LaTeX Font Info:    Try loading font information for LY1+phb on input line 408.
+LaTeX Font Info:    Try loading font information for LY1+phb on input line 409.
 
-LaTeX Font Info:    No file LY1phb.fd. on input line 408.
+LaTeX Font Info:    No file LY1phb.fd. on input line 409.
 
 LaTeX Font Warning: Font shape `LY1/phb/m/n' undefined
-(Font)              using `LY1/ptm/m/n' instead on input line 408.
+(Font)              using `LY1/ptm/m/n' instead on input line 409.
 
 
 LaTeX Font Warning: Font shape `LY1/phb/bx/n' undefined
-(Font)              using `LY1/phb/m/n' instead on input line 408.
+(Font)              using `LY1/phb/m/n' instead on input line 409.
 
-LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 408.
+LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 409.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <7.5> not available
-(Font)              size <7> substituted on input line 408.
+(Font)              size <7> substituted on input line 409.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.75> not available
-(Font)              size <5> substituted on input line 408.
+(Font)              size <5> substituted on input line 409.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <7.5> not available
-(Font)              size <7> substituted on input line 408.
+(Font)              size <7> substituted on input line 409.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.75> not available
-(Font)              size <5> substituted on input line 408.
+(Font)              size <5> substituted on input line 409.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <7.5> not available
-(Font)              size <7> substituted on input line 408.
+(Font)              size <7> substituted on input line 409.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.75> not available
-(Font)              size <5> substituted on input line 408.
+(Font)              size <5> substituted on input line 409.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <7.5> not available
-(Font)              size <7> substituted on input line 408.
+(Font)              size <7> substituted on input line 409.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <3.75> not available
-(Font)              size <5> substituted on input line 408.
+(Font)              size <5> substituted on input line 409.
 
 
 LaTeX Font Warning: Font shape `LY1/phb/m/it' undefined
-(Font)              using `LY1/phb/m/n' instead on input line 408.
+(Font)              using `LY1/phb/m/n' instead on input line 409.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -598,17 +598,17 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
  []
 
 [4]
-Underfull \hbox (badness 1337) in paragraph at lines 463--470
+Underfull \hbox (badness 1337) in paragraph at lines 464--471
 \LY1/ptm/m/n/8 MDD and demonstrate NPDR's utility for GWAS and continuous
  []
 
 
-Underfull \hbox (badness 3668) in paragraph at lines 473--475
+Underfull \hbox (badness 3668) in paragraph at lines 474--476
 \LY1/ptm/m/n/8 Detailed simulation and analysis code needed to reproduce the
  []
 
 
-Underfull \hbox (badness 3746) in paragraph at lines 473--475
+Underfull \hbox (badness 3746) in paragraph at lines 474--476
 \LY1/ptm/m/n/8 paper (R version 3.5.0). The \LY1/ptm/m/it/8 npdr \LY1/ptm/m/n/8
  R package is available at
  []
@@ -616,48 +616,48 @@ Underfull \hbox (badness 3746) in paragraph at lines 473--475
 <../../figs/fig2_pr_plots.pdf, id=39, 418.56375pt x 461.725pt>
 File: ../../figs/fig2_pr_plots.pdf Graphic file (type pdf)
 <use ../../figs/fig2_pr_plots.pdf>
-Package pdftex.def Info: ../../figs/fig2_pr_plots.pdf  used on input line 482.
+Package pdftex.def Info: ../../figs/fig2_pr_plots.pdf  used on input line 483.
 (pdftex.def)             Requested size: 242.76714pt x 267.80069pt.
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <6.5> not available
-(Font)              Font shape `LY1/phv/b/n' tried instead on input line 483.
+(Font)              Font shape `LY1/phv/b/n' tried instead on input line 484.
 LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <6.5> not available
-(Font)              Font shape `LY1/ptm/b/n' tried instead on input line 483.
-LaTeX Font Info:    Calculating math sizes for size <6.5> on input line 483.
+(Font)              Font shape `LY1/ptm/b/n' tried instead on input line 484.
+LaTeX Font Info:    Calculating math sizes for size <6.5> on input line 484.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.54997> not available
-(Font)              size <5> substituted on input line 483.
+(Font)              size <5> substituted on input line 484.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.25> not available
-(Font)              size <5> substituted on input line 483.
+(Font)              size <5> substituted on input line 484.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.54997> not available
-(Font)              size <5> substituted on input line 483.
+(Font)              size <5> substituted on input line 484.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.25> not available
-(Font)              size <5> substituted on input line 483.
+(Font)              size <5> substituted on input line 484.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.54997> not available
-(Font)              size <5> substituted on input line 483.
+(Font)              size <5> substituted on input line 484.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.25> not available
-(Font)              size <5> substituted on input line 483.
+(Font)              size <5> substituted on input line 484.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <6.5> not available
-(Font)              size <6> substituted on input line 483.
+(Font)              size <6> substituted on input line 484.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.54997> not available
-(Font)              size <5> substituted on input line 483.
+(Font)              size <5> substituted on input line 484.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <3.25> not available
-(Font)              size <5> substituted on input line 483.
+(Font)              size <5> substituted on input line 484.
 
 
 Overfull \hbox (252.0pt too wide) has occurred while \output is active
@@ -668,7 +668,7 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Underfull \hbox (badness 4242) in paragraph at lines 545--554
+Underfull \hbox (badness 4242) in paragraph at lines 546--555
 \LY1/ptm/m/n/8 NPDR with covariate adjustment effectively removes sex-related
  []
 
@@ -678,11 +678,11 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
  []
 
 [6 <../../figs/fig2_pr_plots.pdf>]
-<../../figs/mostafavi_npdrs_mdd.pdf, id=59, 433.62pt x 325.215pt>
+<../../figs/mostafavi_npdrs_mdd.pdf, id=58, 433.62pt x 325.215pt>
 File: ../../figs/mostafavi_npdrs_mdd.pdf Graphic file (type pdf)
 <use ../../figs/mostafavi_npdrs_mdd.pdf>
 Package pdftex.def Info: ../../figs/mostafavi_npdrs_mdd.pdf  used on input line
- 562.
+ 563.
 (pdftex.def)             Requested size: 255.83359pt x 191.87518pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -696,7 +696,7 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
  []
 
 [7 <../../figs/mostafavi_npdrs_mdd.pdf>]
-Underfull \hbox (badness 4328) in paragraph at lines 676--677
+Underfull \hbox (badness 4328) in paragraph at lines 677--678
 \LY1/ptm/m/n/8 neighbors in the projection models, which violates distribution
  []
 
@@ -804,10 +804,10 @@ s/type1/urw/helvetic/uhvr8ac.pfb></usr/local/texlive/2018/texmf-dist/fonts/type
 helvetic/uhvro8ac.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times
 /utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmr8a.pf
 b></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main_npdr.pdf (9 pages, 375939 bytes).
+Output written on main_npdr.pdf (9 pages, 375930 bytes).
 PDF statistics:
- 152 PDF objects out of 1000 (max. 8388607)
- 111 compressed objects within 2 object streams
+ 151 PDF objects out of 1000 (max. 8388607)
+ 110 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
