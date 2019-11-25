@@ -1,0 +1,91 @@
+---
+title: "More comprehensive visualization"
+output: html_document
+---
+
+Setup
+
+```{r}
+library(tidyverse)
+library(cowplot)
+theme_set(theme_bw())
+
+cbbPalette <- paletteer::paletteer_d(yarrr, info)
+my_cols <- cbbPalette[c(4,2,1)]
+my_methods <- c('Random forest',  'Relief', 'NPDR')
+```
+
+
+Load in data:
+```{r}
+read_recall <- function(file, label) {
+  read_csv(here::here('results', 'new-results', file)) %>%
+    select(2, 5, 4) %>%
+    `colnames<-`(my_methods) %>%
+    pivot_longer(everything(), names_to = 'method', values_to = 'auRC') %>%
+    mutate(title = label,
+           method = factor(method, levels = my_methods))
+}
+
+df_1 <-
+  read_recall(
+    'auRC_iterates_sim_gwas_fixed-k_multisurf(balanced).csv',
+    'Genotype predictors (balanced)'
+  )
+
+df_2 <-
+  read_recall(
+    'auRC_iterates_sim_gwas_fixed-k_multisurf(unbalanced).csv',
+    'Genotype predictors (imbalanced)'
+  )
+
+df_3 <-
+  read_recall(
+    'auRC_iterates_fixed-k_multisurf(continuous-balanced).csv',
+    'Continuous predictors (balanced)'
+  )
+
+df_4 <-
+  read_recall(
+    'auRC_iterates_fixed-k_multisurf(continuous-unbalanced).csv',
+    'Continuous predictors (imbalanced)'
+  )
+
+df_plots <- bind_rows(df_1, df_2, df_3, df_4)
+```
+
+```{r}
+set.seed(1618)
+p1 <- df_plots %>% 
+  filter(grepl('Genotype predictors', title)) %>% 
+  ggplot(aes(x = method, y = auRC, color = method)) +
+  geom_boxplot(outlier.shape = NA, color = 'grey50') +
+  geom_jitter(height = 0, width = 0.15, alpha = 0.7) +
+  scale_y_continuous(
+    name = "Area under the Recall curve",
+    limits = c(0.2, 1),
+    breaks = seq(0, 1, by = 0.2),
+    labels = scales::percent_format(accuracy = 1)
+  ) +
+  scale_color_manual(values = my_cols) +
+  facet_grid(. ~ title) +
+  theme(axis.title.x = element_blank(), legend.position = "none")
+
+p2 <- df_plots %>% 
+  filter(grepl('Continuous predictors', title)) %>% 
+  ggplot(aes(x = method, y = auRC, color = method)) +
+  geom_boxplot(outlier.shape = NA, color = 'grey50') +
+  geom_jitter(height = 0, width = 0.15, alpha = 0.7) +
+  scale_y_continuous(
+    name = "Area under the Recall curve",
+    limits = c(0.4, 1),
+    breaks = seq(0, 1, by = 0.2),
+    labels = scales::percent_format(accuracy = 1)
+  ) +
+  scale_color_manual(values = my_cols) +
+  facet_grid(. ~ title) +
+  theme(axis.title.x = element_blank(), legend.position = "none")
+
+ggsave(plot_grid(p1, p2, nrow = 2), 
+       height = 5, width = 5, filename = 'figs/auRC.pdf')
+```
