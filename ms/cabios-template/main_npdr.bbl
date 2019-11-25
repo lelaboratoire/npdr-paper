@@ -1,11 +1,6 @@
  \newcommand{\noop}[1]{}
 \begin{thebibliography}{}
 
-\bibitem[Altman and Krzywinski(2018)Altman and Krzywinski]{CoD}
-Altman, N. and Krzywinski, M. (2018).
-\newblock The curse(s) of dimensionality this-month.
-\newblock {\em Nature Methods\/}, {\bf 15}(6), 399--400.
-
 \bibitem[Arabnejad {\em et~al.}(2018)Arabnejad, Dawkins, Bush, White, Harkness,
   and McKinney]{titv}
 Arabnejad, M., Dawkins, B., Bush, W., White, B., Harkness, A., and McKinney,
@@ -38,20 +33,6 @@ Chen, H., Wang, C., Conomos, M.~P., Stilp, A.~M., Li, Z., Sofer, T., Szpiro,
   genetic association studies via logistic mixed models.
 \newblock {\em The American Journal of Human Genetics\/}, {\bf 98}(4),
   653--666.
-
-\bibitem[Dawkins {\em et~al.}(2019)Dawkins, Le, and McKinney]{bod}
-Dawkins, B.~A., Le, T.~T., and McKinney, B.~A. (2019).
-\newblock Blessings of dimensionality: Theoretical analysis of nearest-neighbor
-  projected-distance methods for detecting interactions in high dimension.
-\newblock {\em Under Construction\/}.
-
-\bibitem[De~Hertogh {\em et~al.}(2010)De~Hertogh, De~Meulder, Berger, Pierre,
-  Bareke, Gaigneaux, and Depiereux]{de2010benchmark}
-De~Hertogh, B., De~Meulder, B., Berger, F., Pierre, M., Bareke, E., Gaigneaux,
-  A., and Depiereux, E. (2010).
-\newblock A benchmark for statistical microarray data analysis that preserves
-  actual biological and technical variance.
-\newblock {\em BMC bioinformatics\/}, {\bf 11}(1), 17.
 
 \bibitem[De~la Fuente(2010)De~la Fuente]{diffcoexp10}
 De~la Fuente, A. (2010).
