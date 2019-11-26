@@ -27,9 +27,9 @@ $^{\text{\sf 3}}$Tandy School of Computer Science, University of Tulsa, Tulsa, O
 
 \abstract{
 Machine learning feature selection methods are needed to detect complex interaction-network effects in complicated modeling scenarios in high-dimensional data, such as GWAS, gene expression, eQTL, and structural/functional neuroimage studies for case-control or continuous outcomes.
-In addition, many feature selection methods have limited ability to address the issues of controlling the false discovery rate and adjusting for covariates.
-To address these challenges, we develop a new feature selection technique called Nearest-neighbor Projected-Distance Regression (NPDR) that calculates the importance of a predictor using the generalized linear model (GLM) regression of distances between nearest-neighbor pairs projected onto the predictor dimension.
-NPDR captures the underlying interaction structure of data using nearest-neighbors in high dimensions, handles both dichotomous and continuous outcomes and predictor data types, statistically corrects for covariates, and permits penalized regression.
+In addition, many machine learning methods have limited ability to address the issues of controlling false discoveries and adjusting for covariates.
+To address these challenges, we develop a new feature selection technique called Nearest-neighbor Projected-Distance Regression (NPDR) that calculates the importance of each predictor using generalized linear model (GLM) regression of distances between nearest-neighbor pairs projected onto the predictor dimension.
+NPDR captures the underlying interaction structure of data using nearest-neighbors in high dimensions, handles both dichotomous and continuous outcomes and predictor data types, statistically corrects for covariates, and permits statistical inference and penalized regression.
 We use realistic simulations with interactions and other effects to show that NPDR has better precision-recall than standard Relief-based feature selection and random forest importance, with the additional benefit of covariate adjustment and multiple testing correction.
 Using RNA-Seq data from a study of major depressive disorder (MDD), we show that NPDR with covariate adjustment removes spurious associations due to confounding.
 We apply NPDR to eQTL data to identify potentially interacting variants that regulate transcripts associated with MDD and demonstrate NPDR's utility for GWAS and continuous outcomes.
@@ -48,20 +48,20 @@ There is evidence that these non-independent effects are pervasive~\citep{breen1
 A similar interaction effect can be observed in differential co-expression, where the phenotypic effect of one gene is modified depending on the expression of another gene~\citep{lareau15,diffcoexp10}.
 The embedding of these interactions in a regulatory network may lead to, not only pairwise interactions, but also higher-order epistasis network effects.
 Explicit modelling of these higher-order interactions would be computationally and statistically intractable~\citep{riesselman18}.
-Thus, computationally scalable feature selection methods are needed to capture these higher-order effects in high-dimensional data such as genome-wide association~\citep{titv} and RNA-Seq studies~\citep{stir}.
+Thus, computationally scalable feature selection methods are needed to capture these higher-order effects in high-dimensional data, such as genome-wide association~\citep{titv} and RNA-Seq studies~\citep{stir}.
 
 Relief-based algorithms are efficient nearest-neighbor feature selection methods that are able to detect epistasis or statistical interaction effects in high-dimensional data without resorting to pairwise modeling of attributes~\citep{urbanowicz17b, kononenko97, mckinney09, robnik03}.
 We recently introduced the STatistical Inference Relief (STIR) formalism~\citep{stir} to address the lack of a statistical distribution for hypothesis testing and the related challenge of controlling the false positive rate of Relief-based scores.
 STIR extended Relief-based methods to compute statistical significance of attributes in dichotomous outcome data (e.g., case-control) by reformulating the Relief weight~\citep{mckinney13} as a pseudo t-test for the difference of means between projected-distances onto a given attribute.
-STIR is an effective approach with high power and low false-positive rates for data with main and interaction effects and is applicable to any predictor data type (continuous/gene expression or nominal/genetic variants).
-However, being based on a t-test, it does not apply to data with a continuous outcome (e.g., quantitative trait) and does not correct for covariates.
+STIR is an effective approach with high power and low false-positive rate for data with main and interaction effects and is applicable to any predictor data type (continuous/gene expression or nominal/genetic variants).
+However, being based on a t-test, STIR does not apply to data with a continuous outcome (e.g., quantitative trait) and, like predecessor Relief-based methods, it does not correct for covariates.
 
 In the current study, we introduce a new Nearest-neighbor Projected-Distance Regression (NPDR) approach that extends the STIR formalism to regression of nearest neighbors with the generalized linear model (GLM). The set of all nearest neighbor pairs is determined in the space of all attributes. Then for a given attribute, all pairs of neighbor instances are projected onto the attribute dimension and the one-dimensional distances (projected distances) become the observations in a GLM.  
 % For dichotomous phenotype models (Eq.~\ref{eq:too_logit}), the projected distances between instances are binary match/mismatches.
 % For continuous outcome models (Eq.~\ref{eq:lin_reg}), the projected distances are arithmetic differences.
 The regression model of an attribute's projected distances is linear for continuous outcomes and logistic for dichotomous outcomes, and either model may include corrections for covariates.
 The NPDR attribute importance score is given by its standardized regression coefficient and the statistical significance by its P value.
-Prior to the current study, no Relief-based method has included covariate correction.
+%Prior to the current study, no Relief-based method has included covariate correction.
 
 This NPDR framework also provides a natural way to control for covariates by including additional terms for the between-neighbor projected differences for each covariate within the GLM.
 Covariate adjustment is often neglected in machine learning, yet many biological and clinical omic studies involve potentially confounding covariates such as sex, bmi, and age~\citep{le18_brainagesim} or population stratification~\citep{popstrat16}.
@@ -73,15 +73,15 @@ It can detect main effects and interactions for dichotomous and continuous outco
 The models allow any predictor data type such variants in GWAS or RNA-Seq expression levels.
 NPDR also improves attribute importance estimation compared to other Relief methods because NPDR includes the error or dispersion of the projected distances.
 The projected distance model gives the appearance of being univariate but implicitly accounts for interactions with all other attributes via the neighborhood calculation in the space of all attributes (omnigenic).
-Further, we demonstrate that the NPDR formalism allows for Lasso and Ridge-like penalized feature selection for Relief-based methods.
+Further, we extend the NPDR formalism to Lasso-like penalized feature selection.
 
 The paper is organized as follows.
 In the Methods section, we develop the new formalism of NPDR to reformulate Relief-based scores as coefficients in a distanced-based GLM.
 % For data with continuous outcome, we use linear regression, which has theoretical similarities to RRelief but better statistical properties and enables covariate correction.
 % For dichotomous outcome data, we employ a logistic model in the GLM along with possible covariate terms.
 We use the projected-distance regression formalism to implement a penalized version of NPDR.
-In the Results, we assess the performance of NPDR with simulations of main effects and network interactions, dichotomous outcomes with balanced and imbalanced classes, continous outcomes, and continous and genotypic predictors. We demonstrate improved precision and recall in comparison with standard Relief-based feature selection and random forest importance.
-We apply NPDR to an RNA-Seq and GWAS study of MDD.
+In the Results, we assess the performance of NPDR with simulations of main effects and network interactions, dichotomous outcomes with balanced and imbalanced classes, continuous outcomes, and continuous and genotypic predictors. We demonstrate improved precision and recall in comparison with standard Relief-based feature selection and random forest importance.
+We then apply NPDR to an RNA-Seq and GWAS study of MDD.
 % : one with MDD diagnostic status and the other with a continuous outcome (Pittsburgh Sleep Quality Index, PSQI).
 From the RNA-Seq data, we show that NPDR removes spurious associations with MDD due to confounding by sex and identifies biologically relevant genes.
 Combining the RNA-Seq with the GWAS data, we perform an eQTL analysis with NPDR to identify potentially interacting variants that regulate transcripts associated with MDD and demonstrate NPDR's utility for GWAS and continuous outcomes.
@@ -119,14 +119,14 @@ The distance between instances $i$ and $j$ in the data set $X^{m \times p}$ of $
 % D^{(q)}_{ij}=\left(\sum_{a\in A}|\text{d}^{\text{type}}_{ij}(a)|^q\right)^{1/q},
 D^{(q)}_{ij}=\left(\sum_{a\in A}|\text{d}_{ij}(a)|^q\right)^{1/q},
 \end{equation}
-which is typically Manhattan ($q=1$) but may also be Euclidean ($q=2$).
+which is typically Manhattan ($q=1$) in Relief but may also be Euclidean ($q=2$).
 The quantity 
 % $\text{d}^{\text{type}}_{ij}(a)$, 
 $\text{d}_{ij}(a)$,
 known as a ``$\text{diff}$'' in Relief literature, is the projection of the distance between instances $i$ and $j$ onto the attribute $a$ dimension.
 The function $\text{d}_{ij}(a)$ supports any type of attribute (e.g., numeric/continuous versus categorical).
 % ``type'' refers to the data type of the attribute
-For example, the projected difference between two instances $i$ and $j$ for a continuous numeric ($\text{d}^{\text{num}}$) attribute, $a$, may be defined as
+For example, the projected difference between two instances $i$ and $j$ for a continuous numeric attribute, $a$, may be defined as
 %\begin{equation}\label{eq:diff}
 %\text{diff}^{(\text{num})}(a,(\ri,\rj))=\frac{|\text{value}(a,\ri)-\text{value}(a,\rj)%|}{\max(a)-\min(a)}.
 %\end{equation}
@@ -143,8 +143,8 @@ As we show in subsequent sections, NPDR attribute importance scores are standard
 %\emph{Omit: The scaling may alleviate bias in the distance calculation. However, standardizing the data matrix $X$ ($\hat{X}$) should have the same effect without division by $\max(a)-\min(a)$, which has usual distribution properties for distances (expand).}
 Thus, for the numeric-data projection, d$^{\text{num}}_{ij}(a)$, we simply use the absolute difference between row elements $i$ and $j$ of the data matrix $X^{m \times p}$ for the attribute column $a$.
 
-This numeric projection function (Eq.~\ref{eq:diff}) is appropriate for gene expression and other quantitative predictors and outcomes.
-For genome-wide association study (GWAS) data, where attributes are categorical, one simply modifies the type in the projection function~\citep{titv}, but the projected-distance regression methods will be otherwise unchanged.
+The numeric projection function in Eq. (\ref{eq:diff}) is appropriate for gene expression and other quantitative predictors and outcomes.
+For genome-wide association study (GWAS) data, where attributes are categorical, one simply modifies the type in the projection function from numeric to a discrete difference~\citep{titv}, but the projected-distance regression methods will be otherwise unchanged.
 The $\text{d}_{ij}(a)$ quantity is typically part of the metric to define the neighborhood, but it is also essential for computing the importance coefficients (Sec. \ref{sec:regress}).
 The projected-distance regression models below (Eqs.~\ref{eq:lin_reg},~\ref{eq:lin_reg_cov},~\ref{eq:logit_nocovar}, and~\ref{eq:too_logit}) will be fit for all nearest neighbors $i$ and $j$ in the defined neighborhood (discussed next in Eq.~(\ref{eq:N})).
 
@@ -202,7 +202,7 @@ where we apply the floor to ensure the number of neighbors is integer.
 For data with balanced hits and misses in standard fixed-$k$ Relief, one further divides this formula by 2, and then for multiSURF ($\alpha=1/2$), we find $\bar{k}_{1/2}^{\text{hit/miss}} = \frac{1}{2}\bar{k}_{1/2} = 0.154 (m-1)$, which is very close to our previous empirical estimate $m/6$.
 In the current study, when we compare multiSURF neighborhood methods with fixed-$k$ neighborhoods, we use $\bar{k}_{1/2}$.
 Using this $\alpha=1/2$ value has been shown to give good feature selection performance by balancing power for main effects and interaction effects.
-However, the best value for $\alpha$ or $k$ is likely data-specific and may be determined through nested cross-validation parameter tuning or other adaptive methods.
+However, the best value for $\alpha$ or $k$ is likely data-specific and may be determined through nested cross-validation parameter tuning or other adaptive methods~\citep{mckinney13}.
 
 \subsection{Nearest-neighbor Projected-Distance Regression (NPDR) with the generalized linear model}
 
@@ -363,7 +363,7 @@ For dichotomous outcomes, we use the binomial link function for the hit/miss pro
 % The elastic-net parameter $\alpha$ mixes the amount of lasso ($\alpha$=1) and ridge ($\alpha$=0) penalty. Our implementation allows any value of $\alpha$, but we use lasso as the default to choose one predictor (attribute diff vector) when a set of predictors is correlated. The overall penalty strength $\lambda$ is chosen by cross-validation. For dichotomous outcome, we use binomial link function for the hit/miss projected distances in the likelihood optimization, which leads to elastic net treating positive and negative $\beta_{a_i}$ coefficients similarly when shrinking. One can simply remove any negative coefficients after shrinkage, but a better approach may be to modify the likelihood to ordinal (one-sided likelihood).   
 
 \subsection{Properties of NPDR and existing Relief-based methods}
-Here we summarize the properties and capabilities of standard Relief-based methods\citep{urbanowicz17b} and the generalizations STIR\citep{stir} and NPDR (Table \ref{tab:compare_npdr}).
+Here we summarize the properties and capabilities of standard Relief-based methods~\citep{urbanowicz17b} and the generalizations STIR~\citep{stir} and NPDR (Table \ref{tab:compare_npdr}).
 When there are no covariates for dichotomous outcome data, STIR (based on a pseudo t-test) and NPDR (based on regression with a logit model) are approximately equivalent given reasonable distribution assumptions (see Supplementary Fig. S1).
 However, by design, the NPDR framework is more flexible and able to handle covariate adjustment and continuous outcomes.
 In the current notation, the STIR null and alternative hypotheses would be
@@ -388,7 +388,7 @@ where
     \mu_H(a) & = \bar{H}_a = E \left( \text{d}_{ij}(a) \cdot        \text{d}^{\text{miss}}_{ij}(y)           \right)
 \end{aligned}
 \end{equation}  
-and $\text{d}^{\text{miss}}_{ij}(y)$ is given by Eq.(\ref{eq:hitdiff}). The STIR test statistic is a pseudo t-test (see Ref~\citep{stir}).
+and $\text{d}^{\text{miss}}_{ij}(y)$ is given by Eq.(\ref{eq:hitdiff}). The STIR test statistic is a pseudo t-test (see Ref \citep{stir}).
 
 For dichotomous outcomes, STIR improves attribute estimates over Relief weights ($\bar{M}_a - \bar{H}_a$) by incorporating sample variance of the nearest neighbor distances in the denominator, which also enables STIR to estimate statistical significance with the assumptions of a t-test (Table \ref{tab:compare_npdr}).
 NPDR assumes intra- and inter-class differences are randomly sampled from one distribution and computes the importance score from a logistic regression $\beta'_a$.
@@ -406,7 +406,7 @@ Supports covariates           & No                               & No      & {\b
 Supports regularization           & No                               & No      & {\bf Yes} \\
 \hline\\
 \end{tabular}
-\caption{Properties of standard Relief-based methods and generalizations STIR and NPDR. The NPDR score is the standardized regression coefficient $\beta'_a$ from a logistic model (Eq.~\ref{eq:logit_nocovar}) for dichotomous outcomes and from a linear model (Eq.~\ref{eq:lin_reg}) for continuous outcomes. The quantity $S_p$ in STIR is the pooled standard deviation of the hit and miss means. Only the score for dichotomous (hit/miss) Relief is shown and STIR is limited to dichotomous outcomes~\citep{stir}.}
+\caption{Properties of standard Relief-based methods and generalizations STIR and NPDR. The NPDR score is the standardized regression coefficient $\beta'_a$ from a logistic model of projected distances (Eq.~\ref{eq:logit_nocovar}) for dichotomous outcomes and from a linear model (Eq.~\ref{eq:lin_reg}) for continuous outcomes. The quantity $S_p$ in STIR is the pooled standard deviation of the hit and miss means. Only the score for dichotomous (hit/miss) Relief is shown and STIR is limited to dichotomous outcomes~\citep{stir}.}
 \label{tab:compare_npdr}
 \end{table*}
 
@@ -429,30 +429,30 @@ Supports regularization           & No                               & No      &
 \subsection{Real and simulated datasets}
 \subsubsection{Simulation methods}
 To compare true positive and false positive performance for NPDR and other feature selection methods, we use the simulation tool from our private Evaporative Cooling (privateEC) software~\citep{le17} that was designed to simulate realistic main effects, correlations, and interactions found in gene expression or resting-state fMRI correlation data.
-We simulate data with $m=200$ subjects and $p=1000$ real-valued attributes with 10\% functional (true positive association with outcome).
-We simulate both balanced and imbalanced (75:25) dichotmous outcomes as well as continuous outcome data, and we simulate multiple main effects and interaction effects. 
+We simulate data with $m=200$ subjects and $p=1,000$ real-valued attributes with 10\% functional (true positive association with outcome).
+We simulate both balanced and imbalanced (75:25) dichotomous outcomes as well as continuous outcome data, and we simulate multiple main effects and interaction effects. 
 We choose a sample size consistent with real gene expression data but on the smaller end to demonstrate a more challenging scenario.
 Likewise, the main effect size parameter ($b=0.8$) was selected to be sufficiently challenging with power approximately $40\%$~\citep{le17}.
 
 For interactions in dichotomous outcome data, we simulate network interactions using the differential co-expression network-based simulation tool in privateEC, which is described in Refs.~\citep{le17, lareau15}.
 Briefly, first create a co-expression network on an Erd\H{o}s-R\'enyi random graph with $0.1$ attachment probability, which is the critical value for a giant component.
-We give connected genes a higher average correlation, approximately $r_{\text{connected}}=0.8$.%($s_{\text{int}}=.8$) ($s_{\text{int}}=.4$ gives $r_{\text{connected}}=0.9$).
+We give connected genes a higher average correlation, approximately $r_{\text{connected}}=0.8$.
 This correlation between variables also controls the interaction effect size because we disrupt the correlation of target genes in cases but maintain correlation within controls, thereby creating a final differential correlation network.
 %and we create a correlated data matrix by applying a Cholesky transformation of the designed covariance matrix to random normal data of size $m \times p$. 
 %Finally, we simulate functional effects on the outcome of functional variables by permuting their values in cases but leaving the controls unpermuted, thereby leading to a final differential correlation network.
-For genotypic simulations, we use benchmark simulated epistatic data from Ref.~\citep{urbanowicz17}. Specifically, we use data with 20 variants containing one pair of interacting variants with a heritbility of $10\%$. To make functional detection more challenging, we randomly select a small sample size of $m=200$, including balanced and imbalanced ($75:25$) cases and controls.
+For GWAS simulations, we use benchmark simulated epistatic data from Ref.~\citep{urbanowicz17}. Specifically, we use data with 20 variants ($0.2$ maximum minor allele frequency) and containing one pair of epistatic variants with a heritability of $10\%$. To make functional detection more challenging, we randomly select a small sample size of $m=200$, including balanced and imbalanced ($75:25$) cases and control datasets.
 
 %[Variables that are not shrunk to zero by regularization (glmnet and regularized NPDR) are counted as positive tests.]
-We assess the feature-selection performance of each method by averaging the area under the recall curve (auRC) and the precision-recall curve (auPRC) across 100 replicates of each simulation scenario.
+We assess the feature-selection performance of each method by averaging the area under the recall curve (auRC) and the precision-recall curve (auPRC) across 100 replicate simulations for continuous predictors and 30 replicates for GWAS (genotypic) predictors.
 %Assuming relatively few functional attributes ($10\%$ of $1,000$ attributes) compared to non-functional ones, the precision and recall measures are robust to imbalanced data and are thus a useful assessment of a method's propensity to assign higher scores to the correct functional attributes.
-The auRC and auPRC are good comparison tool for methods that, unlike NPDR, do not have a statistical significance threshold.
-The recall curve for a method is computed by sweeping across all score thresholds (from 0 to 100\% selected) for a given dataset and calculating the recall (true positive rate) for each threshold. The auRC gives an overall measure of a method's ability to detect functional attributes; however, in addition to detecting true positives, researchers are also interested in the false postive rate of a method. Thus, we also sweep across thresholds and compute the area under the precision versus recall curve. The auPRC measures how well the method balances the ability to detect true positives versus including too many false positives across all thresholds
+The auRC and auPRC metrics are good comparison tools for feature selection methods that, unlike NPDR, do not have a statistical significance threshold.
+The recall curve for a method is computed by sweeping across all score thresholds (from 0 to 100\% selected) for a given dataset and calculating the recall (true positive rate) for each threshold. The auRC gives an overall measure of a method's ability to detect functional attributes; however, in addition to detecting true positives, researchers are also interested in the false positive rate of a method. Thus, we also sweep across thresholds and compute the area under the precision versus recall curve (auPRC). The auPRC measures how well the method balances the ability to detect true positives versus including too many false positives across all thresholds
 %We remark that, although the terminology used here is similar to classification problems, our analysis focuses on evaluating the detection of functional attributes, not classification accuracy.
 
 \subsubsection{RNA-Seq data and NPDR adjustment for confounding factors}
 To test the ability of NPDR to correct for confounding, we apply NPDR to the RNA-Seq study in Ref.~\citep{mostafavi14} that consists of 15,231 genes for 463 MDD cases and 452 controls.
 Of the 915 subjects, 641 are female and 274 are male.
-The chi-square between MDD and sex is $25.746$ ($p=3.89e-7$), and there are 485 genes significantly associated with sex.
+The chi-square between MDD and sex is $25.75$ ($p=3.89e-7$), and there are 485 genes significantly associated with sex.
 Thus, there is high risk for confounding effects due to sex differences.
 We apply NPDR with a multiSURF neighborhood and compute importance scores of all genes with and without sex as a covariate to isolate confounding genes. All resulting p-values (from STIR and NPDR) are adjusted for multiple testing.
 Attributes with adjusted p-values less than 0.05 are counted as a positive test (null hypothesis rejected), else the test is negative.
@@ -469,7 +469,7 @@ We use NDPR to test for the cis- (1Mb from the gene's transcription start site) 
 We included 281,648 variants following GWAS filtering.
 We remove variants with a deviation from Hardy-Weinberg equilibrium (P $<0.0001$ in controls) and a minor allele frequency (MAF) $<0.01$, and we use linkage disequilibrium (LD) pruning to reduce the potential bias of correlation on interaction and distance calculations.
 SNPs are recursively removed within a sliding window along a given chromosome based on a pairwise LD of 0.5.
-We control for MDD status in the NPDR models to isolate more direct influence of variants on expression rather than MDD association. We use the Eq.(\ref{eq:lin_reg_cov}) NPDR model and an allele mismatch operator for the SNP attribute projections\citep{titv}. 
+We control for MDD status in the NPDR models to isolate more direct influence of variants on expression rather than MDD association. We use the Eq. (\ref{eq:lin_reg_cov}) NPDR model and an allele mismatch operator for the SNP attribute projections~\citep{titv}. 
 
 
 \subsection{Software availability}
@@ -488,15 +488,15 @@ The \emph{npdr} R package is available at {{https://insilico.github.io/npdr/}}.
 %\end{figure}
 
 %\subsection{Simulation comparison for continuous outcome data} 
-Because Relief scores do not have a statistical significance, we compare score quality of methods by calculating the area under the curve of true postive rates (recalls) for a grid of score thresholds (Fig. \ref{fig:rc_curve}). For simulated genotype data with epistasis (Fig. \ref{fig:rc_curve}A), Relief and NPDR have similar recall for detecting the two interacting variants and higher recall than random forest. NPDR has a higher recall than Relief and random forest for simulated continuous-valued attributes with $100$ network interactions in a background $1,000$ total attributes (Fig. \ref{fig:rc_curve}B). 
+Because Relief scores do not have a distribution for statistical significance, we compare score quality of methods by calculating the area under the recall (true positive rate) curve for a grid of score thresholds (Fig. \ref{fig:rc_curve}). For simulated genotype data with epistasis (Fig. \ref{fig:rc_curve}A), Relief and NPDR have similar recall for detecting the two interacting variants and higher recall than random forest. NPDR has a higher recall than Relief and random forest for simulated continuous-valued attributes with $100$ network interactions in a background $1,000$ total attributes (Fig. \ref{fig:rc_curve}B). The performance of all methods decreases when there is imbalance (Fig. \ref{fig:rc_curve} right panels), but the relative performance between methods is the same.   
 
 \begin{figure}[!tbp]
 \centerline{\includegraphics[scale = 0.55, clip]{../../figs/auRC.pdf}}
-\caption{{\bf Recall (true postive rate) for detection of interaction effects in case-control data.} For 30 replicate genotype simulations with epistasis (A, top row), the area under the recall curve (auRC) is compared for NPDR, Relief and random forest for balanced (left 50:50) and  imbalanced (right 75:25) case-control data. The auRC measures the ability of each method to detect the pair of interacting variants with heritability 0.1 in $p=20$ total attributes. For 100 replicate continuous-attribute simulations with a network of interactions (B, bottom row), the area under the recall curve (auRC) is compared for the three methods for balanced (left 50:50) and  imbalanced (right 75:25) case-control data. The auRC measures the ability of each method to detect the 100 interacting attributes in $p=1,000$ total attributes. All simulations use $m = 200$ samples.}
+\caption{{\bf Recall (true positive rate) for detection of interaction effects in case-control data.} For 30 replicate genotype simulations with epistasis (A, top row), the area under the recall curve (auRC) is compared for NPDR, Relief and random forest for balanced (left 50:50) and  imbalanced (right 75:25) case-control data. The auRC measures the ability of each method to detect the pair of interacting variants with heritability 0.1 in $p=20$ total attributes. For 100 replicate continuous-attribute simulations with a network of interactions (B, bottom row), the area under the recall curve (auRC) is compared for the three methods for balanced (left 50:50) and  imbalanced (right 75:25) case-control data. The auRC measures the ability of each method to detect the 100 interacting attributes in $p=1,000$ total attributes. All simulations use $m = 200$ samples.}
 \label{fig:rc_curve}
 \end{figure}
 
-A high true postive rate is an important consideration, but this could come with a risk of a higher false positive rate, which can be measured by the precision. 
+A high true positive rate is an important consideration, but this could come with a risk of a higher false positive rate, which can be measured by the feature selection precision. 
 %NPDR attribute estimates show improved precision and recall over standard Relief and random forest importance scores for detecting functional variables (Fig. \ref{fig:pr_curve}).
 For one simulation with continuous-valued attributes, we illustrate the Precision-Recall Curve (PRC) for a grid of attribute importance thresholds (Fig. \ref{fig:pr_curve}A) for each method. NPDR shows higher area under the PRC (auPRC) than Relief and random forest for continuous outcomes with main effects (left) and dichotomous outcomes with network interaction effects (right).
 Across 100 replicate simulations for each simulation type, NPDR shows significantly higher auPRC than random forest and Relief (both $P < 0.0001$, Fig. \ref{fig:pr_curve}B). 
@@ -511,12 +511,12 @@ Across 100 replicate simulations for each simulation type, NPDR shows significan
 We use auPRC to compare other machine learning methods with NPDR because Relief and random forest lack a null distribution, whereas NPDR has an approximate distribution for hypothesis testing.
 NPDR correctly detects 57 out of 100 functional attributes in a continuous-outcome main effect simulation (Supplementary Fig. S2A) and 86 out of 100 functional attributes in a dichotomous-outcome interaction simulation (Supplementary Fig. S2B) using an adjusted P value threshold.
 Given any vertical score cutoff (Supplementary Fig. S2), it is difficult for Relief or random forest to detect most of the functional attributes without including many more false positives than NPDR.
-As shown by the auPRC, NPDR tends to include fewer false positives than the other methods as it detects more functional attributes (Fig. \ref{fig:pr_curve}).
+As shown by the auPRC (Fig. \ref{fig:pr_curve}), NPDR includes fewer false positives than the other methods as it also detects more functional attributes.
 
 NPDR importance scores are highly correlated with Relief-F scores with $r = 0.869$ for continuous outcome main effects and $0.848$ for dichotomous outcome interaction effects (Supplementary Fig. S2).
 This correlation is expected because both methods are nearest-neighbor based.
 The correlation of NPDR with random forest scores is lower than with Relief-F, where $r = 0.692$ for continuous outcome main effects and $0.578$ for dichotomous outcome interaction effects.
-The correlation for interaction effect simulations decreases further because random forest underestimates the importance of interacting attributes as the attribute dimensionality becomes large compared to the number of functional attributes~\citep{mckinney2009capturing,winham2012snp}.
+The correlation for interaction effect simulations is lower than main effects because random forest underestimates the importance of interacting attributes as the attribute dimensionality becomes large compared to the number of functional attributes~\citep{mckinney2009capturing,winham2012snp}.
 
 % With a Bonferroni cutoff, NPDR correctly detects 57 out of 100 functional attributes in the continuous outcome (Supplementary Fig. S2A) and 86 out of 100 functional attributes in the dichotomous outcome data (Supplementary Fig. S2B).
 % As expected, NPDR importance scores are more correlated with Relief-F ($r = 0.869, 0.848$) than with random forest ($r = 0.692, 0.578$).
@@ -546,12 +546,13 @@ The correlation for interaction effect simulations decreases further because ran
 In addition to auRC and auPRC performance metrics, we also use the area under the Receiver Operating Characteristics curve (auROC), which also shows NPDR has statistically significant higher feature selection performance than random forest and Relief (both $P < 0.0001$, see Supplementary Fig. S3).
 We also compare NPDR (using a logistic model) with STIR (based on a t-test) for the dichotomous outcome data with interaction effects (Supplementary Fig. S1).
 %Across 100 simulations with specified effect size, NPDR yields significantly higher auPRC (P < 0.0001, see Supplementary Fig. S4). 
-While logistic regression and the t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yield highly correlated scores for dichotomous data with interaction effects, where the correlation value $r$ between the P values produced from the two methods ranges from 0.9827 to 0.9994 in 100 replications.
+Although standard logistic regression and the t-test have slightly different assumptions on the distribution of samples, NPDR and STIR yield highly correlated scores for dichotomous data with interaction effects, where the correlation between the P values produced from the two methods ranges from 0.9827 to 0.9994 in 100 replicate simulations.
 
-In the continuous and dichotomous simulations, respectively, we use NPDR with a linear model (Eq.~\ref{eq:lin_reg}) and logistic model (Eq.~\ref{eq:logit_nocovar}) to compare with standard RRelief and Relief-F (R package CORElearn) and with random forest regression and classification (permutation importance, R package randomforest).
+In the simulations for continuous and dichotomous outcomes, respectively, we use NPDR with a linear model (Eq.~\ref{eq:lin_reg}) and logistic model (Eq.~\ref{eq:logit_nocovar}) to compare with standard RRelief and Relief-F (R package CORElearn) and with random forest regression and classification (permutation importance, R package randomforest).
 %Because CORElearn does not include the adaptive multiSURF neighborhood, we use a fixed-$k$ neighborhood $\mathcal{N}_{\bar{k}_{1/2}}$ for the Relief-based methods.
 To provide a fair comparison of Relief and NPDR scores, we control for the neighborhood method by using the same fixed-$k$ neighborhood $\mathcal{N}_{\bar{k}_{1/2}}$ for all methods.
-The value $\bar{k}_{1/2}=30$ (Eq.~\ref{eq:kbar}) is the expected number of nearest neighbors corresponding to a multiSURF neighborhood. %~\citep{bod}.
+The value $\bar{k}_{1/2}=30$ (Eq.~\ref{eq:kbar}) is the expected number of nearest neighbors corresponding to a multiSURF neighborhood for the simulated sample size $m=200$. %~\citep{bod}.
+In the simulation analysis, this k value is used for NPDR nearest neighbors, and one half this value is used for ReliefF because its k represents nearest hits and misses separately.
 For a dataset of the size simulated in this study ($m = 200$ samples and $p = 1,000$ attributes with $100$ functional), on a desktop with an Intel Xeon W-2104 CPU and 32GB of RAM, NPDR has a 24-second and 3-second runtime for dichotomous and continuous outcome data, respectively.
 
 \subsection{RNA-Seq NPDR analysis for MDD with confounding}
@@ -636,7 +637,7 @@ The NPDR runtime for this RNA-Seq dataset ($m=915$ samples and $p=15,231$ attrib
 \subsection{eQTL analysis using NPDR with GWAS and quantitative outcomes}
 
 We perform an eQTL analysis with NPDR to demonstrate its ability to analyze continuous outcomes and SNP predictors from GWAS.
-We choose to test for eQTLs that influence the expression of SCAI (suppressor of cancer cell invasion, involved in cell migration and regulation of cell cycle on chromosome 9), which was one of the stronger NPDR associations with MDD (Fig. \ref{fig:npdrs_mdd}) and was found previously to have a modest cis-eQTL effect in this dataset\citep{mostafavi14}.
+We choose to test for eQTLs that influence the expression of SCAI (suppressor of cancer cell invasion, involved in cell migration and regulation of cell cycle on chromosome 9), which was one of the stronger NPDR associations with MDD (Fig. \ref{fig:npdrs_mdd}) and was found previously to have a modest cis-eQTL effect in this dataset~\citep{mostafavi14}.
 One of the eQTLs found by NPDR (rs10997355) is an intron variant in CTNNA3 (catenin alpha-3 mediates cell–cell adhesion) on chromosome 10.
 In a study of schizophrenia, an intron variant near rs10997355 showed an interaction with maternal cytomegalovirus (CMV) status~\citep{borglum2014genome}.
 Other studies of CTNNA3 and its nested gene LRRTM3 (encoding the Leucine-rich repeat transmembrane neuronal protein 3) have found associations with Alzheimer's disease~\citep{miyashita2007genetic} and autism spectrum disorder~\citep{wang2009common}.
@@ -644,13 +645,13 @@ The top 100 NDPR eQTLs for SCAI are provided as supplementary information.
 The NPDR runtime was 7.06 hours (on a high performance computing environment with an Intel Xeon E5-2650v3 CPU, 20 nodes and 32GB of RAM).
 
 \section{Discussion}
-NPDR is the first method to our knowledge to combine projected distances and nearest-neighbors into a generalized linear model regression framework to perform feature selection.
+NPDR is the first method to our knowledge to combine projected distances and nearest-neighbors into a generalized linear model (GLM) regression framework to perform feature selection.
 The use of nearest neighbors enables the detection of interacting attributes, which NPDR shares with Relief-based methods. NPDR extends Relief in the following ways.
 %(1) For feature selection with a continuous outcome, it does not rely on the idea of a hit/miss group like current RRelief approaches~\citep{urbanowicz17}.
 (1) For feature selection with dichotomous outcomes, NPDR uses a logistic model to fit pairwise projected distance predictors onto hit and miss class differences.
-(2) This regression formalism provides a simple mechanism for the distance-based NPDR to correct for covariates, which is often neglected in machine learning and has been a limitation of Relief-based methods.
-(3) For continuous outcome data, NPDR simply performs a linear regression between the outcome and attribute projected distances of neighbors. The NPDR regression coefficient is an effective importance scores and has an interpretation of variation explained.
-(4) For any outcome data type (dichotomous or continuous) and predictor data type, the NPDR score of an attribute includes the error of the estimate via the standardized regression coefficient, which enables statistical inference, significance of attribute scores, and adjustment for multiple testing. This additional variation is neglected by Relief-based methods.
+(2) This regression formalism provides a simple mechanism for the projected distance-based NPDR to correct for covariates, which is often neglected in machine learning and has been a limitation of Relief-based methods.
+(3) For continuous outcome data, NPDR simply performs a linear regression between the outcome and attribute projected distances between neighbors. The NPDR regression coefficient is an effective importance score and has an interpretation of variation explained in the outcome variable distances between subjects.
+(4) For any outcome data type (dichotomous or continuous) and any predictor data type, the NPDR score of an attribute includes the error of the estimate via the standardized regression coefficient, which enables statistical inference, significance testing of attribute scores, and adjustment for multiple testing. This additional variation is neglected by Relief-based methods.
 (5) We introduced a regularized NPDR that adds another layer of multivariate modeling to an already multi-dimensional nearest-neighbor method to shrink correlated projected attribute differences.
 
 %The novel NPDR importance score of an attribute is the standardized regression coefficient between the projected attribute differences and the numeric outcome differences between neighbors.
@@ -658,7 +659,7 @@ The use of nearest neighbors enables the detection of interacting attributes, wh
 %However, we provided evidence that the NPDR standardized regression coefficient is a better attribute estimator than Relief and random forest, and we showed that the NPDR models can adjust for confounding covariates and other sources of variation.
 
 We assessed NPDR's true positive rate and ability to control false positives using realistic simulations with main effects, network interactions, continuous outcomes, dichotomous outcomes with balanced and imbalanced classes, and categorical (genotypes) and continuous (expression) predictors.
-We showed that the statistical performance using NPDR P values is the same as STIR, which is limited to dichotomous outcome data.
+We showed that the statistical performance using NPDR P values is the same as STIR, where STIR is limited to dichotomous outcome data.
 In other words, by modeling hit/miss differences between neighbors with a logit link, NPDR can be used safely instead of STIR with the added benefit of covariate correction and the analysis of quantitative traits.
 The simulations provided empirical evidence for the improved recall and precision of NPDR over Relief-based and Random Forest feature selection.
 %In a different Relief-based approach for continuous outcomes, Ref.~\citep{urbanowicz17} uses a standard deviation of the continuous outcome diffs to discretize the numeric outcome and make the RRelief algorithm compatible with the idea of hits and misses.
@@ -673,8 +674,8 @@ The MDMR approach uses an F-statistic to test for the association of distance ma
 The MDMR regression is performed for the distance matrix for all pairs of instances, not a subset of nearest neighbors like NPDR, which makes MDMR susceptible to missing interactions.
 The use of local neighborhoods allows NPDR to remove imposter/irrelevant instances from the neighborhood and detect interactions in the higher dimensional space.
 %The ability to remove imposters from the set of nearest neighbors illustrates the ``blessings of dimensionality'' for Relief-based methods~\citep{bod}, but this class of nearest-neighbor methods is still, of course, susceptible to the curses of dimensionality~\citep{CoD}.
-Another distinction between methods is that NPDR projects distances onto each attribute, allowing for hypothesis testing of individual attributes (i.e., perform feature selection), whereas MDMR focuses on specified sets of attributes.
-NPDR uses the context of all attributes to compute nearest neighbors, but it focuses on the projected regression of each attribute at a time and uses the nearest neighbors to allow for detection of interactions. However, NPDR can also be used to compute the importance of sets of factors, like MDMR.
+Another distinction between methods is that NPDR projects distances onto each attribute, allowing for hypothesis testing of individual attributes (i.e., perform feature selection), whereas MDMR uses specified sets of attributes.
+NPDR uses the context of all attributes to compute nearest neighbors, but it focuses on the projected regression of each attribute at a time and uses the nearest neighbors to allow for detection of interactions. However, NPDR can also be used to compute the importance of sets of factors, similar to MDMR.
 An example of this is the penalized version of NPDR that uses the set of all attributes in a nearest-neighbor projected-distance multiple regression.
 
 The NPDR implementation can use fixed-$k$, fixed radius, or adaptive radius neighborhood methods. To provide a fair comparison between Relief and NDPR methods, we used the same fixed-k for all simulation analyses.
@@ -683,9 +684,9 @@ The NPDR implementation can use fixed-$k$, fixed radius, or adaptive radius neig
 %By identifying the nearest neighbors independently of hit/miss status, the neighborhood should naturally reflect the imbalance in the data.
 %The hit/miss status of each pair is computed separately as a categorical outcome regression variable.
 %This should make NPDR scores with fixed-$k$ ($\mathcal{N}_{k_\alpha}$) similar to fixed radius ($\mathcal{N}_{R_\alpha}$) for balanced and imbalanced data.
-Power for detecting main effects is highest with the myopic maximum $\mathcal{N}_{k_\text{max}}$ ($k_{\text{max}}=\lfloor (m-1)/2\rfloor$).
-However, real biological data will likely contain a mixture of main effects and interaction network effects~\citep{mckinney_pajewski}. Thus, for all simulation analyses we used a fixed-k that has been shown to balance main effects and interactions (Eq.~\ref{eq:kbar} with $\alpha=1/2$)\citep{stir}.
-NPDR feature selection can be embedded in the backwards elimination of private Evaporative Cooling (privateEC) or in a nested cross-validation for feature selection and classification~\citep{le17} or for optimization of $\alpha$ or $k$ to balance main effect and interaction detection.
+Power for detecting main effects is highest with the myopic maximum $\mathcal{N}_{k_\text{max}}$ ($k_{\text{max}}=\lfloor (m-1)/2\rfloor$ for balanced data).
+However, real biological data will likely contain a mixture of main effects and interaction network effects~\citep{mckinney_pajewski}. Thus, for all simulation analyses we used a fixed-k that has been shown to balance main effects and interactions (Eq.~\ref{eq:kbar} with $\alpha=1/2$)~\citep{stir}.
+NPDR feature selection can be embedded in the backwards elimination of private Evaporative Cooling (privateEC) or in a nested cross-validation for feature selection and classification~\citep{le17} or tuning $\alpha$ or $k$ to balance main effect and interaction detection.
 
 %A challenge in NPDR analysis is the inherent dependence between neighbors in the projection models, which violates distribution assumptions of regression and leads to artificially lower P-values. Our results indicate that the Bonferroni procedure effectively controls type I error despite deflated P-values. However, future studies are needed to investigate strategies to account for dependence between neighbor-pair observations such as regularization/shrinkage of the regression-coefficients\citep{de2010benchmark}. A related property of NPDR is that it is often the case that two instances will be in each other's neighborhood. In these cases, we provide an option to restrict $\mathcal{N}$ to contain only unique pairs. However, the extra sampling of neighbor projections may provide beneficial information by reinforcing tightly connected neighborhoods.
 
@@ -702,7 +703,7 @@ In addition, it has been suggested that exposure to CMV may increase mood disord
 
 To expand variant discovery and demonstrate the ability of NDPR to analyze large GWAS data, we performed a conservative LD pruning that removes some correlation between variants while still leaving a substantial number of informative variants.
 Our simulations for continuous predictors included correlation as well as interactions, but because of the omni-genic nature of NPDR, further investigation is needed to understand the effect of correlation on the relative ranking of variants and the effect on nearest-neighbor calculations.
-A challenge in NPDR analysis is the inherent dependence between neighbors in the projection models, which violates distribution assumptions of regression and leads to artificially lower P-values. Our results indicate that the Bonferroni procedure effectively controls type I error despite deflated P-values. However, future studies are needed to investigate strategies to account for dependence between neighbor-pair observations
+A challenge in NPDR analysis is the inherent dependence between neighbors in the models, which violates distribution assumptions of regression and leads to artificially lower P-values. Our results indicate that the Bonferroni procedure effectively controls type I error despite deflated P-values. However, future studies are needed to investigate strategies to account for dependence between neighbor-pair observations
 
 \section*{Acknowledgements}
 

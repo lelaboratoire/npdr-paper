@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  25 NOV 2019 06:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  26 NOV 2019 11:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -420,6 +420,12 @@ Underfull \hbox (badness 1675) in paragraph at lines 283--283
 []\LY1/ptm/b/n/8 Dichotomous outcomes with covariates: logistic regression
  []
 
+
+Underfull \hbox (badness 1087) in paragraph at lines 366--370
+\LY1/ptm/m/n/8 based methods (Urbanowicz \LY1/ptm/m/it/8 et al.\LY1/ptm/m/n/8 ,
+ 2018b) and the generalizations
+ []
+
 LaTeX Font Info:    Try loading font information for LY1+phb on input line 409.
 
 LaTeX Font Info:    No file LY1phb.fd. on input line 409.
@@ -477,12 +483,12 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
  []
 
 [4]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 Underfull \hbox (badness 1337) in paragraph at lines 466--473
 \LY1/ptm/m/n/8 MDD and demonstrate NPDR's utility for GWAS and continuous
  []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \hbox (badness 3668) in paragraph at lines 476--478
@@ -495,16 +501,12 @@ Underfull \hbox (badness 3746) in paragraph at lines 476--478
  R package is available at
  []
 
+<../../figs/auRC.pdf, id=39, 418.56375pt x 461.725pt>
+File: ../../figs/auRC.pdf Graphic file (type pdf)
 
-<../../figs/auRC_comparison_gwas_continuous(balanced_and_imbalanced).pdf, id=39
-, 722.7pt x 722.7pt>
-File: ../../figs/auRC_comparison_gwas_continuous(balanced_and_imbalanced).pdf G
-raphic file (type pdf)
-
-<use ../../figs/auRC_comparison_gwas_continuous(balanced_and_imbalanced).pdf>
-Package pdftex.def Info: ../../figs/auRC_comparison_gwas_continuous(balanced_an
-d_imbalanced).pdf used on input line 494.
-(pdftex.def)             Requested size: 245.71474pt x 245.71474pt.
+<use ../../figs/auRC.pdf>
+Package pdftex.def Info: ../../figs/auRC.pdf used on input line 494.
+(pdftex.def)             Requested size: 230.21077pt x 253.94954pt.
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <6.5> not available
 (Font)              Font shape `LY1/phv/b/n' tried instead on input line 495.
 LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <6.5> not available
@@ -552,14 +554,19 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
  []
 
-[5] <../../figs/pr_compare_100.pdf, id=45, 418.56375pt x 461.725pt>
+[5] <../../figs/pr_compare_100.pdf, id=46, 418.56375pt x 461.725pt>
 File: ../../figs/pr_compare_100.pdf Graphic file (type pdf)
 
 <use ../../figs/pr_compare_100.pdf>
 Package pdftex.def Info: ../../figs/pr_compare_100.pdf used on input line 506.
-(pdftex.def)             Requested size: 242.76714pt x 267.80069pt.
+(pdftex.def)             Requested size: 230.21077pt x 253.94954pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \hbox (badness 2080) in paragraph at lines 551--557
+[]\LY1/ptm/m/n/8 In the simulations for continuous and dichotomous outcomes,
+ []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -569,17 +576,17 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
  []
 
-[6 <../../figs/auRC_comparison_gwas_continuous(balanced_and_imbalanced).pdf>]
-Underfull \hbox (badness 4242) in paragraph at lines 558--567
+[6 <../../figs/auRC.pdf>]
+Underfull \hbox (badness 4242) in paragraph at lines 559--568
 \LY1/ptm/m/n/8 NPDR with covariate adjustment effectively removes sex-related
  []
 
-<../../figs/mostafavi_npdrs_mdd.pdf, id=57, 433.62pt x 325.215pt>
+<../../figs/mostafavi_npdrs_mdd.pdf, id=62, 433.62pt x 325.215pt>
 File: ../../figs/mostafavi_npdrs_mdd.pdf Graphic file (type pdf)
 
 <use ../../figs/mostafavi_npdrs_mdd.pdf>
 Package pdftex.def Info: ../../figs/mostafavi_npdrs_mdd.pdf used on input line 
-575.
+576.
 (pdftex.def)             Requested size: 255.83359pt x 191.87518pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -589,48 +596,45 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
  []
 
-[7 <../../figs/pr_compare_100.pdf>]
-Underfull \hbox (badness 1661) in paragraph at lines 660--667
+[7 <../../figs/pr_compare_100.pdf> <../../figs/mostafavi_npdrs_mdd.pdf>]
+Underfull \hbox (badness 1661) in paragraph at lines 661--668
 []\LY1/ptm/m/n/8 We assessed NPDR's true positive rate and ability to control
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
+(./main_npdr.bbl
 Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
  []
 
-[8 <../../figs/mostafavi_npdrs_mdd.pdf>] (./main_npdr.bbl
+[8]
 LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `LY1/ptm/b/n' tried instead on input line 10.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+)
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Overfull \hbox (252.0pt too wide) has occurred while \output is active
-[][] 
- []
-
-[9])
-Extra height:10.0pt when 37.0pt
+Extra height:10.0pt when 510.25949pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:0.0pt when 38.0pt
+Extra height:10.0pt when 511.25949pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-(2)Left:38.0pt Right:38.0pt Output:38.0pt
+Extra height:10.0pt when 512.25949pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 513.25949pt
+Extra height:0.0pt when 514.25949pt
+(2)Left:514.25949pt Right:507.519pt Output:514.25949pt
 - LAST -
 Extra skip:0.0pt
-Left:38.0pt
-Right:38.0pt
-Output:38.0pt
+Left:514.25949pt
+Right:507.519pt
+Output:514.25949pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -639,9 +643,7 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
  []
 
-[10
-
-] (./main_npdr.aux)
+[9] (./main_npdr.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.75pt have occurred.
@@ -652,12 +654,12 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
  ) 
 Here is how much of TeX's memory you used:
  3795 strings out of 492995
- 47940 string characters out of 6132704
- 128445 words of memory out of 5000000
+ 47680 string characters out of 6132704
+ 147844 words of memory out of 5000000
  7245 multiletter control sequences out of 15000+600000
  62953 words of font info for 117 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 39i,15n,28p,1166b,317s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 39i,15n,28p,1166b,280s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc}</usr/lo
 cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy9.pfb></us
 r/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/
@@ -679,10 +681,10 @@ s/type1/urw/helvetic/uhvr8ac.pfb></usr/local/texlive/2017/texmf-dist/fonts/type
 helvetic/uhvro8ac.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times
 /utmb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pf
 b></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main_npdr.pdf (10 pages, 403447 bytes).
+Output written on main_npdr.pdf (9 pages, 403350 bytes).
 PDF statistics:
- 163 PDF objects out of 1000 (max. 8388607)
- 119 compressed objects within 2 object streams
+ 166 PDF objects out of 1000 (max. 8388607)
+ 121 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 33 words of extra memory for PDF output out of 10000 (max. 10000000)
 
