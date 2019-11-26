@@ -491,7 +491,7 @@ The \emph{npdr} R package is available at {{https://insilico.github.io/npdr/}}.
 Because Relief scores do not have a statistical significance, we compare score quality of methods by calculating the area under the curve of true postive rates (recalls) for a grid of score thresholds (Fig. \ref{fig:rc_curve}). For simulated genotype data with epistasis (Fig. \ref{fig:rc_curve}A), Relief and NPDR have similar recall for detecting the two interacting variants and higher recall than random forest. NPDR has a higher recall than Relief and random forest for simulated continuous-valued attributes with $100$ network interactions in a background $1,000$ total attributes (Fig. \ref{fig:rc_curve}B). 
 
 \begin{figure}[!tbp]
-\centerline{\includegraphics[scale = 0.65, clip]{../../figs/auRC.pdf}}
+\centerline{\includegraphics[scale = 0.55, clip]{../../figs/auRC.pdf}}
 \caption{{\bf Recall (true postive rate) for detection of interaction effects in case-control data.} For 30 replicate genotype simulations with epistasis (A, top row), the area under the recall curve (auRC) is compared for NPDR, Relief and random forest for balanced (left 50:50) and  imbalanced (right 75:25) case-control data. The auRC measures the ability of each method to detect the pair of interacting variants with heritability 0.1 in $p=20$ total attributes. For 100 replicate continuous-attribute simulations with a network of interactions (B, bottom row), the area under the recall curve (auRC) is compared for the three methods for balanced (left 50:50) and  imbalanced (right 75:25) case-control data. The auRC measures the ability of each method to detect the 100 interacting attributes in $p=1,000$ total attributes. All simulations use $m = 200$ samples.}
 \label{fig:rc_curve}
 \end{figure}
@@ -503,7 +503,7 @@ Across 100 replicate simulations for each simulation type, NPDR shows significan
 %The auPRC values for all methods are higher in the interaction effect simulations relative to the main effect simulations because of a larger simulated effect size.
 
 \begin{figure}[!tbp]
-\centerline{\includegraphics[trim = 0 0 0 0, scale = 0.58]{../../figs/pr_compare_100.pdf}}
+\centerline{\includegraphics[trim = 0 0 0 0, scale = 0.55, clip]{../../figs/pr_compare_100.pdf}}
 \caption{{\bf Precision-Recall for detection of simulated functional variables.} For one replicate simulation (A, top row), precision-recall curves (PRC) are displayed for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right). The area under the PRC (auPRC) value is reported next to each method's curve: NPDR, Relief-based and random forest. The $\ast$ indicates the NPDR 0.05 adjusted cutoffs (scores shown in Supplementary Fig. S2). For 100 replicate simulations (B, bottom row), the distributions of the auPRC values are compared for the methods. NPDR yields statistically significant higher auPRC than Relief or random forest ($\ast$$\ast$$\ast$ indicate P $<.0001$). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}
 \label{fig:pr_curve}
 \end{figure}
