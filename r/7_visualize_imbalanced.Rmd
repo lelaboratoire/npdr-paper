@@ -73,6 +73,6 @@ p2 <- df_plots %>%
   facet_grid(. ~ title) +
   theme(axis.title.x = element_blank(), legend.position = "none")
 
-ggsave(cowplot::plot_grid(p1, p2, nrow = 2), 
+ggsave(cowplot::plot_grid(p1, p2, nrow = 2, labels = 'AUTO'), 
        width = 5.8, height = 6.4, filename = 'figs/auRC.pdf')
 ```
