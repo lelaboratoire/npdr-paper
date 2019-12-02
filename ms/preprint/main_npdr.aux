@@ -1,0 +1,135 @@
+\relax 
+\citation{breen12}
+\citation{weinreich13}
+\citation{lareau15}
+\citation{diffcoexp10}
+\citation{riesselman18}
+\citation{titv}
+\citation{stir}
+\citation{urbanowicz17b}
+\citation{kononenko97}
+\citation{mckinney09}
+\citation{robnik03}
+\citation{stir}
+\citation{mckinney13}
+\newcplabel{^_1}{1}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
+\citation{le18_brainagesim}
+\citation{popstrat16}
+\citation{rao2017}
+\citation{linn2016}
+\citation{li2011ccsvm}
+\citation{mostafavi14}
+\citation{titv}
+\citation{greene09}
+\citation{urbanowicz17}
+\citation{mckinney13}
+\citation{urbanowicz17}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Materials and Methods}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{2.1}}Distance metrics and nearest neighbors}{2}}
+\newlabel{sec:reform}{{{2.1}}{2}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{2.1}.1}}Distances and projections onto attributes}{2}}
+\newlabel{eq:D}{{1}{2}}
+\newlabel{eq:diff}{{2}{2}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{2.1}.2}}Nearest-neighbor ordered pairs}{2}}
+\newlabel{eq:N}{{3}{2}}
+\citation{msurf13}
+\citation{stir}
+\citation{mckinney13}
+\citation{robnik03}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{2.1}.3}}Adaptive-radius and fixed-k Neighborhoods}{3}}
+\newlabel{eq:kbar}{{7}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{2.2}}Nearest-neighbor Projected-Distance Regression (NPDR) with the generalized linear model}{3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{2.2}.1}}Continuous outcomes: linear regression NPDR}{3}}
+\newlabel{sec:regress}{{{{2.2}.1}}{3}}
+\newlabel{eq:lin_reg}{{8}{3}}
+\newlabel{eq:linreg_null}{{9}{3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{2.2}.2}}Linear regression NPDR with covariates}{3}}
+\newlabel{eq:lin_reg_cov}{{11}{3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{2.2}.3}}Dichotomous outcomes with covariates: logistic regression NPDR}{3}}
+\citation{glmnet05}
+\citation{urbanowicz17b}
+\citation{stir}
+\citation{stir}
+\citation{stir}
+\citation{le17}
+\citation{le17}
+\citation{le17}
+\citation{lareau15}
+\citation{urbanowicz17}
+\newlabel{eq:logit_nocovar}{{14}{4}}
+\newlabel{eq:too_logit}{{15}{4}}
+\newlabel{eq:hitdiff}{{16}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{2.2}.4}}Regularized NPDR}{4}}
+\newlabel{eq:glmnetNPDR}{{18}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{2.3}}Properties of NPDR and existing Relief-based methods}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{2.4}}Real and simulated datasets}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{2.4}.1}}Simulation methods}{4}}
+\citation{mostafavi14}
+\citation{mostafavi14}
+\citation{titv}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Properties of standard Relief-based methods and generalizations STIR and NPDR. The NPDR score is the standardized regression coefficient $\beta '_a$ from a logistic model of projected distances (Eq.\nobreakspace  {}14\hbox {}) for dichotomous outcomes and from a linear model (Eq.\nobreakspace  {}8\hbox {}) for continuous outcomes. The quantity $S_p$ in STIR is the pooled standard deviation of the hit and miss means. Only the score for dichotomous (hit/miss) Relief is shown and STIR is limited to dichotomous outcomes\nobreakspace  {}\citep  {stir}.}}{5}}
+\newlabel{tab:compare_npdr}{{1}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{2.4}.2}}RNA-Seq data and NPDR adjustment for confounding factors}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{2.4}.3}}eQTL data and NPDR for GWAS and quantitative outcomes}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces {\bf  Recall (true positive rate) for detection of interaction effects in case-control data.} For 30 replicate genotype simulations with epistasis (A, top row), the area under the recall curve (auRC) is compared for NPDR, Relief and random forest for balanced (left 50:50) and imbalanced (right 75:25) case-control data. The auRC measures the ability of each method to detect the pair of interacting variants with heritability 0.1 in $p=20$ total attributes. For 100 replicate continuous-attribute simulations with a network of interactions (B, bottom row), the area under the recall curve (auRC) is compared for the three methods for balanced (left 50:50) and imbalanced (right 75:25) case-control data. The auRC measures the ability of each method to detect the 100 interacting attributes in $p=1,000$ total attributes. All simulations use $m = 200$ samples.}}{5}}
+\newlabel{fig:rc_curve}{{1}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{2.5}}Software availability}{5}}
+\citation{mckinney2009capturing}
+\citation{winham2012snp}
+\citation{mostafavi14}
+\citation{lopes2010human}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{3.1}}Simulation results}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces {\bf  Precision-Recall for detection of simulated functional variables.} For one replicate simulation (A, top row), precision-recall curves (PRC) are displayed for continuous outcome data with main effects (left) and dichotomous outcome data with interaction effects (right). The area under the PRC (auPRC) value is reported next to each method's curve: NPDR, Relief-based and random forest. The $\ast $ indicates the NPDR 0.05 adjusted cutoffs (scores shown in Supplementary Fig. S2). For 100 replicate simulations (B, bottom row), the distributions of the auPRC values are compared for the methods. NPDR yields statistically significant higher auPRC than Relief or random forest ($\ast $$\ast $$\ast $ indicate P $<.0001$). All simulations use $m = 200$ samples and $p = 1,000$ attributes with 100 functional.}}{6}}
+\newlabel{fig:pr_curve}{{2}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{3.2}}RNA-Seq NPDR analysis for MDD with confounding}{6}}
+\citation{mostafavi14}
+\citation{borglum2014genome}
+\citation{miyashita2007genetic}
+\citation{wang2009common}
+\citation{schork12}
+\citation{mckinney_pajewski}
+\citation{stir}
+\citation{le17}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces {\bf  Comparison of NPDR major depressive disorder associations with and without covariate adjustment.} Gene scatter plot of $-\qopname  \relax o{log}_{10}$ significance using NPDR without correction for sex (horizontal axis) and with correction for sex (vertical axis). Genes with adjusted $p_\textrm  {mdd} < 0.001$ by either method are labeled. NPDR without sex correction finds 87 genes associated with MDD at the Bonferroni-adjusted 0.05 level (right of vertical dashed line), 53 of which are also significantly correlated with sex (adjusted $p_\textrm  {sex} < 0.05$). NPDR with adjustment for sex finds 56 genes associated with MDD at the Bonferroni-adjusted 0.05 level (above horizontal dashed line), 19 of which are significantly correlated with sex. The most highly associated genes with sex are eliminated by adjustment (dark genes below the horizontal dashed line) but remain in the non-adjusted set (right of dashed vertical line). }}{7}}
+\newlabel{fig:npdrs_mdd}{{3}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{3.3}}eQTL analysis using NPDR with GWAS and quantitative outcomes}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{7}}
+\citation{titv}
+\citation{kim2007exposure}
+\bibstyle{natbib}
+\bibdata{NPDR_refs}
+\bibcite{titv}{{1}{2018}{{Arabnejad {\em  et~al.}}}{{Arabnejad, Dawkins, Bush, White, Harkness, and McKinney}}}
+\bibcite{borglum2014genome}{{2}{2014}{{B{\o }rglum {\em  et~al.}}}{{B{\o }rglum, Demontis, Grove, Pallesen, Hollegaard, Pedersen, Hedemand, Mattheisen, Uitterlinden, Nyegaard, {\em  et~al.}}}}
+\bibcite{breen12}{{3}{2012}{{Breen {\em  et~al.}}}{{Breen, Kemena, Vlasov, Notredame, and FA}}}
+\bibcite{popstrat16}{{4}{2016}{{Chen {\em  et~al.}}}{{Chen, Wang, Conomos, Stilp, Li, Sofer, Szpiro, Chen, Brehm, Celed{\'o}n, {\em  et~al.}}}}
+\bibcite{diffcoexp10}{{5}{2010}{{De~la Fuente}}{{De~la Fuente}}}
+\bibcite{msurf13}{{6}{2013}{{Granizo-Mackenzie and Moore}}{{Granizo-Mackenzie and Moore}}}
+\bibcite{greene09}{{7}{2009}{{Greene {\em  et~al.}}}{{Greene, Penrod, Kiralis, and Moore}}}
+\bibcite{kim2007exposure}{{8}{2007}{{Kim {\em  et~al.}}}{{Kim, Shirts, Dayal, Bacanu, Wood, Xie, Zhang, Chowdari, Yolken, Devlin, {\em  et~al.}}}}
+\bibcite{kononenko97}{{9}{1997}{{Kononenko {\em  et~al.}}}{{Kononenko, {\v {S}}imec, and Robnik-{\v {S}}ikonja}}}
+\bibcite{lareau15}{{10}{2015}{{Lareau {\em  et~al.}}}{{Lareau, White, Oberg, and McKinney}}}
+\bibcite{le17}{{11}{2017}{{Le {\em  et~al.}}}{{Le, Simmons, Misaki, Bodurka, White, Savitz, and McKinney}}}
+\bibcite{le18_brainagesim}{{12}{2018a}{{Le {\em  et~al.}}}{{Le, Kuplicki, McKinney, Yeh, Thompson, and Paulus}}}
+\bibcite{stir}{{13}{2018b}{{Le {\em  et~al.}}}{{Le, Urbanowicz, Moore, and McKinney}}}
+\bibcite{li2011ccsvm}{{14}{2011}{{Li {\em  et~al.}}}{{Li, Rakitsch, and Borgwardt}}}
+\bibcite{linn2016}{{15}{2016}{{Linn {\em  et~al.}}}{{Linn, Gaonkar, Doshi, Davatzikos, and Shinohara}}}
+\bibcite{lopes2010human}{{16}{2010}{{Lopes {\em  et~al.}}}{{Lopes, Miguel, Sargent, Ellis, Amorim, and Affara}}}
+\bibcite{mckinney_pajewski}{{17}{2012}{{McKinney and Pajewski}}{{McKinney and Pajewski}}}
+\bibcite{mckinney09}{{18}{2009a}{{McKinney {\em  et~al.}}}{{McKinney, Crowe, Guo, and Tian}}}
+\bibcite{mckinney2009capturing}{{19}{2009b}{{McKinney {\em  et~al.}}}{{McKinney, Crowe~Jr, Guo, and Tian}}}
+\bibcite{mckinney13}{{20}{2013}{{McKinney {\em  et~al.}}}{{McKinney, White, Grill, Li, Kennedy, Poland, and Oberg}}}
+\bibcite{miyashita2007genetic}{{21}{2007}{{Miyashita {\em  et~al.}}}{{Miyashita, Arai, Asada, Imagawa, Matsubara, Shoji, Higuchi, Urakami, Kakita, Takahashi, {\em  et~al.}}}}
+\bibcite{mostafavi14}{{22}{2014}{{Mostafavi {\em  et~al.}}}{{Mostafavi, Battle, Zhu, Potash, Weissman, Shi, Beckman, Haudenschild, McCormick, Mei, {\em  et~al.}}}}
+\bibcite{rao2017}{{23}{2017}{{Rao {\em  et~al.}}}{{Rao, Monteiro, Mourao-Miranda, Initiative, {\em  et~al.}}}}
+\bibcite{riesselman18}{{24}{2018}{{Riesselman {\em  et~al.}}}{{Riesselman, Ingraham, and Marks}}}
+\bibcite{robnik03}{{25}{2003}{{Robnik-{\v {S}}ikonja and Kononenko}}{{Robnik-{\v {S}}ikonja and Kononenko}}}
+\bibcite{schork12}{{26}{2012}{{Schork and Zapala}}{{Schork and Zapala}}}
+\bibcite{urbanowicz17}{{27}{2018a}{{Urbanowicz {\em  et~al.}}}{{Urbanowicz, Olson, Schmitt, Meeker, and Moore}}}
+\bibcite{urbanowicz17b}{{28}{2018b}{{Urbanowicz {\em  et~al.}}}{{Urbanowicz, Meeker, Cava, Olson, and Moore}}}
+\bibcite{wang2009common}{{29}{2009}{{Wang {\em  et~al.}}}{{Wang, Zhang, Ma, Bucan, Glessner, Abrahams, Salyakina, Imielinski, Bradfield, Sleiman, {\em  et~al.}}}}
+\bibcite{weinreich13}{{30}{2013}{{Weinreich {\em  et~al.}}}{{Weinreich, Lan, Wylie, and Heckendorn}}}
+\bibcite{winham2012snp}{{31}{2012}{{Winham {\em  et~al.}}}{{Winham, Colby, Freimuth, Wang, De~Andrade, Huebner, and Biernacka}}}
+\bibcite{glmnet05}{{32}{2005}{{Zou and Hastie}}{{Zou and Hastie}}}
+\global\@namedef{@lastpage@}{9}
