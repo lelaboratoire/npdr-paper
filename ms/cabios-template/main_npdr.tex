@@ -1,6 +1,8 @@
 \documentclass{bioinfo}
 \copyrightyear{2015} \pubyear{2015}
 
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
 
 \access{Advance Access Publication Date: Day Month Year}
 \appnotes{Manuscript Category}
@@ -318,6 +320,16 @@ Thus, like NPDR linear regression, we are interested in testing one-sided hypoth
 \end{equation}
 Nominal outcomes can be analyzed (similar to multi-state Relief-F) with NPDR by grouping all misses of an instance as one group.
 %This may be improved by using multinomial regression in NPDR.
+
+Pseudo-code of the NPDR algorithm for continuous or discrete outcome is provided in Algorithm 1.
+
+\begin{figure}[!tpb]%figure1
+\centerline{\includegraphics[trim = 0 497 0 120, clip, scale = 0.68]{../../figs/npdr-algo.pdf}}
+\caption{Pseudo-code of the NPDR algorithm.}\label{fig:pseudocode}
+\end{figure}
+
+
+
 
 \subsubsection{Regularized NPDR}
 

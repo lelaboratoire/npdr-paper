@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+%\usepackage[linesnumbered]{algorithm2e}
+%\usepackage[linesnumbered,ruled]{algorithm2e}
+% \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
+\title{Example of how to use Algorithm2e}
+\author{Robert Woodward}
+
+\begin{document}
+
+
+\begin{algorithm}[H]
+% \SetAlgoLined
+\SetKwInOut{Input}{input}
+% \SetKwInOut{Output}{output}
+\Input{training dataset $X$ with $m$ observations, $p$ attributes, and \newline outcome $y$}
+pre-process $X$\\
+compute distance matrix $D$ (Eq. 1) \\
+%\newline ($D$ contains distances between all pairs of observations)
+select neighborhood method (adaptive or fixed)\\
+find nearest neighbor pairs according to $D$ and neighborhood method\\
+$\mathbf{d}_y=$ distance vector among nearest neighbors in dimension $y$\\
+% $\quad$ \\
+\For{attribute $a:=1$ to $p$}{
+$\mathbf{d}_a=$ distance vector among nearest neighbors in dimension $a$ \\
+$\beta_a=$ regression coefficient of $a$ from $\mathbf{d}_y \sim \mathbf{d}_a $ (Eq. 8 or 15)\\
+$\beta'_a =$ standardize $\beta_a$ coefficient\\
+}
+{\Return vector of all attribute importances {\boldmath$\beta'$}}
+\caption{NPDR algorithm}
+\end{algorithm}
+
+
+\end{document}
