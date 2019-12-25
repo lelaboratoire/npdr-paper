@@ -17,21 +17,24 @@
 % \SetAlgoLined
 \SetKwInOut{Input}{input}
 % \SetKwInOut{Output}{output}
-\Input{training dataset $X$ with $m$ observations, $p$ attributes, and \newline outcome $y$}
-pre-process $X$\\
-compute distance matrix $D$ (Eq. 1) \\
+\Input{Dataset $X$ with $m$ observations and $p$ attributes 
+      \\ Outcome $y$ (continuous or categorical) and optional covariates}
+Pre-process $X$ (continuous or categorical attributes)\\
+Compute distance matrix $D$ (Eq. 1) from $X$\\
 %\newline ($D$ contains distances between all pairs of observations)
-select neighborhood method (adaptive or fixed)\\
-find nearest neighbor pairs according to $D$ and neighborhood method\\
-$\mathbf{d}_y=$ distance vector among nearest neighbors in dimension $y$\\
+Find neighbors $\mathcal{N}$ (Eq. 3) from $D$ by neighbor method (adaptive/fixed)\\
+%select neighborhood methorod (adaptive or fixed)\\
+%find nearest neighbor pairs according to $D$ and neighborhood method\\
+$\mathbf{d}(y)=$ distance vector among neighbors $\mathcal{N}$ for outcome $y$ (Eq. 2 or 16)\\
+$\mathbf{d}(\textrm{cov})=$ optional distance vector among neighbors $\mathcal{N}$ for covariates\\
 % $\quad$ \\
 \For{attribute $a:=1$ to $p$}{
-$\mathbf{d}_a=$ distance vector among nearest neighbors in dimension $a$ \\
-$\beta_a=$ regression coefficient of $a$ from $\mathbf{d}_y \sim \mathbf{d}_a $ (Eq. 8 or 15)\\
-$\beta'_a =$ standardize $\beta_a$ coefficient\\
+$\mathbf{d}(a)=$ distance vector among neighbors $\mathcal{N}$ for attribute $a$ \\
+$\beta_a=$ coefficient of $\mathbf{d}(a)$ from $\mathbf{d}(y) \sim \mathbf{d}(a) + \mathbf{d}(\textrm{cov})  $ (Eq. 11 or 15)\\
+$\beta'_a =$ standardized $\beta_a$ regression coefficient\\
 }
-{\Return vector of all attribute importances {\boldmath$\beta'$}}
-\caption{NPDR algorithm}
+{\textbf{output:} vector of all attribute importances {\boldmath$\beta'$}}
+\caption{NPDR}
 \end{algorithm}
 
 
