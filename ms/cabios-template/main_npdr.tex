@@ -74,7 +74,8 @@ The flexible GLM formalism of NPDR opens nearest-neighbor feature selection to s
 It can detect main effects and interactions for dichotomous and continuous outcome studies while adjusting for covariates and multiple hypothesis testing.
 The models allow any predictor data type such variants in GWAS or RNA-Seq expression levels.
 NPDR also improves attribute importance estimation compared to other Relief methods because NPDR includes the error or dispersion of the projected distances.
-The projected distance model gives the appearance of being univariate but implicitly accounts for interactions with all other attributes via the neighborhood calculation in the space of all attributes (omnigenic). The new method works for any nearest-neighbor method, including fixed-k and adaptive radius. 
+The projected distance model gives the appearance of being univariate but implicitly accounts for interactions with all other attributes via the neighborhood calculation in the space of all attributes (omnigenic).
+The new method works for any nearest-neighbor method, including fixed-$k$ and adaptive radius. 
 Further, we extend the NPDR formalism to Lasso-like penalized feature selection.
 
 The paper is organized as follows.
@@ -168,7 +169,7 @@ The cardinality of the set $\{j \ne i : j \in N_{i}\}$ is $k_i$, the number of n
 
 %Note that the inner index $j$ depends on the outer index $i$. This is important for multiSURF, where each instance $\ri$ will, in general, have a different number of misses and hits ($\kmi$ and $\khi$) and these values may differ between instances.  Thus, for multiSURF, the sets $M$ and $H$ can be thought of as irregular or ragged matrices of ordered pairs. For ReliefF algorithms, where the number of neighbors is constant across subjects, the hit and miss matrices are proper (non-ragged) matrices of ordered pairs. % We further discuss how we utilize the reshaped ordered pairs in the next subsection.
 
-\subsubsection{Adaptive-radius and fixed-k Neighborhoods}
+\subsubsection{Adaptive-radius and fixed-$k$ neighborhoods}
 The NPDR algorithm applies to any Relief neighborhood algorithm.
 In the NPDR analysis of real data, we use the multiSURF~\citep{urbanowicz17} adaptive-radius neighborhood, which uses a different radius for each instance. In the simulation anlysis, we use a fixed-$k$ neighborhood that well-approximates mulitSURF for Relief and NPDR comparisons. %, which is derived in Ref.~\citep{bod}.
 The adaptive radius for an instance may be defined as the mean of its distances to all other instances subtracted by the fraction $\alpha$ of the standard deviation of this mean.
@@ -689,14 +690,17 @@ Another distinction between methods is that NPDR projects distances onto each at
 NPDR uses the context of all attributes to compute nearest neighbors, but it focuses on the projected regression of each attribute at a time and uses the nearest neighbors to allow for detection of interactions. However, NPDR can also be used to compute the importance of sets of factors, similar to MDMR.
 An example of this is the penalized version of NPDR that uses the set of all attributes in a nearest-neighbor projected-distance multiple regression.
 
-The NPDR implementation can use fixed-$k$, fixed radius, or adaptive radius neighborhood methods. To provide a fair comparison between Relief and NDPR methods, we used the same fixed-k for all simulation analyses.
+The NPDR implementation can use fixed-$k$, fixed radius, or adaptive radius neighborhood methods.
+To provide a fair comparison between Relief and NDPR methods, we used the same fixed-$k$ for all simulation analyses.
 %Relief neighborhoods and radius-based Relief neighborhoods.
 %For fixed-$k$ neighborhoods, we expect the NPDR approach will handle imbalanced data in a less biased way than the original fixed-$k$ methods, which focus on hit/miss neighborhoods separately.
 %By identifying the nearest neighbors independently of hit/miss status, the neighborhood should naturally reflect the imbalance in the data.
 %The hit/miss status of each pair is computed separately as a categorical outcome regression variable.
 %This should make NPDR scores with fixed-$k$ ($\mathcal{N}_{k_\alpha}$) similar to fixed radius ($\mathcal{N}_{R_\alpha}$) for balanced and imbalanced data.
 Power for detecting main effects is highest with the myopic maximum $\mathcal{N}_{k_\text{max}}$ ($k_{\text{max}}=\lfloor (m-1)/2\rfloor$ for balanced data).
-However, real biological data will likely contain a mixture of main effects and interaction network effects~\citep{mckinney_pajewski}. Thus, for all simulation comparisons we used a fixed-k that has been shown to balance main effects and interactions (Eq.~\ref{eq:kbar} with $\alpha=1/2$)~\citep{stir}. Also NPDR can be used with the variable or gene-wise adaptive k~\citep{mckinney13}, which takes more computational time but allows each attribute to use a different k that is optimal for the particular effect. 
+However, real biological data will likely contain a mixture of main effects and interaction network effects~\citep{mckinney_pajewski}.
+Thus, for all simulation comparisons we used a fixed-$k$ that has been shown to balance main effects and interactions (Eq.~\ref{eq:kbar} with $\alpha=1/2$)~\citep{stir}.
+Also NPDR can be used with the variable or gene-wise adaptive $k$~\citep{mckinney13}, which takes more computational time but allows each attribute to use a different $k$ that is optimal for the particular effect. 
 NPDR feature selection can be embedded in the backwards elimination of private Evaporative Cooling (privateEC) or in a nested cross-validation~\citep{le17}.
 
 %A challenge in NPDR analysis is the inherent dependence between neighbors in the projection models, which violates distribution assumptions of regression and leads to artificially lower P-values. Our results indicate that the Bonferroni procedure effectively controls type I error despite deflated P-values. However, future studies are needed to investigate strategies to account for dependence between neighbor-pair observations such as regularization/shrinkage of the regression-coefficients\citep{de2010benchmark}. A related property of NPDR is that it is often the case that two instances will be in each other's neighborhood. In these cases, we provide an option to restrict $\mathcal{N}$ to contain only unique pairs. However, the extra sampling of neighbor projections may provide beneficial information by reinforcing tightly connected neighborhoods.
