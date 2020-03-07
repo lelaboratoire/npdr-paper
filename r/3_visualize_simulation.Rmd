@@ -6,7 +6,7 @@ output: html_document
 Combine plots together:
 
 ```{r}
-rm(list = ls())
+# rm(list = ls())
 load('results/df_cc.Rdata')
 load('results/df_qtrait.Rdata')
 load('results/rf_cc.Rdata')
@@ -14,8 +14,11 @@ load('results/rf_qtrait.Rdata')
 
 library(tidyverse)
 library(cowplot)
-cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
-                "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
+# cbbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+#                 "#0072B2", "#D55E00", "#CC79A7", "#c5679b", "#be548f")
+
+cbbPalette <- paletteer::paletteer_d(yarrr, info)
+scales::show_col(cbbPalette)
 ```
 
 # Plot of simulation result, one time run
@@ -71,9 +74,9 @@ plot_r2 <- function(x){
       legend.text = element_text(size = 8),
       legend.title = element_text(size = 8),
       legend.margin = margin(c(1,1,1,1))) +
-  scale_color_manual(values = cbbPalette[c(1,7)], labels = c('Non-functional', 'Functional')) +
-  geom_text(cutoff_text, mapping = aes(x = x, y = y, label = label) , size = 3, color = cbbPalette[1]) + 
-  geom_text(r2_text, mapping = aes(x = x, y = y, label = label), size = 3, parse = T)
+  scale_color_manual(values = cbbPalette[c(7,1)], labels = c('Non-functional', 'Functional')) +
+  geom_text(cutoff_text, mapping = aes(x = x, y = y, label = label) , size = 3, color = cbbPalette[7]) + 
+  geom_text(r2_text, mapping = aes(x = x, y = y, label = label), size = 3, parse = T, color = cbbPalette[7])
 }
 ```
 
@@ -104,7 +107,7 @@ r2_text <- data.frame(
 qtrait_plot <- ggplot(qtrait_r %>% arrange(functional), aes(x = imp_score, y = beta.Z.att)) + 
   labs(x = NULL, title = 'Continuous outcome data with main effect', 
        y = bquote('NPDR linear'~beta*minute), color = NULL) +
-  geom_hline(yintercept = npdr.beta.cutoff.qtrait, linetype='dashed', alpha = 0.5)
+  geom_hline(yintercept = npdr.beta.cutoff.qtrait, linetype='dashed', color = cbbPalette[7])
 qtrait_plot <- plot_r2(qtrait_plot)
 
 # Dichotomous outcome:
@@ -117,7 +120,7 @@ r2_text <- data.frame(
 cc_plot <- ggplot(cc_r %>% arrange(functional), aes(x = imp_score, y = beta.Z.att)) + 
   labs(x = NULL, title = 'Dichotomous outcome data with interaction effect', 
        y = bquote("NPDR logistic"~beta*minute), color = NULL) +
-  geom_hline(yintercept=npdr.beta.cutoff.qtrait, linetype='dashed', alpha = 0.5)
+  geom_hline(yintercept=npdr.beta.cutoff.qtrait, linetype='dashed', color = cbbPalette[7])
 cc_plot <- plot_r2(cc_plot)
 
 fig1 <- plot_grid(qtrait_plot, cc_plot, nrow = 2, labels = 'AUTO')
@@ -144,24 +147,24 @@ pr_text <- data.frame(
     paste0('Relief-F\n', round(auprc_relief_cc, 3)), 
     paste0('NPDR\n', round(auprc_npdr_qtrait, 3)),
     paste0('NPDR\n   ', round(auprc_npdr_cc, 3))), 
-  sim = rep(c('Continuous outcome', 'Dichotomous outcome'), 3),
+  sim = rep(c('Continuous outcome (main effect)', 'Dichotomous outcome (interaction)'), 3),
   x = c(0.3, 0.65, 0.485 , 0.28, 0.755, 0.81), 
   y = c(0.2, 0.2, 0.7, 0.91, 0.45, 0.88), 
   type = rep(c('Random forest', 'Relief-F', 'NPDR'), each = 2)
 )
 
 cutoff_point <- data.frame(
-  sim = c('Continuous outcome', 'Dichotomous outcome'),
+  sim = c('Continuous outcome (main effect)', 'Dichotomous outcome (interaction)'),
   x = c(npdr.recall.qtrait, npdr.recall.cc), y = c(npdr.precis.qtrait, npdr.precis.cc), 
   type = c('NPDR', 'NPDR')
 )
 
 pr <- rbind(pr_qtrait, pr_cc) %>% 
-  mutate(sim = c(rep('Continuous outcome', nrow(pr_qtrait)), 
-                 rep('Dichotomous outcome', nrow(pr_cc)))) %>%
+  mutate(sim = c(rep('Continuous outcome (main effect)', nrow(pr_qtrait)), 
+                 rep('Dichotomous outcome (interaction)', nrow(pr_cc)))) %>%
   ggplot(aes(Recall, Precision, color = type)) +
   geom_path(size = 0.8) + theme_bw() + facet_wrap(~ sim) + 
-  scale_color_manual(values = cbbPalette[c(8,3,6)]) +
+  scale_color_manual(values = cbbPalette[c(1,4,2)]) +
   scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) +
   geom_text(pr_text, mapping = aes(x = x, y = y, label = label), size = 3) +
@@ -184,9 +187,9 @@ p <- ggplot(npdr_stir, aes(x=stir.log10,y=npdr.log10)) +
        x = bquote('STIR ('~-log[10]~'p'~')'), 
        y = bquote('NPDR ('~-log[10]~'p'~')')) + 
   annotate("text", x = 130, y = 130, label = deparse(bquote(r > 0.99)), parse = T) +
-  scale_color_manual(values = cbbPalette[c(1,7)], labels = c('Non-functional', 'Functional')) +
-  geom_vline(xintercept=pcutoff, linetype='dashed', alpha = 0.5) +
-  geom_hline(yintercept=pcutoff, linetype='dashed', alpha = 0.5)
+  scale_color_manual(values = cbbPalette[c(7,1)], labels = c('Non-functional', 'Functional')) +
+  geom_vline(xintercept=pcutoff, linetype='dashed', color = 'grey') +
+  geom_hline(yintercept=pcutoff, linetype='dashed', color = 'grey')
 p
 ggsave(p, filename = paste0('figs/npdr_stir_p_cc.pdf'), height = 4.5, width = 4.5 )
 ```
@@ -201,21 +204,23 @@ pr_cc_100 <- pr_df
 load('results/npdr_100_qtrait.Rdata')
 pr_qtrait_100 <- pr_df
 
+cbbPalette <- paletteer::paletteer_d(yarrr, info)
+
 # pr_df
 pr_df <- rbind(pr_cc_100, pr_qtrait_100) %>%
-  mutate(sim = c(rep('Dichotomous outcome', nrow(pr_cc_100)), 
-         rep('Continuous outcome', nrow(pr_qtrait_100)))) %>%
+  mutate(sim = c(rep('Dichotomous outcome (interaction)', nrow(pr_cc_100)), 
+         rep('Continuous outcome (main effect)', nrow(pr_qtrait_100)))) %>%
   mutate(newtype = as.factor(case_when((type %in% c('Relief-F', 'RRelief')) ~ 'Relief',
                              TRUE ~ as.character(type))))
 pr_df$newtype <- factor(pr_df$newtype, levels = c('Random forest', 'Relief', 'NPDR'))
 
 pr_100 <- ggplot(pr_df, aes(x = newtype, y = aupr, color = newtype)) + 
-  geom_boxplot(alpha = 0.5, color = 'grey50', outlier.size = -1, width = 0.5) +
+  geom_boxplot(alpha = 0, color = 'grey50', outlier.size = -1, width = 0.5) +
   geom_jitter(height = 0, width = 0.15, alpha = 0.3) +
   labs(x = NULL, y = 'Area under the PR curve') + facet_wrap(~ sim) +
   theme_bw() + guides(fill = F, color = F) +
-  scale_color_manual(values = cbbPalette[c(3, 6, 8)]) +
-  scale_fill_manual(values = cbbPalette[c(3, 6, 8)]) +
+  scale_color_manual(values = cbbPalette[c(4,2,1)]) +
+  scale_fill_manual(values = cbbPalette[c(4,2,1)]) +
   scale_y_continuous(
     breaks = seq(0, 1, 0.2), minor_breaks = seq(0.5, 1, 0.2),
     labels = scales::percent_format(accuracy = 1),
@@ -223,41 +228,44 @@ pr_100 <- ggplot(pr_df, aes(x = newtype, y = aupr, color = newtype)) +
   ggsignif::geom_signif(
     comparisons = list(c('Random forest', 'NPDR'), c('Relief', 'NPDR')),
     map_signif_level = TRUE, y_position = c(1.06, 1.02), vjust = 0.5, tip_length = 0)
-  
+pr_100  
 prs <- plot_grid(pr, pr_100, nrow = 2, labels = 'AUTO')
-# rocs
-
-# ggsave(rocs, filename = paste0('figs/roc_compare_100.pdf'), height = 6.24, width = 5)
-# ggsave(pr_100, filename = paste0('figs/pr_compare_100.pdf'), height = 3, width = 5)
+prs
 ggsave(prs, filename = 'figs/fig2_pr_plots.pdf', width = 5.8, height = 6.4)
 
+```
+
+Dark theme for presentation:
+```{r}
+ggsave(pr_100 + ggdark::dark_theme_bw(), filename = 'figs/rocky_fig1.pdf', width = 5.8, height = 3.2)
+ggsave(pr + ggdark::dark_theme_bw(), filename = 'figs/rocky_fig2.pdf', width = 5.8, height = 3.15)
 ```
 
 
 ```{r}
 pr <- rbind(pr_qtrait, pr_cc) %>% 
-  mutate(sim = c(rep('Continuous outcome', nrow(pr_qtrait)), 
-                 rep('Dichotomous outcome', nrow(pr_cc)))) %>%
-  filter(sim == 'Continuous outcome') %>%
+  mutate(sim = c(rep('Continuous outcome (main effect)', nrow(pr_qtrait)), 
+                 rep('Dichotomous outcome (interaction)', nrow(pr_cc)))) %>%
+  filter(sim == 'Continuous outcome (main effect)') %>%
   ggplot(aes(Recall, Precision, color = type)) +
   geom_path(size = 0.8) + theme_bw() + 
-  scale_color_manual(values = cbbPalette[c(8,3,6)]) +
+  scale_color_manual(values = cbbPalette[c(1,4,2)]) +
   scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1.1, 0.2), labels = scales::percent) +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), labels = scales::percent) +
-  geom_text(pr_text %>% filter(sim == 'Continuous outcome') , mapping = aes(x = x, y = y, label = label), size = 3) +
-  geom_point(cutoff_point %>% filter(sim == 'Continuous outcome'), 
+  geom_text(pr_text %>% filter(sim == 'Continuous outcome (main effect)') , mapping = aes(x = x, y = y, label = label), size = 3) +
+  geom_point(cutoff_point %>% filter(sim == 'Continuous outcome (main effect)'), 
              mapping = aes(x = x, y = y), shape = 8, size = 2, stroke = 1) +
   coord_fixed(ratio = 1) +
   guides(color = FALSE)
 pr
 
-pr_100 <- ggplot(pr_df %>% filter(sim == 'Continuous outcome'), aes(x = newtype, y = aupr, color = newtype)) + 
-  geom_boxplot(alpha = 0.5, color = 'grey50', outlier.size = -1, width = 0.5) +
+pr_100 <- ggplot(pr_df %>% filter(sim == 'Continuous outcome (main effect)'), aes(x = newtype, y = aupr, color = newtype)) + 
+  geom_boxplot(alpha = 0.5, color = 'grey50', outlier.size = -1, width = 0.5, fill = 'white') +
   geom_jitter(height = 0, width = 0.15, alpha = 0.3) +
   labs(x = 'Method', y = 'Area under the PR curve') +
   theme_bw() + guides(fill = F, color = F) +
-  scale_color_manual(values = cbbPalette[c(3, 6, 8)]) +
-  scale_fill_manual(values = cbbPalette[c(3, 6, 8)]) +
+  scale_color_manual(values = cbbPalette[c(4,2,1)]) +
+  scale_fill_manual(values = cbbPalette[c(4,2,1)]) +
   scale_y_continuous(
     breaks = seq(0, 1, 0.2), minor_breaks = seq(0.5, 1, 0.2),
     labels = scales::percent_format(accuracy = 1),
@@ -278,8 +286,8 @@ ggsave(grant1, filename = 'figs/grant_fig_1.pdf', width = 7, height = 3.2)
 
 ```{r}
 ss_df <- rbind(ss_df_cc, ss_df_qtrait) %>%
-  mutate(sim = c(rep('Dichotomous outcome', nrow(ss_df_cc)),
-                 rep('Continuous outcome', nrow(ss_df_qtrait))))
+  mutate(sim = c(rep('Dichotomous outcome (interaction)', nrow(ss_df_cc)),
+                 rep('Continuous outcome (main effect)', nrow(ss_df_qtrait))))
 
 pr_text <- data.frame(
   label = c(
@@ -288,7 +296,7 @@ pr_text <- data.frame(
     paste0('RRelief \n', round(auroc_relief_qtrait, 3)),
     paste0('NPDR ', round(auroc_npdr_cc, 3)), 
     paste0('NPDR\n', round(auroc_npdr_qtrait, 3))),
-  sim = rep(c('Dichotomous outcome', 'Continuous outcome'), 3),
+  sim = rep(c('Dichotomous outcome (interaction)', 'Continuous outcome (main effect)'), 3),
   x = c(0.6, 0.33, 0.8, 0.79, 0.83, 0.77), 
   y = c(0.63, 0.6, 0.38, 0.1, 1.05, 1), 
   type = rep(c('Random forest', 'Relief', 'NPDR'), each = 2)
@@ -296,7 +304,7 @@ pr_text <- data.frame(
 
 roc <- ggplot(ss_df, aes(x = Sensitivity, y = Specificity, color = type)) +   
   geom_path(size = 0.8) + theme_bw() + facet_wrap(~ sim) + coord_fixed(ratio = 1) +
-  scale_color_manual(values = cbbPalette[c(8,3,6)]) + guides(color = FALSE) +
+  scale_color_manual(values = cbbPalette[c(1,4,2)]) + guides(color = FALSE) +
   scale_x_reverse(breaks = seq(1, 0, -0.2), labels = scales::percent) + 
   scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent, limits = c(NA, 1.05)) + 
   geom_text(pr_text, mapping = aes(x = x, y = y, label = label), size = 3)
@@ -305,34 +313,60 @@ roc
 ```
 
 
+```{r}
+recall_text <- data.frame(
+  label = c('Random forest','Random forest',
+            'RRelief', 'Relief-F',
+            'NPDR', 'NPDR'),
+  sim = rep(c('Continuous outcome (main effect)', 'Dichotomous outcome (interaction)'), 3),
+  x = c(0.47, 0.53, 0.16, 0.17, 0.28, 0.05), 
+  y = c(0.5, 0.8, 0.15, 0.15, 0.85, 0.99), 
+  type = rep(c('Random forest', 'Relief', 'NPDR'), each = 2)
+)
+
+recall <- ggplot(ss_df, aes(x = pct_selected, y = Sensitivity, color = type)) +   
+  geom_path(size = 0.8) + theme_bw() + facet_wrap(~ sim) + coord_fixed(ratio = 1) +
+  scale_color_manual(values = cbbPalette[c(1,4,2)]) + guides(color = FALSE) +
+  scale_x_continuous(breaks = seq(1, 0, -0.2), labels = scales::percent) + 
+  scale_y_continuous(breaks = seq(0, 1, 0.2), labels = scales::percent) + 
+  labs(x = 'Selection percentage cutoff', y = 'Recall') +
+  geom_text(recall_text, mapping = aes(x = x, y = y, label = label), size = 3)
+
+recall
+ggsave(recall, filename = paste0('figs/recall_compare_1.pdf'), height = 3, width = 5)
+```
+
 # Replications of auROC for Supplement:
 
 Must run `2_npdr_relief_100_cc_auroc.Rmd` and `2_npdr_relief_100_qtrait_auroc.Rmd`:
 
 ```{r}
+
 load('results/npdr_100_cc_auroc.Rdata')
 roc_cc_100 <- roc_df
 
 load('results/npdr_100_qtrait_auroc.Rdata')
 roc_qtrait_100 <- roc_df
 
+cbbPalette <- paletteer::paletteer_d(yarrr, info)
+
 roc_df <- rbind(roc_cc_100, roc_qtrait_100) %>%
-  mutate(sim = c(rep('Dichotomous outcome', nrow(roc_cc_100)), 
-         rep('Continuous outcome', nrow(roc_qtrait_100)))) %>%
+  mutate(sim = c(rep('Dichotomous outcome (interaction)', nrow(roc_cc_100)), 
+         rep('Continuous outcome (main effect)', nrow(roc_qtrait_100)))) %>%
   mutate(newtype = as.factor(case_when((type %in% c('Relief-F', 'RRelief')) ~ 'Relief',
                              TRUE ~ as.character(type))))
 roc_df$newtype <- factor(roc_df$newtype, levels = c('Random forest', 'Relief', 'NPDR'))
 
 roc_100 <- ggplot(roc_df, aes(x = newtype, y = aupr, color = newtype)) + 
-  geom_boxplot(alpha = 0.5, color = 'grey50', outlier.size = -1, width = 0.5) +
+  geom_boxplot(alpha = 0.5, color = 'grey50', outlier.size = -1, width = 0.5, fill = 'white') +
   geom_jitter(height = 0, width = 0.15, alpha = 0.3) +
   labs(x = NULL, y = 'Area under the ROC curve') + facet_wrap(~ sim) +
   scale_y_continuous(breaks = seq(0, 1, 0.1), 
                      minor_breaks = seq(0.65, 1, 0.1),
                      labels = scales::percent_format(accuracy = 1),
                      limits = c(NA, 1.05)) + 
-  scale_color_manual(values = cbbPalette[c(3, 6, 8)]) +
-  scale_fill_manual(values = cbbPalette[c(3, 6, 8)]) +
+  scale_color_manual(values = cbbPalette[c(4,2,1)]) +
+  scale_fill_manual(values = cbbPalette[c(4,2,1)]) +
   ggsignif::geom_signif(
     comparisons = list(c('Random forest', 'NPDR'), c('Relief', 'NPDR')),
     map_signif_level = TRUE, y_position = c(1.045, 1.02), vjust = 0.5, tip_length = 0) +
